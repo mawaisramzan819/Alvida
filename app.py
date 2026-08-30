@@ -1,6 +1,3 @@
-
-
-
 """
 =============================================================================
 STREAMLIT FAREWELL WEB APP
@@ -54,66 +51,92 @@ def load_styles():
     css_path = config.CSS_DIR / "style.css"
     if css_path.exists():
         with open(css_path, "r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)# -----------------------------------------------------------------------------
+# 3. Startup Machine & Default Background Audio Controller (Guaranteed Deployment Playback)
+# -----------------------------------------------------------------------------
+@st.cache_data
+def get_audio_base64():
+    """Cache audio as Base64 for guaranteed zero-dependency playback on all cloud deployment hosts."""
+    for path in [
+        config.MUSIC_DIR / "farewell.mp3",
+        config.BASE_DIR / "static" / "farewell.mp3",
+        config.MUSIC_DIR / "farewell.mp3.mp3",
+    ]:
+        if path.exists():
+            try:
+                with open(path, "rb") as f:
+                    return base64.b64encode(f.read()).decode("utf-8")
+            except Exception:
+                pass
+    return ""
 
 
-# -----------------------------------------------------------------------------
-# 3. Startup Machine & Default Background Audio Controller (components.html iframe execution)
-# -----------------------------------------------------------------------------
 def render_startup_state_machine():
     """Render Startup Loader and Auto-Play Background Music seamlessly by default."""
-    components.html("""
+    audio_b64 = get_audio_base64()
+    components.html(f"""
     <script>
-    (function() {
+    (function() {{
         const pDoc = window.parent.document;
+        const pWin = window.parent;
+        const b64Data = "{audio_b64}";
         
         // 1. Create Audio Element on parent document
         let audio = pDoc.getElementById('farewellBgAudioMain');
-        if (!audio) {
+        if (!audio) {{
             audio = pDoc.createElement('audio');
             audio.id = 'farewellBgAudioMain';
             audio.loop = true;
             audio.preload = 'auto';
-            audio.src = '/app/static/farewell.mp3';
+            
+            if (b64Data && b64Data.length > 100) {{
+                audio.src = 'data:audio/mp3;base64,' + b64Data;
+            }} else {{
+                audio.src = '/app/static/farewell.mp3';
+            }}
+            
             pDoc.body.appendChild(audio);
-            window.parent.__farewell_audio = audio;
-        }
+            pWin.__farewell_audio = audio;
+        }}
 
         // Function to attempt smooth audio playback
-        function triggerAudioPlayback() {
+        function triggerAudioPlayback() {{
             if (!audio) return;
-            if (audio.paused) {
+            if (audio.paused) {{
                 audio.volume = 0;
                 let playPromise = audio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
+                if (playPromise !== undefined) {{
+                    playPromise.then(() => {{
                         let start = performance.now();
-                        function fadeIn() {
+                        function fadeIn() {{
                             let el = performance.now() - start;
                             let frac = Math.min(el / 1500, 1);
-                            audio.volume = frac * 0.18;
+                            audio.volume = frac * 0.22;
                             if (frac < 1) requestAnimationFrame(fadeIn);
-                        }
+                        }}
                         requestAnimationFrame(fadeIn);
-                    }).catch(err => {
+                    }}).catch(err => {{
                         console.log("Autoplay waiting for user gesture:", err);
-                    });
-                }
-            }
-        }
+                    }});
+                }}
+            }}
+        }}
 
         // Immediately try auto-playing on page load
         triggerAudioPlayback();
 
         // Fallback interaction listeners across document and window for instant start on any gesture
-        const handleFirstInteraction = function() {
+        const handleFirstInteraction = function() {{
             triggerAudioPlayback();
-        };
-        pDoc.addEventListener('click', handleFirstInteraction, { passive: true });
-        pDoc.addEventListener('touchstart', handleFirstInteraction, { passive: true });
-        pDoc.addEventListener('keydown', handleFirstInteraction, { passive: true });
-        pDoc.addEventListener('pointerdown', handleFirstInteraction, { passive: true });
-        window.addEventListener('click', handleFirstInteraction, { passive: true });
+        }};
+        pDoc.addEventListener('click', handleFirstInteraction, {{ capture: true, passive: true }});
+        pDoc.addEventListener('touchstart', handleFirstInteraction, {{ capture: true, passive: true }});
+        pDoc.addEventListener('keydown', handleFirstInteraction, {{ capture: true, passive: true }});
+        pDoc.addEventListener('pointerdown', handleFirstInteraction, {{ capture: true, passive: true }});
+        pWin.addEventListener('click', handleFirstInteraction, {{ capture: true, passive: true }});
+        pWin.addEventListener('touchstart', handleFirstInteraction, {{ capture: true, passive: true }});
+        window.addEventListener('click', handleFirstInteraction, {{ capture: true, passive: true }});
+        window.addEventListener('touchstart', handleFirstInteraction, {{ capture: true, passive: true }});
 
         // Avoid duplicate overlay creation
         if (pDoc.getElementById('startupMasterOverlay')) return;
@@ -125,30 +148,30 @@ def render_startup_state_machine():
 
         overlay.innerHTML = `
             <style>
-                @keyframes fillCircularRing {
-                    0% { stroke-dashoffset: 301.59; }
-                    100% { stroke-dashoffset: 0; }
-                }
-                @keyframes stage1FadeOut {
-                    0% { opacity: 1; transform: scale(1); }
-                    100% { opacity: 0; transform: scale(0.96); }
-                }
-                @property --num {
+                @keyframes fillCircularRing {{
+                    0% {{ stroke-dashoffset: 301.59; }}
+                    100% {{ stroke-dashoffset: 0; }}
+                }}
+                @keyframes stage1FadeOut {{
+                    0% {{ opacity: 1; transform: scale(1); }}
+                    100% {{ opacity: 0; transform: scale(0.96); }}
+                }}
+                @property --num {{
                     syntax: '<integer>';
                     initial-value: 0;
                     inherits: false;
-                }
-                @keyframes countPercent {
-                    0% { --num: 0; }
-                    100% { --num: 100; }
-                }
-                .css-pct-counter {
+                }}
+                @keyframes countPercent {{
+                    0% {{ --num: 0; }}
+                    100% {{ --num: 100; }}
+                }}
+                .css-pct-counter {{
                     counter-reset: num var(--num);
                     animation: countPercent 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-                }
-                .css-pct-counter::after {
+                }}
+                .css-pct-counter::after {{
                     content: counter(num) "%";
-                }
+                }}
             </style>
 
             <!-- 3-Second Circular STARTING Loader -->
@@ -179,14 +202,14 @@ def render_startup_state_machine():
         pDoc.body.appendChild(overlay);
 
         // After 3 seconds, smoothly fade out and dismiss the overlay automatically
-        setTimeout(() => {
+        setTimeout(() => {{
             overlay.style.opacity = '0';
             overlay.style.pointerEvents = 'none';
-            setTimeout(() => {
+            setTimeout(() => {{
                 overlay.remove();
-            }, 500);
-        }, 3150);
-    })();
+            }}, 500);
+        }}, 3150);
+    }})();
     </script>
     """, height=0, width=0)
 
@@ -194,53 +217,54 @@ def render_startup_state_machine():
 def sync_audio_player():
     """Sync background audio playback with current music_playing state."""
     is_playing = st.session_state.get("music_playing", True)
+    audio_b64 = get_audio_base64()
     if is_playing:
-        components.html("""
+        components.html(f"""
         <script>
-        (function() {
-            try {
+        (function() {{
+            try {{
                 const pDoc = window.parent.document;
+                const pWin = window.parent;
+                const b64Data = "{audio_b64}";
                 let audio = pDoc.getElementById('farewellBgAudioMain');
-                if (!audio) {
+                if (!audio) {{
                     audio = pDoc.createElement('audio');
                     audio.id = 'farewellBgAudioMain';
                     audio.loop = true;
                     audio.preload = 'auto';
-                    audio.src = '/app/static/farewell.mp3';
+                    if (b64Data && b64Data.length > 100) {{
+                        audio.src = 'data:audio/mp3;base64,' + b64Data;
+                    }} else {{
+                        audio.src = '/app/static/farewell.mp3';
+                    }}
                     pDoc.body.appendChild(audio);
-                    window.parent.__farewell_audio = audio;
-                }
-                if (audio) {
-                    if (audio.paused) {
-                        audio.volume = 0;
+                    pWin.__farewell_audio = audio;
+                }}
+                if (audio) {{
+                    if (audio.paused) {{
+                        audio.volume = 0.22;
                         let playPromise = audio.play();
-                        if (playPromise !== undefined) {
-                            playPromise.then(() => {
-                                let start = performance.now();
-                                function fadeIn() {
-                                    let el = performance.now() - start;
-                                    let frac = Math.min(el / 400, 1);
-                                    audio.volume = frac * 0.18;
-                                    if (frac < 1) requestAnimationFrame(fadeIn);
-                                }
-                                requestAnimationFrame(fadeIn);
-                            }).catch(err => {
-                                console.log("Play error / interaction required:", err);
-                                const onAction = () => {
-                                    audio.play().then(() => {
-                                        audio.volume = 0.18;
-                                    }).catch(()=>{});
+                        if (playPromise !== undefined) {{
+                            playPromise.then(() => {{
+                                console.log("Audio playing in sync");
+                            }}).catch(err => {{
+                                const onAction = () => {{
+                                    audio.play().catch(()=>{{}});
                                     pDoc.removeEventListener('click', onAction);
                                     pDoc.removeEventListener('touchstart', onAction);
-                                };
-                                pDoc.addEventListener('click', onAction, { passive: true });
-                                pDoc.addEventListener('touchstart', onAction, { passive: true });
-                            });
-                        }
-                    }
-                }
-            } catch(e) {}
-        })();
+                                    pWin.removeEventListener('click', onAction);
+                                    pWin.removeEventListener('touchstart', onAction);
+                                }};
+                                pDoc.addEventListener('click', onAction, {{ passive: true }});
+                                pDoc.addEventListener('touchstart', onAction, {{ passive: true }});
+                                pWin.addEventListener('click', onAction, {{ passive: true }});
+                                pWin.addEventListener('touchstart', onAction, {{ passive: true }});
+                            }});
+                        }}
+                    }}
+                }}
+            }} catch(e) {{}}
+        }})();
         </script>
         """, height=0, width=0)
     else:
@@ -268,7 +292,7 @@ def sync_audio_player():
             } catch(e) {}
         })();
         </script>
-        """, height=0, width=0)
+        """, height=0, width=0)idth=0)
 
 
 # -----------------------------------------------------------------------------
