@@ -335,10 +335,33 @@ def render_sidebar_and_navigation_bridge():
             if (!audio) return;
             const isPaused = audio.paused;
 
+            // 1. Center circular button
             const playBtn = pDoc.getElementById('musicBtnPlayPause');
             if (playBtn) {
                 playBtn.innerHTML = isPaused ? '▶' : '❚❚';
                 playBtn.title = isPaused ? 'Start Music' : 'Stop Music';
+            }
+
+            // 2. Dedicated Stop / Start button inside sidebar music card
+            const stopStartBtn = pDoc.getElementById('musicBtnStopStart');
+            const stopStartIcon = pDoc.getElementById('musicBtnStopStartIcon');
+            const stopStartText = pDoc.getElementById('musicBtnStopStartText');
+            if (stopStartBtn && stopStartIcon && stopStartText) {
+                stopStartIcon.textContent = isPaused ? '▶' : '⏸';
+                stopStartText.textContent = isPaused ? 'Start Music' : 'Stop Music';
+                stopStartBtn.classList.toggle('is-stopped', isPaused);
+                stopStartBtn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
+            }
+
+            // 3. Floating top-right button
+            const floatBtn = pDoc.getElementById('floatingMusicBtn');
+            const floatIcon = pDoc.getElementById('floatingMusicIcon');
+            const floatText = pDoc.getElementById('floatingMusicText');
+            if (floatBtn && floatIcon && floatText) {
+                floatIcon.textContent = isPaused ? '🔇' : '🎵';
+                floatText.textContent = isPaused ? 'Start Music' : 'Stop Music';
+                floatBtn.classList.toggle('is-stopped', isPaused);
+                floatBtn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
             }
 
             const curTime = pDoc.getElementById('musicTimeCurrent');
@@ -364,6 +387,8 @@ def render_sidebar_and_navigation_bridge():
             if (!audio) return;
 
             const playBtn = pDoc.getElementById('musicBtnPlayPause');
+            const stopStartBtn = pDoc.getElementById('musicBtnStopStart');
+            const floatBtn = pDoc.getElementById('floatingMusicBtn');
             const prevBtn = pDoc.getElementById('musicBtnPrev');
             const nextBtn = pDoc.getElementById('musicBtnNext');
             const heartBtn = pDoc.getElementById('musicBtnHeart');
@@ -372,6 +397,24 @@ def render_sidebar_and_navigation_bridge():
             if (playBtn && !playBtn.__bound) {
                 playBtn.__bound = true;
                 playBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleAudio();
+                };
+            }
+
+            if (stopStartBtn && !stopStartBtn.__bound) {
+                stopStartBtn.__bound = true;
+                stopStartBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleAudio();
+                };
+            }
+
+            if (floatBtn && !floatBtn.__bound) {
+                floatBtn.__bound = true;
+                floatBtn.onclick = function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     toggleAudio();
@@ -575,6 +618,12 @@ def render_sidebar():
                 <button class="music-ctrl-playpause-glow" id="musicBtnPlayPause" title="Click to Start or Stop Music">❚❚</button>
                 <span class="music-ctrl-icon music-btn-next" id="musicBtnNext" title="Next / Forward 10s">⏭</span>
                 <span class="music-ctrl-heart" id="musicBtnHeart" title="Favorite">♡</span>
+            </div>
+            <!-- Prominent Stop / Start Music Button -->
+            <div class="music-stop-start-row">
+                <button class="music-stop-start-pill" id="musicBtnStopStart" title="Click to Stop or Start Music">
+                    <span id="musicBtnStopStartIcon">⏸</span> &nbsp;<span id="musicBtnStopStartText">Stop Music</span>
+                </button>
             </div>
         </div>
         """)
@@ -1193,6 +1242,16 @@ def main():
 
     # 1. Global Styles
     load_styles()
+
+    # Floating Music Toggle Button (Always visible on all chapters and devices)
+    ui("""
+    <div class="floating-music-bar" id="floatingMusicBar">
+        <button class="floating-music-toggle-btn" id="floatingMusicBtn" title="Click to Stop or Start Music">
+            <span id="floatingMusicIcon" class="floating-music-icon">🎵</span>
+            <span id="floatingMusicText" class="floating-music-text">Stop Music</span>
+        </button>
+    </div>
+    """)
 
     # 2. First-load Startup Overlay
     if not st.session_state["session_started"]:
