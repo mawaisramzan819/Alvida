@@ -302,7 +302,7 @@ def render_startup_state_machine():
 # 6. Interactive Sidebar Music Bridge (Real-Time Audio Player Integration)
 # -----------------------------------------------------------------------------
 def render_sidebar_audio_bridge():
-    """Bind real-time interactive controls to sidebar music card DOM elements."""
+    """Bind real-time interactive controls to sidebar music card and floating music bar."""
     components.html(
         """
     <script>
@@ -317,55 +317,97 @@ def render_sidebar_audio_bridge():
             return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
         }
 
+        function togglePlay() {
+            if (!audio) return;
+            if (audio.paused) {
+                audio.play().then(updateUI).catch(() => {});
+            } else {
+                audio.pause();
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            if (!audio) return;
+            const isPaused = audio.paused;
+
+            // 1. Circular center button in sidebar
+            const playBtn = pDoc.getElementById('musicBtnPlayPause');
+            if (playBtn) {
+                playBtn.innerHTML = isPaused ? '▶' : '❚❚';
+                playBtn.title = isPaused ? 'Start Music' : 'Stop Music';
+            }
+
+            // 2. Labeled text toggle in sidebar music card
+            const textToggle = pDoc.getElementById('musicTextToggleBtn');
+            const toggleIcon = pDoc.getElementById('musicTextToggleIcon');
+            const toggleLabel = pDoc.getElementById('musicTextToggleLabel');
+            if (toggleIcon && toggleLabel) {
+                toggleIcon.textContent = isPaused ? '▶' : '⏸';
+                toggleLabel.textContent = isPaused ? 'Start Music' : 'Stop Music';
+            }
+            if (textToggle) {
+                textToggle.classList.toggle('is-paused', isPaused);
+            }
+
+            // 3. Floating top-right button
+            const floatBtn = pDoc.getElementById('floatingMusicToggle');
+            if (floatBtn) {
+                floatBtn.innerHTML = isPaused 
+                    ? '<span class="music-pill-icon">🔇</span> Music Paused' 
+                    : '<span class="music-pill-icon music-note-anim">🎵</span> Music Playing';
+                floatBtn.classList.toggle('is-paused', isPaused);
+                floatBtn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
+            }
+
+            // 4. Progress and timer updates
+            const curTime = pDoc.getElementById('musicTimeCurrent');
+            const totTime = pDoc.getElementById('musicTimeTotal');
+            const fill = pDoc.getElementById('musicProgressFill');
+            const dot = pDoc.getElementById('musicProgressDot');
+
+            if (curTime) {
+                curTime.textContent = fmtTime(audio.currentTime);
+            }
+            if (totTime && audio.duration && !isNaN(audio.duration)) {
+                totTime.textContent = fmtTime(audio.duration);
+            }
+            if (fill && dot && audio.duration && !isNaN(audio.duration)) {
+                const pct = Math.min(100, Math.max(0, (audio.currentTime / audio.duration) * 100));
+                fill.style.width = pct + '%';
+                dot.style.left = pct + '%';
+            }
+        }
+
         function bindControls() {
             if (!audio) return;
             const playBtn = pDoc.getElementById('musicBtnPlayPause');
+            const textToggle = pDoc.getElementById('musicTextToggleBtn');
+            const floatBtn = pDoc.getElementById('floatingMusicToggle');
             const prevBtn = pDoc.getElementById('musicBtnPrev');
             const nextBtn = pDoc.getElementById('musicBtnNext');
             const heartBtn = pDoc.getElementById('musicBtnHeart');
             const track = pDoc.getElementById('musicProgressTrack');
-            const fill = pDoc.getElementById('musicProgressFill');
-            const dot = pDoc.getElementById('musicProgressDot');
-            const curTime = pDoc.getElementById('musicTimeCurrent');
-            const totTime = pDoc.getElementById('musicTimeTotal');
-
-            function updateUI() {
-                if (!audio) return;
-                if (playBtn) {
-                    playBtn.innerHTML = audio.paused ? '▶' : '❚❚';
-                }
-                if (curTime) {
-                    curTime.textContent = fmtTime(audio.currentTime);
-                }
-                if (totTime && audio.duration && !isNaN(audio.duration)) {
-                    totTime.textContent = fmtTime(audio.duration);
-                }
-                if (fill && dot && audio.duration && !isNaN(audio.duration)) {
-                    const pct = Math.min(100, Math.max(0, (audio.currentTime / audio.duration) * 100));
-                    fill.style.width = pct + '%';
-                    dot.style.left = pct + '%';
-                }
-            }
 
             if (playBtn && !playBtn.__bound) {
                 playBtn.__bound = true;
-                playBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (audio.paused) {
-                        audio.play().then(updateUI).catch(() => {});
-                    } else {
-                        audio.pause();
-                        updateUI();
-                    }
-                };
+                playBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); togglePlay(); };
+            }
+
+            if (textToggle && !textToggle.__bound) {
+                textToggle.__bound = true;
+                textToggle.onclick = function(e) { e.preventDefault(); e.stopPropagation(); togglePlay(); };
+            }
+
+            if (floatBtn && !floatBtn.__bound) {
+                floatBtn.__bound = true;
+                floatBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); togglePlay(); };
             }
 
             if (prevBtn && !prevBtn.__bound) {
                 prevBtn.__bound = true;
                 prevBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    e.preventDefault(); e.stopPropagation();
                     audio.currentTime = Math.max(0, audio.currentTime - 10);
                     updateUI();
                 };
@@ -374,8 +416,7 @@ def render_sidebar_audio_bridge():
             if (nextBtn && !nextBtn.__bound) {
                 nextBtn.__bound = true;
                 nextBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    e.preventDefault(); e.stopPropagation();
                     if (audio.duration) {
                         audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
                     }
@@ -386,8 +427,7 @@ def render_sidebar_audio_bridge():
             if (heartBtn && !heartBtn.__bound) {
                 heartBtn.__bound = true;
                 heartBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    e.preventDefault(); e.stopPropagation();
                     const isFav = heartBtn.classList.toggle('favorited');
                     heartBtn.textContent = isFav ? '♥' : '♡';
                     heartBtn.style.color = isFav ? '#ff6b81' : '#baa9b4';
@@ -398,8 +438,7 @@ def render_sidebar_audio_bridge():
             if (track && !track.__bound) {
                 track.__bound = true;
                 track.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
+                    e.preventDefault(); e.stopPropagation();
                     if (!audio.duration) return;
                     const rect = track.getBoundingClientRect();
                     const clickX = e.clientX - rect.left;
@@ -555,9 +594,14 @@ def render_sidebar():
             </div>
             <div class="music-controls-row">
                 <span class="music-ctrl-icon music-btn-prev" id="musicBtnPrev" title="Previous / Rewind 10s">⏮</span>
-                <button class="music-ctrl-playpause-glow" id="musicBtnPlayPause" title="Play / Pause">❚❚</button>
+                <button class="music-ctrl-playpause-glow" id="musicBtnPlayPause" title="Click to Start or Stop Music">❚❚</button>
                 <span class="music-ctrl-icon music-btn-next" id="musicBtnNext" title="Next / Forward 10s">⏭</span>
                 <span class="music-ctrl-heart" id="musicBtnHeart" title="Favorite">♡</span>
+            </div>
+            <div class="music-toggle-row">
+                <button class="music-text-toggle-btn" id="musicTextToggleBtn" title="Start or Stop Music">
+                    <span id="musicTextToggleIcon">⏸</span> &nbsp;<span id="musicTextToggleLabel">Stop Music</span>
+                </button>
             </div>
         </div>
         """)
@@ -597,7 +641,7 @@ def render_sidebar():
         </div>
         """)
 
-    # Connect persistent JavaScript bridge to sidebar music card
+    # Connect persistent JavaScript bridge to sidebar music card and floating button
     render_sidebar_audio_bridge()
 
 
@@ -1086,6 +1130,15 @@ def main():
 
     # 1. Global Styles
     load_styles()
+
+    # Floating Music Controller (Always accessible at top-right on desktop & mobile)
+    ui("""
+    <div class="floating-music-bar" id="floatingMusicBar">
+        <button class="floating-music-btn" id="floatingMusicToggle" title="Click to Start or Stop Music">
+            <span class="music-pill-icon music-note-anim">🎵</span> Music Playing
+        </button>
+    </div>
+    """)
 
     # 2. First-load Startup Overlay
     if not st.session_state["session_started"]:
