@@ -276,15 +276,114 @@ def render_startup_state_machine():
 # 6. Interactive Sidebar Music & Navigation JavaScript Bridge
 # -----------------------------------------------------------------------------
 def render_sidebar_and_navigation_bridge():
-    """Register global navigation helper and bind real-time sidebar music controls."""
+    """Register global navigation helper and bind bulletproof real-time sidebar music controls."""
     components.html(
         """
     <script>
     (function() {
         const pDoc = window.parent.document;
-        const audio = pDoc.getElementById('farewellBgAudioMain');
 
-        // 1. Global Navigation Trigger callable from any HTML card or button
+        // 1. Dynamic Audio Resolver
+        window.parent.__farewellGetAudio = function() {
+            let a = pDoc.getElementById('farewellBgAudioMain') || window.parent.__farewell_audio;
+            if (!a) {
+                const audios = pDoc.getElementsByTagName('audio');
+                if (audios.length > 0) a = audios[0];
+            }
+            return a;
+        };
+
+        // 2. Format Seconds into MM:SS
+        function fmtTime(sec) {
+            if (!sec || isNaN(sec)) return "00:00";
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+        }
+
+        // 3. Real-Time UI Synchronizer
+        window.parent.__farewellUpdateMusicUI = function() {
+            const audio = window.parent.__farewellGetAudio();
+            const isPaused = !audio || audio.paused;
+
+            // Circular Play/Pause button
+            const playBtn = pDoc.getElementById('musicBtnPlayPause');
+            if (playBtn) {
+                playBtn.innerHTML = isPaused ? '▶' : '❚❚';
+                playBtn.title = isPaused ? 'Start Music' : 'Stop Music';
+            }
+
+            // Stop / Start Pill Button
+            const stopStartBtn = pDoc.getElementById('musicBtnStopStart');
+            const stopStartIcon = pDoc.getElementById('musicBtnStopStartIcon');
+            const stopStartText = pDoc.getElementById('musicBtnStopStartText');
+            if (stopStartBtn && stopStartIcon && stopStartText) {
+                stopStartIcon.textContent = isPaused ? '▶' : '⏸';
+                stopStartText.textContent = isPaused ? 'Start Music' : 'Stop Music';
+                stopStartBtn.classList.toggle('is-stopped', isPaused);
+                stopStartBtn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
+            }
+
+            // Timeline & Track
+            if (audio) {
+                const curTime = pDoc.getElementById('musicTimeCurrent');
+                const totTime = pDoc.getElementById('musicTimeTotal');
+                const fill = pDoc.getElementById('musicProgressFill');
+                const dot = pDoc.getElementById('musicProgressDot');
+
+                if (curTime) curTime.textContent = fmtTime(audio.currentTime);
+                if (totTime && audio.duration && !isNaN(audio.duration)) {
+                    totTime.textContent = fmtTime(audio.duration);
+                }
+                if (fill && dot && audio.duration && !isNaN(audio.duration)) {
+                    const pct = Math.min(100, Math.max(0, (audio.currentTime / audio.duration) * 100));
+                    fill.style.width = pct + '%';
+                    dot.style.left = pct + '%';
+                }
+            }
+        };
+
+        // 4. Guaranteed Audio Toggle Function
+        window.parent.__farewellToggleAudio = function() {
+            const audio = window.parent.__farewellGetAudio();
+            if (!audio) {
+                console.warn('Farewell: No audio element available on document.');
+                return;
+            }
+            if (audio.paused) {
+                audio.play().then(() => {
+                    if (window.parent.__farewellUpdateMusicUI) {
+                        window.parent.__farewellUpdateMusicUI();
+                    }
+                }).catch(err => {
+                    console.error('Audio play error:', err);
+                });
+            } else {
+                audio.pause();
+                if (window.parent.__farewellUpdateMusicUI) {
+                    window.parent.__farewellUpdateMusicUI();
+                }
+            }
+        };
+
+        // 5. Rewind & Fast-Forward
+        window.parent.__farewellRewind = function() {
+            const a = window.parent.__farewellGetAudio();
+            if (a) {
+                a.currentTime = Math.max(0, a.currentTime - 10);
+                window.parent.__farewellUpdateMusicUI();
+            }
+        };
+
+        window.parent.__farewellForward = function() {
+            const a = window.parent.__farewellGetAudio();
+            if (a && a.duration) {
+                a.currentTime = Math.min(a.duration, a.currentTime + 10);
+                window.parent.__farewellUpdateMusicUI();
+            }
+        };
+
+        // 6. Global Navigation Trigger callable from any HTML card or button
         window.parent.__farewellNav = function(chapterId) {
             if (!chapterId) return;
             const sidebar = pDoc.querySelector('[data-testid="stSidebar"]');
@@ -307,170 +406,87 @@ def render_sidebar_and_navigation_bridge():
             window.parent.location.href = url.href;
         };
 
-        // 2. Format Seconds into MM:SS
-        function fmtTime(sec) {
-            if (!sec || isNaN(sec)) return "00:00";
-            const m = Math.floor(sec / 60);
-            const s = Math.floor(sec % 60);
-            return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+        // 7. Global Event Delegation on Parent Document (Intercepts clicks regardless of Streamlit DOM updates)
+        if (window.parent.__farewellClickDelegation) {
+            pDoc.removeEventListener('click', window.parent.__farewellClickDelegation, true);
         }
 
-        // 3. Audio State Toggle
-        function toggleAudio() {
-            if (!audio) return;
-            if (audio.paused) {
-                audio.play().then(updateMusicUI).catch(() => {});
-            } else {
-                audio.pause();
-                updateMusicUI();
-            }
-        }
+        window.parent.__farewellClickDelegation = function(e) {
+            const target = e.target;
+            if (!target) return;
 
-        // 4. Update Music UI in Real-Time
-        function updateMusicUI() {
-            if (!audio) return;
-            const isPaused = audio.paused;
+            const stopStart = target.closest('#musicBtnStopStart');
+            const playPause = target.closest('#musicBtnPlayPause');
+            const prevBtn = target.closest('#musicBtnPrev');
+            const nextBtn = target.closest('#musicBtnNext');
+            const heartBtn = target.closest('#musicBtnHeart');
+            const track = target.closest('#musicProgressTrack');
 
-            // 1. Center circular button
-            const playBtn = pDoc.getElementById('musicBtnPlayPause');
-            if (playBtn) {
-                playBtn.innerHTML = isPaused ? '▶' : '❚❚';
-                playBtn.title = isPaused ? 'Start Music' : 'Stop Music';
+            if (stopStart || playPause) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.__farewellToggleAudio();
+                return;
             }
 
-            // 2. Dedicated Stop / Start button inside sidebar music card
-            const stopStartBtn = pDoc.getElementById('musicBtnStopStart');
-            const stopStartIcon = pDoc.getElementById('musicBtnStopStartIcon');
-            const stopStartText = pDoc.getElementById('musicBtnStopStartText');
-            if (stopStartBtn && stopStartIcon && stopStartText) {
-                stopStartIcon.textContent = isPaused ? '▶' : '⏸';
-                stopStartText.textContent = isPaused ? 'Start Music' : 'Stop Music';
-                stopStartBtn.classList.toggle('is-stopped', isPaused);
-                stopStartBtn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
+            if (prevBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.__farewellRewind();
+                return;
             }
 
-            // 3. Floating top-right button
-            const floatBtn = pDoc.getElementById('floatingMusicBtn');
-            const floatIcon = pDoc.getElementById('floatingMusicIcon');
-            const floatText = pDoc.getElementById('floatingMusicText');
-            if (floatBtn && floatIcon && floatText) {
-                floatIcon.textContent = isPaused ? '🔇' : '🎵';
-                floatText.textContent = isPaused ? 'Start Music' : 'Stop Music';
-                floatBtn.classList.toggle('is-stopped', isPaused);
-                floatBtn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
+            if (nextBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.__farewellForward();
+                return;
             }
 
-            const curTime = pDoc.getElementById('musicTimeCurrent');
-            const totTime = pDoc.getElementById('musicTimeTotal');
-            const fill = pDoc.getElementById('musicProgressFill');
-            const dot = pDoc.getElementById('musicProgressDot');
-
-            if (curTime) {
-                curTime.textContent = fmtTime(audio.currentTime);
-            }
-            if (totTime && audio.duration && !isNaN(audio.duration)) {
-                totTime.textContent = fmtTime(audio.duration);
-            }
-            if (fill && dot && audio.duration && !isNaN(audio.duration)) {
-                const pct = Math.min(100, Math.max(0, (audio.currentTime / audio.duration) * 100));
-                fill.style.width = pct + '%';
-                dot.style.left = pct + '%';
-            }
-        }
-
-        // 5. Bind Event Handlers
-        function bindSidebarAudio() {
-            if (!audio) return;
-
-            const playBtn = pDoc.getElementById('musicBtnPlayPause');
-            const stopStartBtn = pDoc.getElementById('musicBtnStopStart');
-            const floatBtn = pDoc.getElementById('floatingMusicBtn');
-            const prevBtn = pDoc.getElementById('musicBtnPrev');
-            const nextBtn = pDoc.getElementById('musicBtnNext');
-            const heartBtn = pDoc.getElementById('musicBtnHeart');
-            const track = pDoc.getElementById('musicProgressTrack');
-
-            if (playBtn && !playBtn.__bound) {
-                playBtn.__bound = true;
-                playBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleAudio();
-                };
+            if (heartBtn) {
+                e.preventDefault();
+                e.stopPropagation();
+                const isFav = heartBtn.classList.toggle('favorited');
+                heartBtn.textContent = isFav ? '♥' : '♡';
+                heartBtn.style.color = isFav ? '#E96582' : '#C9B7B5';
+                return;
             }
 
-            if (stopStartBtn && !stopStartBtn.__bound) {
-                stopStartBtn.__bound = true;
-                stopStartBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleAudio();
-                };
-            }
-
-            if (floatBtn && !floatBtn.__bound) {
-                floatBtn.__bound = true;
-                floatBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    toggleAudio();
-                };
-            }
-
-            if (prevBtn && !prevBtn.__bound) {
-                prevBtn.__bound = true;
-                prevBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    audio.currentTime = Math.max(0, audio.currentTime - 10);
-                    updateMusicUI();
-                };
-            }
-
-            if (nextBtn && !nextBtn.__bound) {
-                nextBtn.__bound = true;
-                nextBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (audio.duration) {
-                        audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
-                    }
-                    updateMusicUI();
-                };
-            }
-
-            if (heartBtn && !heartBtn.__bound) {
-                heartBtn.__bound = true;
-                heartBtn.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const isFav = heartBtn.classList.toggle('favorited');
-                    heartBtn.textContent = isFav ? '♥' : '♡';
-                    heartBtn.style.color = isFav ? '#ff6b81' : '#baa9b4';
-                    heartBtn.style.filter = isFav ? 'drop-shadow(0 0 10px rgba(255, 107, 129, 0.9))' : 'none';
-                };
-            }
-
-            if (track && !track.__bound) {
-                track.__bound = true;
-                track.onclick = function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    if (!audio.duration) return;
+            if (track) {
+                e.preventDefault();
+                e.stopPropagation();
+                const a = window.parent.__farewellGetAudio();
+                if (a && a.duration) {
                     const rect = track.getBoundingClientRect();
                     const clickX = e.clientX - rect.left;
                     const pct = Math.max(0, Math.min(1, clickX / rect.width));
-                    audio.currentTime = pct * audio.duration;
-                    updateMusicUI();
-                };
+                    a.currentTime = pct * a.duration;
+                    window.parent.__farewellUpdateMusicUI();
+                }
+                return;
             }
+        };
 
-            updateMusicUI();
+        pDoc.addEventListener('click', window.parent.__farewellClickDelegation, true);
+
+        // 8. Attach audio event listeners
+        const audio = window.parent.__farewellGetAudio();
+        if (audio) {
+            audio.onplay = () => window.parent.__farewellUpdateMusicUI();
+            audio.onpause = () => window.parent.__farewellUpdateMusicUI();
+            audio.ontimeupdate = () => window.parent.__farewellUpdateMusicUI();
         }
 
-        bindSidebarAudio();
-        if (!window.parent.__farewellInterval) {
-            window.parent.__farewellInterval = setInterval(bindSidebarAudio, 350);
+        // Initial sync
+        window.parent.__farewellUpdateMusicUI();
+
+        // Continuous sync loop on parent window
+        if (!window.parent.__farewellSyncInterval) {
+            window.parent.__farewellSyncInterval = setInterval(() => {
+                if (window.parent.__farewellUpdateMusicUI) {
+                    window.parent.__farewellUpdateMusicUI();
+                }
+            }, 300);
         }
     })();
     </script>
@@ -611,14 +627,14 @@ def render_sidebar():
                 <span class="music-time-lbl music-time-total" id="musicTimeTotal">04:58</span>
             </div>
             <div class="music-controls-row">
-                <span class="music-ctrl-icon music-btn-prev" id="musicBtnPrev" title="Previous / Rewind 10s">⏮</span>
-                <button class="music-ctrl-playpause-glow" id="musicBtnPlayPause" title="Click to Start or Stop Music">❚❚</button>
-                <span class="music-ctrl-icon music-btn-next" id="musicBtnNext" title="Next / Forward 10s">⏭</span>
+                <span class="music-ctrl-icon music-btn-prev" id="musicBtnPrev" onclick="window.parent.__farewellRewind && window.parent.__farewellRewind()" title="Previous / Rewind 10s">⏮</span>
+                <button class="music-ctrl-playpause-glow" id="musicBtnPlayPause" onclick="window.parent.__farewellToggleAudio && window.parent.__farewellToggleAudio()" title="Click to Start or Stop Music">❚❚</button>
+                <span class="music-ctrl-icon music-btn-next" id="musicBtnNext" onclick="window.parent.__farewellForward && window.parent.__farewellForward()" title="Next / Forward 10s">⏭</span>
                 <span class="music-ctrl-heart" id="musicBtnHeart" title="Favorite">♡</span>
             </div>
             <!-- Prominent Stop / Start Music Button -->
             <div class="music-stop-start-row">
-                <button class="music-stop-start-pill" id="musicBtnStopStart" title="Click to Stop or Start Music">
+                <button class="music-stop-start-pill" id="musicBtnStopStart" onclick="window.parent.__farewellToggleAudio && window.parent.__farewellToggleAudio()" title="Click to Stop or Start Music">
                     <span id="musicBtnStopStartIcon">⏸</span> &nbsp;<span id="musicBtnStopStartText">Stop Music</span>
                 </button>
             </div>
