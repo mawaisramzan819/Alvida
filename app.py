@@ -96,8 +96,8 @@ def get_thumbnail_b64(name: str):
 
 @st.cache_data
 def get_hero_panorama_b64():
-    """Load clean panoramic hero artwork into base64 string."""
-    for name in ["hero_panorama_clean.jpg", "hero_banner_ref.jpg", "hero_scene_walk.jpg"]:
+    """Load master cinematic hero artwork into base64 string."""
+    for name in ["hero_cinematic_master.jpg", "hero_panorama_hd.jpg", "hero_panorama_clean.jpg", "hero_banner_ref.jpg"]:
         path = config.IMAGES_DIR / name
         if path.exists():
             try:
@@ -287,22 +287,18 @@ def render_sidebar_and_navigation_bridge():
         // 1. Global Navigation Trigger callable from any HTML card or button
         window.parent.__farewellNav = function(chapterId) {
             if (!chapterId) return;
-            // First check hidden bridge buttons
-            const bridgeBtn = pDoc.getElementById('bridge_btn_' + chapterId);
-            if (bridgeBtn) {
-                bridgeBtn.click();
-                return;
-            }
-            // Second check sidebar buttons
-            const allBtns = pDoc.querySelectorAll('[data-testid="stSidebar"] div.stButton > button');
-            for (let b of allBtns) {
-                const txt = (b.innerText || '').toLowerCase();
-                if (txt.includes(chapterId.toLowerCase()) || 
-                    (chapterId === 'words' && txt.includes('words')) ||
-                    (chapterId === 'respect' && txt.includes('respect')) ||
-                    (chapterId === 'goodbye' && txt.includes('final note'))) {
-                    b.click();
-                    return;
+            const sidebar = pDoc.querySelector('[data-testid="stSidebar"]');
+            if (sidebar) {
+                const allBtns = sidebar.querySelectorAll('div.stButton > button');
+                for (let b of allBtns) {
+                    const txt = (b.innerText || '').toLowerCase();
+                    if (txt.includes(chapterId.toLowerCase()) || 
+                        (chapterId === 'words' && txt.includes('words')) ||
+                        (chapterId === 'respect' && txt.includes('respect')) ||
+                        (chapterId === 'goodbye' && txt.includes('final note'))) {
+                        b.click();
+                        return;
+                    }
                 }
             }
             // Fallback: URL query param
@@ -566,17 +562,18 @@ def render_sidebar():
     """Render cinematic left sidebar matching exact reference UI with full 4-tier hierarchy."""
     with st.sidebar:
         # =====================================================================
-        # 1. TOP BRAND / TITLE AREA
+        # 1. TOP BRAND / TITLE AREA (A Farewell / That Stays / in the Heart)
         # =====================================================================
         ui("""
         <div class="sidebar-brand-wrapper">
             <div class="sidebar-brand-heart-glow">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e57373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E96582" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
             </div>
             <div class="sidebar-brand-title">A Farewell</div>
-            <div class="sidebar-brand-sub">🌿 &nbsp; That Stays &nbsp; 🌿</div>
+            <div class="sidebar-brand-sub">That Stays</div>
+            <div class="sidebar-brand-sub-bottom">in the Heart</div>
         </div>
         """)
 
@@ -662,19 +659,6 @@ def render_sidebar():
             </div>
         </div>
         """)
-
-
-# -----------------------------------------------------------------------------
-# 10. Hidden Bridge Buttons (Enables seamless click from custom HTML cards)
-# -----------------------------------------------------------------------------
-def render_hidden_bridge_buttons():
-    """Render invisible buttons so HTML elements can trigger instant Streamlit chapter transitions."""
-    ui('<div id="hiddenBridgeContainer" style="display:none !important; visibility:hidden !important; height:0 !important; overflow:hidden !important;">')
-    for chap in config.CHAPTERS:
-        if st.button(f"bridge_{chap['id']}", key=f"bridge_btn_{chap['id']}"):
-            st.session_state["pending_section"] = chap["id"]
-            st.rerun()
-    ui('</div>')
 
 
 # -----------------------------------------------------------------------------
@@ -1243,16 +1227,6 @@ def main():
     # 1. Global Styles
     load_styles()
 
-    # Floating Music Toggle Button (Always visible on all chapters and devices)
-    ui("""
-    <div class="floating-music-bar" id="floatingMusicBar">
-        <button class="floating-music-toggle-btn" id="floatingMusicBtn" title="Click to Stop or Start Music">
-            <span id="floatingMusicIcon" class="floating-music-icon">🎵</span>
-            <span id="floatingMusicText" class="floating-music-text">Stop Music</span>
-        </button>
-    </div>
-    """)
-
     # 2. First-load Startup Overlay
     if not st.session_state["session_started"]:
         st.session_state["session_started"] = True
@@ -1260,9 +1234,6 @@ def main():
 
     # 3. Always Render Exact Sidebar Architecture (Brand -> Nav -> Music -> Progress)
     render_sidebar()
-
-    # 4. Hidden Bridge Buttons for Smooth Card Clicks
-    render_hidden_bridge_buttons()
 
     # 5. Handle Pending Navigation Transition
     if st.session_state.get("pending_section"):

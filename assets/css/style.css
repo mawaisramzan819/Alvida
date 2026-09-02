@@ -131,31 +131,49 @@ p {
 }
 
 /* ==========================================================================
-   2. FIXED LEFT SIDEBAR (Width: 270px)
+   2. FIXED LEFT SIDEBAR (Width: 270px) & DESKTOP TWO-COLUMN SHELL
    ========================================================================== */
 [data-testid="stSidebar"] {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  bottom: 0 !important;
+  width: 270px !important;
+  min-width: 270px !important;
+  max-width: 270px !important;
+  height: 100vh !important;
+  z-index: 1000 !important;
+  transform: none !important;
+  visibility: visible !important;
   background-color: var(--bg-sidebar) !important;
   border-right: 1px solid var(--border-dark) !important;
   box-shadow: 6px 0 28px rgba(0, 0, 0, 0.45) !important;
-  min-width: 270px !important;
-  max-width: 285px !important;
+  overflow-y: auto !important;
+  padding: 0 !important;
 }
 
 [data-testid="stSidebar"] > div:first-child {
   background-color: var(--bg-sidebar) !important;
-  padding: 1.8rem 1.15rem 2.5rem 1.15rem !important;
+  padding: 1.6rem 1.15rem 2.5rem 1.15rem !important;
 }
 
-[data-testid="stSidebarNav"] {
+[data-testid="stSidebarNav"],
+[data-testid="stSidebarCollapseButton"] {
   display: none !important;
 }
 
-[data-testid="stSidebarCollapseButton"] button,
-[data-testid="stSidebarCollapsedControl"] button {
-  color: var(--accent-primary) !important;
-  background: var(--surface-dark-2) !important;
-  border: 1px solid var(--border-dark) !important;
-  border-radius: var(--radius-sm) !important;
+/* MAIN CONTENT OFFSET */
+[data-testid="stMain"],
+[data-testid="stAppViewContainer"] > .main {
+  margin-left: 270px !important;
+  width: calc(100% - 270px) !important;
+  min-width: 0 !important;
+}
+
+.main .block-container {
+  max-width: 1280px !important;
+  padding: 20px 32px 48px 32px !important;
+  margin: 0 auto !important;
 }
 
 /* 1. TOP BRANDING AREA */
@@ -164,6 +182,14 @@ p {
   margin-bottom: 1.6rem;
   padding-bottom: 1.2rem;
   border-bottom: 1px solid var(--border-dark);
+}
+
+.sidebar-brand-sub-bottom {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  color: var(--text-secondary-dark-bg);
+  letter-spacing: 0.5px;
+  margin-top: 0.1rem;
 }
 
 .sidebar-brand-heart-glow {
@@ -512,19 +538,20 @@ p {
 }
 
 /* ==========================================================================
-   3. HERO SECTION (.hero-panoramic-card) — PANORAMIC CARD
+   3. HERO SECTION (.hero-panoramic-card) — LARGE CINEMATIC VISUAL BLOCK
    ========================================================================== */
 .hero-panoramic-card {
   position: relative;
   width: 100%;
-  min-height: 330px;
-  height: clamp(330px, 32vw, 400px);
+  min-height: 560px;
+  height: clamp(540px, 48vw, 640px);
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), 0 0 28px rgba(233, 101, 130, 0.15);
   border: 1px solid var(--border-dark);
+  margin-top: 0;
   margin-bottom: var(--space-8);
-  background: #0f121e;
+  background: #090D1B;
 }
 
 .hero-panoramic-bg-img {
@@ -540,16 +567,22 @@ p {
 .hero-panoramic-gradient-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(9, 13, 27, 0.96) 0%, rgba(9, 13, 27, 0.85) 34%, rgba(9, 13, 27, 0.15) 60%, transparent 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(9, 13, 27, 0.94) 0%,
+    rgba(9, 13, 27, 0.78) 36%,
+    rgba(9, 13, 27, 0.25) 68%,
+    rgba(9, 13, 27, 0.02) 100%
+  );
   pointer-events: none;
 }
 
 .hero-left-overlay {
   position: absolute;
-  left: 2.5rem;
-  top: 1.8rem;
-  bottom: 1.8rem;
-  width: 48%;
+  left: 3rem;
+  top: 2.2rem;
+  bottom: 2.2rem;
+  width: 50%;
   max-width: 520px;
   display: flex;
   flex-direction: column;
