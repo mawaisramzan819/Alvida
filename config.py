@@ -20,30 +20,30 @@ APP_ICON = "💗"
 PAGE_LAYOUT = "wide"
 INITIAL_SIDEBAR_STATE = "expanded"
 
-# Visual Theme Tokens (Sampled from Reference Mockup)
+# Visual Theme Tokens — Locked "Romantic Midnight Editorial" Design System
 THEME = {
-    "bg_deep": "#0e101a",
-    "bg_navy": "#141324",
-    "bg_surface": "#1b172a",
-    "bg_sidebar": "#161324",
-    "bg_card_light": "#fbf5f2",
-    "bg_card_dark": "#161a2e",
-    "border_subtle": "rgba(255, 180, 180, 0.12)",
-    "border_rose": "rgba(229, 115, 115, 0.35)",
-    "accent_rose": "#e26a6a",
-    "accent_coral": "#ff8a80",
-    "accent_blush": "#fce4ec",
-    "accent_gold": "#f59e0b",
-    "text_primary": "#ffffff",
-    "text_secondary": "#cbd5e1",
-    "text_muted": "#baa9b4",
-    "text_dark_card": "#2d1f23",
-    "text_dark_card_desc": "#635156",
+    "bg_deep": "#090D1B",
+    "bg_sidebar": "#101428",
+    "surface_dark": "#18172B",
+    "surface_dark_2": "#242036",
+    "surface_light": "#F8EDE4",
+    "surface_light_soft": "#F3E2DA",
+    "accent_primary": "#E96582",
+    "accent_primary_hover": "#F07D92",
+    "accent_soft": "#F39AA7",
+    "accent_peach": "#F5B18F",
+    "accent_gold": "#EAB378",
+    "text_primary_dark_bg": "#FFF4ED",
+    "text_secondary_dark_bg": "#C9B7B5",
+    "text_primary_light_bg": "#302436",
+    "text_secondary_light_bg": "#725E67",
+    "border_dark": "rgba(235,151,155,.22)",
+    "border_light": "#E7C9C2",
 }
 
-# Typography Google Fonts
+# Typography Google Fonts (Cormorant Garamond, Allura, Inter)
 GOOGLE_FONTS = [
-    "https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap"
+    "https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@400;500;600;700&display=swap"
 ]
 
 # Audio Settings
