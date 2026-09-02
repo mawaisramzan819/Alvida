@@ -448,231 +448,220 @@ p {
 /* ==========================================================================
    3. HERO SECTION (.v2-hero) — MATCHING EXACT REFERENCE UI
    ========================================================================== */
-.v2-main-wrap {
-  width: 100%;
-  animation: fadeIn 0.8s ease-out;
-}
-
-.v2-hero-text-wrap {
+/* ==========================================================================
+   3. HERO SECTION (.hero-panoramic-card) — UNIFIED WIDE BANNER
+   ========================================================================== */
+.hero-panoramic-card {
   position: relative;
-  padding: 1.2rem 0;
+  width: 100%;
+  min-height: 330px;
+  height: clamp(330px, 32vw, 400px);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 35px rgba(229, 115, 115, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 2rem;
+  background: #0f121e;
 }
 
-.floating-doodle-heart {
+.hero-panoramic-bg-img {
   position: absolute;
-  top: 4.8rem;
-  right: 2.5rem;
-  font-size: 2.3rem;
-  color: #e57373;
-  opacity: 0.9;
-  filter: drop-shadow(0 0 12px rgba(229, 115, 115, 0.75));
-  animation: pulseGlow 2.8s infinite ease-in-out;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+  display: block;
 }
 
-.v2-hero-headline {
+.hero-panoramic-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(15, 18, 30, 0.95) 0%, rgba(15, 18, 30, 0.82) 34%, rgba(15, 18, 30, 0.15) 60%, transparent 100%);
+  pointer-events: none;
+}
+
+.hero-left-overlay {
+  position: absolute;
+  left: 2.5rem;
+  top: 1.8rem;
+  bottom: 1.8rem;
+  width: 48%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  z-index: 5;
+}
+
+.hero-heart-doodle {
+  font-size: 2.2rem;
+  color: #e57373;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+  filter: drop-shadow(0 0 10px rgba(229, 115, 115, 0.8));
+  animation: pulseGlow 2.5s infinite ease-in-out;
+}
+
+.hero-headline {
   font-family: var(--font-heading);
-  font-size: clamp(2.6rem, 4.4vw, 4rem);
-  line-height: 1.14;
-  margin-bottom: 1.3rem;
+  font-size: clamp(2.2rem, 3.4vw, 3.3rem);
+  line-height: 1.12;
   color: #ffffff;
   font-weight: 600;
+  margin: 0.2rem 0 0.8rem 0;
 }
 
-.hero-cursive-calligraphy {
+.hero-cursive {
   font-family: var(--font-cursive);
-  font-size: 1.35em;
-  font-style: normal;
+  font-size: 1.32em;
   color: #f09292;
   display: inline-block;
-  text-shadow: 0 0 25px rgba(240, 146, 146, 0.55);
+  text-shadow: 0 0 25px rgba(240, 146, 146, 0.6);
 }
 
-.v2-hero-subtitle {
+.hero-subtitle {
   font-family: var(--font-body);
-  font-size: 1.12rem;
+  font-size: 0.92rem;
   color: #d9ced4;
-  line-height: 1.75;
-  margin-bottom: 2rem;
-  max-width: 500px;
+  line-height: 1.6;
+  margin: 0 0 1.3rem 0;
+  max-width: 440px;
 }
 
-/* Hero Action Buttons (Reference UI) */
-button[key="hero_start_btn"],
-div.stButton > button[kind="primary"] {
-  background: linear-gradient(135deg, #e26a6a 0%, #cb4d4d 100%) !important;
-  color: #ffffff !important;
-  border-radius: 28px !important;
-  padding: 0.7rem 1.8rem !important;
-  box-shadow: 0 4px 20px rgba(226, 106, 106, 0.5) !important;
-  border: 1px solid rgba(255, 200, 200, 0.4) !important;
-  font-family: var(--font-ui) !important;
-  font-weight: 600 !important;
+.hero-action-buttons {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-button[key="hero_intro_btn"] {
-  background: rgba(22, 17, 30, 0.65) !important;
-  color: #f0e6eb !important;
-  border-radius: 28px !important;
-  padding: 0.7rem 1.6rem !important;
-  border: 1px solid rgba(255, 180, 180, 0.35) !important;
-  font-family: var(--font-ui) !important;
+.hero-btn-primary {
+  background: linear-gradient(135deg, #e26a6a 0%, #cb4d4d 100%);
+  color: #ffffff;
+  border-radius: 28px;
+  padding: 0.65rem 1.6rem;
+  box-shadow: 0 4px 20px rgba(226, 106, 106, 0.5), inset 0 1px 0 rgba(255, 220, 220, 0.35);
+  border: 1px solid rgba(255, 200, 200, 0.45);
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  outline: none;
 }
 
-.v2-hero-art-container {
-  position: relative;
-  border-radius: 22px;
-  overflow: hidden;
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transform: translateZ(0);
+.hero-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 26px rgba(226, 106, 106, 0.7);
 }
 
-.v2-hero-art-wrapper {
-  position: relative;
+.hero-btn-secondary {
+  background: rgba(22, 17, 30, 0.65);
+  color: #f0e6eb;
+  border-radius: 28px;
+  padding: 0.65rem 1.5rem;
+  border: 1px solid rgba(255, 180, 180, 0.35);
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  outline: none;
+}
+
+.hero-btn-secondary:hover {
+  background: rgba(255, 180, 180, 0.12);
+  color: #ffffff;
+  border-color: rgba(255, 180, 180, 0.55);
+}
+
+.btn-heart-glyph, .btn-play-glyph {
+  font-size: 1rem;
+}
+
+/* Floating Memories Collected Stats Card (Exact Reference UI) */
+.hero-floating-stats-card {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  width: 175px;
+  background: rgba(22, 17, 30, 0.82);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 180, 180, 0.22);
+  border-radius: 18px;
+  padding: 1.1rem 1rem 0.9rem 1rem;
+  text-align: center;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 200, 200, 0.15);
+  z-index: 5;
+}
+
+.stats-card-heart-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(229, 115, 115, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 0.45rem auto;
+  box-shadow: 0 0 14px rgba(229, 115, 115, 0.45);
+}
+
+.stats-card-heart {
+  color: #e57373;
+  font-size: 1.25rem;
+  filter: drop-shadow(0 0 6px rgba(229, 115, 115, 0.8));
+}
+
+.stats-card-title {
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  color: #f0e6eb;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.stats-card-pct {
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  color: #e57373;
+  font-weight: 600;
+  margin-bottom: 0.45rem;
+}
+
+.stats-card-track {
   width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.45rem;
+}
+
+.stats-card-fill {
   height: 100%;
-  border-radius: 22px;
-  overflow: hidden;
+  background: linear-gradient(90deg, #d35454, #f08080);
+  border-radius: 3px;
 }
 
-.kenburns-hero-motion {
-  width: 100%;
-  height: 100%;
-  min-height: 340px;
-  max-height: 420px;
-  object-fit: cover;
-  display: block;
-  transform-origin: 55% 45%;
-  animation: kenBurnsSlow 32s ease-in-out infinite alternate;
-  will-change: transform;
+.stats-card-caption {
+  font-size: 0.68rem;
+  color: #a4949f;
+  font-style: italic;
+  line-height: 1.35;
 }
 
-@keyframes kenBurnsSlow {
-  0% { transform: scale(1.0) translate(0%, 0%); }
-  50% { transform: scale(1.08) translate(-1.2%, -0.8%); }
-  100% { transform: scale(1.0) translate(0%, 0%); }
-}
-
-.hero-atmospheric-haze {
+.stats-card-flower {
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(circle at 65% 35%, rgba(234, 88, 12, 0.18) 0%, rgba(212, 121, 106, 0.10) 45%, transparent 70%);
-  mix-blend-mode: screen;
-  animation: hazeBreathing 18s ease-in-out infinite alternate;
-}
-
-@keyframes hazeBreathing {
-  0% { opacity: 0.4; }
-  100% { opacity: 0.85; }
-}
-
-.hero-horizon-sweep {
-  position: absolute;
-  bottom: 20%;
-  left: -20%;
-  width: 140%;
-  height: 28%;
-  pointer-events: none;
-  background: linear-gradient(90deg, transparent 0%, rgba(245, 158, 11, 0.15) 30%, rgba(234, 88, 12, 0.2) 50%, rgba(245, 158, 11, 0.15) 70%, transparent 100%);
-  mix-blend-mode: color-dodge;
-  filter: blur(12px);
-  animation: horizonLightMove 26s ease-in-out infinite alternate;
-}
-
-@keyframes horizonLightMove {
-  0% { transform: translateX(-6%); }
-  100% { transform: translateX(6%); }
-}
-
-.hero-girl-distance-layer {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: radial-gradient(ellipse at 44% 53%, rgba(13, 17, 23, 0.48) 0%, rgba(13, 17, 23, 0.22) 35%, transparent 62%);
-  animation: distanceMistyFade 34s ease-in-out infinite alternate;
-}
-
-@keyframes distanceMistyFade {
-  0% { opacity: 0.12; transform: scale(0.92); }
-  50% { opacity: 0.52; transform: scale(1.18); filter: blur(1.5px); }
-  100% { opacity: 0.12; transform: scale(0.92); }
-}
-
-.hero-bokeh-light-1 {
-  position: absolute;
-  top: 15%;
-  left: 18%;
-  width: 95px;
-  height: 95px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(251, 191, 36, 0.3) 0%, transparent 70%);
-  filter: blur(16px);
-  pointer-events: none;
-  animation: bokehDrift1 22s ease-in-out infinite alternate;
-}
-
-.hero-bokeh-light-2 {
-  position: absolute;
-  bottom: 22%;
-  right: 25%;
-  width: 125px;
-  height: 125px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(234, 88, 12, 0.24) 0%, transparent 70%);
-  filter: blur(20px);
-  pointer-events: none;
-  animation: bokehDrift2 28s ease-in-out infinite alternate;
-}
-
-@keyframes bokehDrift1 {
-  0% { transform: translate(0, 0) scale(0.9); opacity: 0.35; }
-  100% { transform: translate(24px, -16px) scale(1.25); opacity: 0.75; }
-}
-
-@keyframes bokehDrift2 {
-  0% { transform: translate(0, 0) scale(1.15); opacity: 0.55; }
-  100% { transform: translate(-22px, 18px) scale(0.85); opacity: 0.25; }
-}
-
-.hero-dust-container {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.hero-dust-mote {
-  position: absolute;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #fbbf24;
-  box-shadow: 0 0 8px #f59e0b, 0 0 14px rgba(251, 191, 36, 0.6);
-  opacity: 0;
-  animation: heroMoteFloat linear infinite;
-}
-
-.hd1 { left: 24%; bottom: 8%; animation-duration: 11s; animation-delay: 0s; }
-.hd2 { left: 42%; bottom: 14%; animation-duration: 14s; animation-delay: 2.5s; width: 4px; height: 4px; }
-.hd3 { left: 58%; bottom: 6%; animation-duration: 12s; animation-delay: 5s; }
-.hd4 { left: 74%; bottom: 18%; animation-duration: 15s; animation-delay: 1.2s; width: 3.5px; height: 3.5px; }
-.hd5 { left: 34%; bottom: 4%; animation-duration: 13s; animation-delay: 7s; }
-.hd6 { left: 82%; bottom: 10%; animation-duration: 16s; animation-delay: 4s; }
-
-@keyframes heroMoteFloat {
-  0% { transform: translateY(0) translateX(0); opacity: 0; }
-  15% { opacity: 0.75; }
-  50% { transform: translateY(-80px) translateX(15px); opacity: 0.9; }
-  85% { opacity: 0.55; }
-  100% { transform: translateY(-160px) translateX(-10px); opacity: 0; }
-}
-
-.v2-hero-art-placeholder {
-  width: 100%;
-  min-height: 360px;
-  background: var(--bg-surface);
-  border-radius: 22px;
+  right: -6px;
+  bottom: -6px;
+  font-size: 1rem;
 }
 
 /* ==========================================================================
@@ -719,31 +708,44 @@ button[key="hero_intro_btn"] {
 }
 
 /* ==========================================================================
-   5. 8 CHAPTER CARDS GRID (Exact Reference UI: 7 Light Cards + 1 Dark Card)
+   5. 2x4 CONTENT CARD GRID (Exact Reference UI: 7 Light Cream + 1 Dark Lantern)
    ========================================================================== */
-/* Light Parchment Cards (Cards 1 to 7) */
-.ref-card-light {
-  background: #fbf5f2;
+.ref-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.15rem;
+  width: 100%;
+  margin: 1.5rem 0 2.5rem 0;
+}
+
+.ref-card {
+  position: relative;
   border-radius: 18px;
-  padding: 1.1rem 1.1rem;
+  padding: 1.1rem 1rem;
+  min-height: 155px;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  gap: 0.95rem;
-  border: 1px solid rgba(255, 255, 255, 0.92);
+  gap: 0.85rem;
+  user-select: none;
+}
+
+/* 7 Light Cream Parchment Cards */
+.ref-card-light {
+  background: #fbf5f2;
+  border: 1px solid rgba(255, 255, 255, 0.95);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.32);
-  min-height: 145px;
-  transition: all 0.3s ease;
-  margin-bottom: 0.35rem;
 }
 
 .ref-card-light:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 35px rgba(229, 115, 115, 0.25);
+  transform: translateY(-5px);
+  box-shadow: 0 18px 38px rgba(229, 115, 115, 0.28);
 }
 
 .ref-card-thumb-wrap {
   width: 72px;
-  height: 96px;
+  height: 98px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -757,18 +759,22 @@ button[key="hero_intro_btn"] {
   border-radius: 6px;
 }
 
-.ref-card-body {
+.ref-card-content {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: space-between;
 }
 
 .ref-card-title {
   font-family: var(--font-heading);
-  font-size: 1.15rem;
+  font-size: 1.12rem;
   font-weight: 700;
   color: #2d1f23;
-  margin-bottom: 0.35rem;
-  line-height: 1.2;
+  margin: 0 0 0.3rem 0;
+  line-height: 1.22;
 }
 
 .ref-card-desc {
@@ -776,52 +782,50 @@ button[key="hero_intro_btn"] {
   font-size: 0.77rem;
   color: #635156;
   line-height: 1.45;
-  margin-bottom: 0;
+  margin: 0 0 0.6rem 0;
 }
 
-/* Open Button Overrides for Light Cards */
-[data-testid="stMain"] div.stButton > button {
-  background: #ecd8d8 !important;
-  color: #944242 !important;
-  border-radius: 14px !important;
-  font-size: 0.82rem !important;
-  font-weight: 600 !important;
-  border: 1px solid #d8bebe !important;
-  padding: 0.32rem 0.95rem !important;
-  font-family: var(--font-ui) !important;
-  transition: all 0.25s ease !important;
+.ref-card-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: auto;
 }
 
-[data-testid="stMain"] div.stButton > button:hover {
-  background: #e57373 !important;
-  color: #ffffff !important;
-  border-color: #e57373 !important;
-  box-shadow: 0 4px 15px rgba(229, 115, 115, 0.4) !important;
+.ref-card-open-btn {
+  background: #ecd8d8;
+  color: #944242;
+  border-radius: 12px;
+  padding: 0.3rem 0.85rem;
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  font-weight: 600;
+  border: 1px solid #d8bebe;
+  transition: all 0.2s;
+  display: inline-block;
 }
 
-/* 8th Special Night Lantern Card (Dark Navy) */
+.ref-card-light:hover .ref-card-open-btn {
+  background: #e57373;
+  color: #ffffff;
+  border-color: #e57373;
+  box-shadow: 0 4px 12px rgba(229, 115, 115, 0.45);
+}
+
+/* 8th Special Night Lantern Card */
 .ref-card-dark {
   background: #15182e;
-  border-radius: 18px;
-  padding: 1.1rem 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.8rem;
   border: 1px solid rgba(220, 130, 130, 0.28);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 25px rgba(220, 130, 130, 0.1);
-  min-height: 145px;
-  transition: all 0.3s ease;
-  margin-bottom: 0.35rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55), 0 0 25px rgba(220, 130, 130, 0.12);
+  justify-content: space-between;
 }
 
 .ref-card-dark:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 40px rgba(245, 158, 11, 0.25);
-  border-color: rgba(245, 158, 11, 0.45);
+  transform: translateY(-5px);
+  box-shadow: 0 18px 40px rgba(245, 158, 11, 0.25);
+  border-color: rgba(245, 158, 11, 0.5);
 }
 
-.ref-card-dark-body {
+.ref-card-dark-content {
   flex: 1;
   min-width: 0;
 }
@@ -832,28 +836,20 @@ button[key="hero_intro_btn"] {
   font-weight: 600;
   color: #f8ede8;
   line-height: 1.45;
-  margin-bottom: 0.4rem;
+  margin: 0 0 0.45rem 0;
 }
 
 .ref-card-dark-heart {
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   color: #e57373;
-}
-
-.ref-card-dark-thumb-wrap {
-  width: 72px;
-  height: 96px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  filter: drop-shadow(0 0 8px rgba(229, 115, 115, 0.6));
 }
 
 .ref-card-thumb-lantern {
-  width: 100%;
-  height: 100%;
+  width: 72px;
+  height: 98px;
   object-fit: contain;
-  filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.6));
+  filter: drop-shadow(0 0 14px rgba(245, 158, 11, 0.65));
 }
 
 /* Bottom Footer Bar */

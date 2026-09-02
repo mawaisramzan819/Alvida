@@ -1,7 +1,7 @@
 """
 =============================================================================
-A FAREWELL THAT STAYS — EXACT REFERENCE UI IMPLEMENTATION
-Interactive Storytelling Web Experience with Full-Featured Cinematic Sidebar
+A FAREWELL THAT STAYS — EXACT UI/UX REFERENCE IMPLEMENTATION
+Full-fidelity layout matching reference mockup: Fixed Sidebar + Panoramic Hero + 2x4 Card Grid
 =============================================================================
 """
 
@@ -22,7 +22,7 @@ try:
 except Exception:
     pass
 
-# Page Configuration — Wide cinematic layout with expanded sidebar
+# Page Configuration — Wide layout with persistent sidebar
 st.set_page_config(
     page_title=config.APP_TITLE,
     page_icon=config.APP_ICON,
@@ -95,9 +95,9 @@ def get_thumbnail_b64(name: str):
 
 
 @st.cache_data
-def get_hero_scene_b64():
-    """Load hero scene artwork into base64 string."""
-    for name in ["hero_scene_walk.jpg", "hero_banner_ref.jpg", "alvida_hero.jpg"]:
+def get_hero_panorama_b64():
+    """Load clean panoramic hero artwork into base64 string."""
+    for name in ["hero_panorama_clean.jpg", "hero_banner_ref.jpg", "hero_scene_walk.jpg"]:
         path = config.IMAGES_DIR / name
         if path.exists():
             try:
@@ -106,31 +106,6 @@ def get_hero_scene_b64():
             except Exception:
                 pass
     return ""
-
-
-def get_hero_image_html():
-    """Return hero scene artwork element with cinematic ambient layers."""
-    b64 = get_hero_scene_b64()
-    if b64:
-        return f"""
-        <div class="v2-hero-art-wrapper">
-            <img src="data:image/jpeg;base64,{b64}" class="v2-hero-img kenburns-hero-motion" alt="A Farewell That Stays">
-            <div class="hero-atmospheric-haze"></div>
-            <div class="hero-horizon-sweep"></div>
-            <div class="hero-girl-distance-layer"></div>
-            <div class="hero-bokeh-light-1"></div>
-            <div class="hero-bokeh-light-2"></div>
-            <div class="hero-dust-container">
-                <span class="hero-dust-mote hd1"></span>
-                <span class="hero-dust-mote hd2"></span>
-                <span class="hero-dust-mote hd3"></span>
-                <span class="hero-dust-mote hd4"></span>
-                <span class="hero-dust-mote hd5"></span>
-                <span class="hero-dust-mote hd6"></span>
-            </div>
-        </div>
-        """
-    return '<div class="v2-hero-art-placeholder"></div>'
 
 
 # -----------------------------------------------------------------------------
@@ -194,7 +169,7 @@ def render_cinematic_atmosphere(active_section: str):
 # 5. Startup State Machine & Audio Engine (DOM Persistent Injection)
 # -----------------------------------------------------------------------------
 def render_startup_state_machine():
-    """Inject background audio into parent document DOM and display 2.4s startup overlay."""
+    """Inject background audio into parent document DOM and display 2.2s startup overlay."""
     audio_b64 = get_audio_base64()
     audio_src = f"data:audio/mp3;base64,{audio_b64}" if audio_b64 else "/app/static/farewell.mp3"
 
@@ -233,7 +208,6 @@ def render_startup_state_machine():
                         }}
                         requestAnimationFrame(fadeIn);
                     }}).catch(err => {{
-                        console.log("Autoplay waiting for gesture:", err);
                         const unlockAction = () => {{
                             audio.play().then(() => {{
                                 audio.volume = 0.22;
@@ -289,7 +263,7 @@ def render_startup_state_machine():
             setTimeout(() => {{
                 try {{ overlay.remove(); }} catch(e) {{}}
             }}, 500);
-        }}, 2200);
+        }}, 2000);
     }})();
     </script>
     """,
@@ -299,10 +273,10 @@ def render_startup_state_machine():
 
 
 # -----------------------------------------------------------------------------
-# 6. Interactive Sidebar Music Bridge (Real-Time Audio Player Integration)
+# 6. Interactive Sidebar Music & Navigation JavaScript Bridge
 # -----------------------------------------------------------------------------
-def render_sidebar_audio_bridge():
-    """Bind real-time interactive controls to sidebar music card and floating music bar."""
+def render_sidebar_and_navigation_bridge():
+    """Register global navigation helper and bind real-time sidebar music controls."""
     components.html(
         """
     <script>
@@ -310,6 +284,34 @@ def render_sidebar_audio_bridge():
         const pDoc = window.parent.document;
         const audio = pDoc.getElementById('farewellBgAudioMain');
 
+        // 1. Global Navigation Trigger callable from any HTML card or button
+        window.parent.__farewellNav = function(chapterId) {
+            if (!chapterId) return;
+            // First check hidden bridge buttons
+            const bridgeBtn = pDoc.getElementById('bridge_btn_' + chapterId);
+            if (bridgeBtn) {
+                bridgeBtn.click();
+                return;
+            }
+            // Second check sidebar buttons
+            const allBtns = pDoc.querySelectorAll('[data-testid="stSidebar"] div.stButton > button');
+            for (let b of allBtns) {
+                const txt = (b.innerText || '').toLowerCase();
+                if (txt.includes(chapterId.toLowerCase()) || 
+                    (chapterId === 'words' && txt.includes('words')) ||
+                    (chapterId === 'respect' && txt.includes('respect')) ||
+                    (chapterId === 'goodbye' && txt.includes('final note'))) {
+                    b.click();
+                    return;
+                }
+            }
+            // Fallback: URL query param
+            const url = new URL(window.parent.location.href);
+            url.searchParams.set('chapter', chapterId);
+            window.parent.location.href = url.href;
+        };
+
+        // 2. Format Seconds into MM:SS
         function fmtTime(sec) {
             if (!sec || isNaN(sec)) return "00:00";
             const m = Math.floor(sec / 60);
@@ -317,50 +319,28 @@ def render_sidebar_audio_bridge():
             return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
         }
 
-        function togglePlay() {
+        // 3. Audio State Toggle
+        function toggleAudio() {
             if (!audio) return;
             if (audio.paused) {
-                audio.play().then(updateUI).catch(() => {});
+                audio.play().then(updateMusicUI).catch(() => {});
             } else {
                 audio.pause();
-                updateUI();
+                updateMusicUI();
             }
         }
 
-        function updateUI() {
+        // 4. Update Music UI in Real-Time
+        function updateMusicUI() {
             if (!audio) return;
             const isPaused = audio.paused;
 
-            // 1. Circular center button in sidebar
             const playBtn = pDoc.getElementById('musicBtnPlayPause');
             if (playBtn) {
                 playBtn.innerHTML = isPaused ? '▶' : '❚❚';
                 playBtn.title = isPaused ? 'Start Music' : 'Stop Music';
             }
 
-            // 2. Labeled text toggle in sidebar music card
-            const textToggle = pDoc.getElementById('musicTextToggleBtn');
-            const toggleIcon = pDoc.getElementById('musicTextToggleIcon');
-            const toggleLabel = pDoc.getElementById('musicTextToggleLabel');
-            if (toggleIcon && toggleLabel) {
-                toggleIcon.textContent = isPaused ? '▶' : '⏸';
-                toggleLabel.textContent = isPaused ? 'Start Music' : 'Stop Music';
-            }
-            if (textToggle) {
-                textToggle.classList.toggle('is-paused', isPaused);
-            }
-
-            // 3. Floating top-right button
-            const floatBtn = pDoc.getElementById('floatingMusicToggle');
-            if (floatBtn) {
-                floatBtn.innerHTML = isPaused 
-                    ? '<span class="music-pill-icon">🔇</span> Music Paused' 
-                    : '<span class="music-pill-icon music-note-anim">🎵</span> Music Playing';
-                floatBtn.classList.toggle('is-paused', isPaused);
-                floatBtn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
-            }
-
-            // 4. Progress and timer updates
             const curTime = pDoc.getElementById('musicTimeCurrent');
             const totTime = pDoc.getElementById('musicTimeTotal');
             const fill = pDoc.getElementById('musicProgressFill');
@@ -379,11 +359,11 @@ def render_sidebar_audio_bridge():
             }
         }
 
-        function bindControls() {
+        // 5. Bind Event Handlers
+        function bindSidebarAudio() {
             if (!audio) return;
+
             const playBtn = pDoc.getElementById('musicBtnPlayPause');
-            const textToggle = pDoc.getElementById('musicTextToggleBtn');
-            const floatBtn = pDoc.getElementById('floatingMusicToggle');
             const prevBtn = pDoc.getElementById('musicBtnPrev');
             const nextBtn = pDoc.getElementById('musicBtnNext');
             const heartBtn = pDoc.getElementById('musicBtnHeart');
@@ -391,43 +371,40 @@ def render_sidebar_audio_bridge():
 
             if (playBtn && !playBtn.__bound) {
                 playBtn.__bound = true;
-                playBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); togglePlay(); };
-            }
-
-            if (textToggle && !textToggle.__bound) {
-                textToggle.__bound = true;
-                textToggle.onclick = function(e) { e.preventDefault(); e.stopPropagation(); togglePlay(); };
-            }
-
-            if (floatBtn && !floatBtn.__bound) {
-                floatBtn.__bound = true;
-                floatBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); togglePlay(); };
+                playBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    toggleAudio();
+                };
             }
 
             if (prevBtn && !prevBtn.__bound) {
                 prevBtn.__bound = true;
                 prevBtn.onclick = function(e) {
-                    e.preventDefault(); e.stopPropagation();
+                    e.preventDefault();
+                    e.stopPropagation();
                     audio.currentTime = Math.max(0, audio.currentTime - 10);
-                    updateUI();
+                    updateMusicUI();
                 };
             }
 
             if (nextBtn && !nextBtn.__bound) {
                 nextBtn.__bound = true;
                 nextBtn.onclick = function(e) {
-                    e.preventDefault(); e.stopPropagation();
+                    e.preventDefault();
+                    e.stopPropagation();
                     if (audio.duration) {
                         audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
                     }
-                    updateUI();
+                    updateMusicUI();
                 };
             }
 
             if (heartBtn && !heartBtn.__bound) {
                 heartBtn.__bound = true;
                 heartBtn.onclick = function(e) {
-                    e.preventDefault(); e.stopPropagation();
+                    e.preventDefault();
+                    e.stopPropagation();
                     const isFav = heartBtn.classList.toggle('favorited');
                     heartBtn.textContent = isFav ? '♥' : '♡';
                     heartBtn.style.color = isFav ? '#ff6b81' : '#baa9b4';
@@ -438,22 +415,23 @@ def render_sidebar_audio_bridge():
             if (track && !track.__bound) {
                 track.__bound = true;
                 track.onclick = function(e) {
-                    e.preventDefault(); e.stopPropagation();
+                    e.preventDefault();
+                    e.stopPropagation();
                     if (!audio.duration) return;
                     const rect = track.getBoundingClientRect();
                     const clickX = e.clientX - rect.left;
                     const pct = Math.max(0, Math.min(1, clickX / rect.width));
                     audio.currentTime = pct * audio.duration;
-                    updateUI();
+                    updateMusicUI();
                 };
             }
 
-            updateUI();
+            updateMusicUI();
         }
 
-        bindControls();
-        if (!window.parent.__farewellMusicInterval) {
-            window.parent.__farewellMusicInterval = setInterval(bindControls, 350);
+        bindSidebarAudio();
+        if (!window.parent.__farewellInterval) {
+            window.parent.__farewellInterval = setInterval(bindSidebarAudio, 350);
         }
     })();
     </script>
@@ -539,7 +517,7 @@ def render_nav_loader(target_key: str):
 
 
 # -----------------------------------------------------------------------------
-# 9. Sidebar Component (Matching Exact Reference UI Mockup)
+# 9. Sidebar Component (Matching Exact 4-Tier Hierarchy from Reference UI)
 # -----------------------------------------------------------------------------
 def render_sidebar():
     """Render cinematic left sidebar matching exact reference UI with full 4-tier hierarchy."""
@@ -598,11 +576,6 @@ def render_sidebar():
                 <span class="music-ctrl-icon music-btn-next" id="musicBtnNext" title="Next / Forward 10s">⏭</span>
                 <span class="music-ctrl-heart" id="musicBtnHeart" title="Favorite">♡</span>
             </div>
-            <div class="music-toggle-row">
-                <button class="music-text-toggle-btn" id="musicTextToggleBtn" title="Start or Stop Music">
-                    <span id="musicTextToggleIcon">⏸</span> &nbsp;<span id="musicTextToggleLabel">Stop Music</span>
-                </button>
-            </div>
         </div>
         """)
 
@@ -612,7 +585,7 @@ def render_sidebar():
         chapter_order = ["home", "welcome", "memories", "words", "respect", "intentions", "dua", "goodbye"]
         active_idx = chapter_order.index(active_id) if active_id in chapter_order else 0
 
-        # Milestones progression: Home (12%) -> Goodbye (100%)
+        # Real milestones: Home (12%) -> Goodbye (100%)
         milestones = [12, 25, 38, 50, 63, 75, 88, 100]
         pos_pct = milestones[active_idx]
 
@@ -641,12 +614,22 @@ def render_sidebar():
         </div>
         """)
 
-    # Connect persistent JavaScript bridge to sidebar music card and floating button
-    render_sidebar_audio_bridge()
+
+# -----------------------------------------------------------------------------
+# 10. Hidden Bridge Buttons (Enables seamless click from custom HTML cards)
+# -----------------------------------------------------------------------------
+def render_hidden_bridge_buttons():
+    """Render invisible buttons so HTML elements can trigger instant Streamlit chapter transitions."""
+    ui('<div id="hiddenBridgeContainer" style="display:none !important; visibility:hidden !important; height:0 !important; overflow:hidden !important;">')
+    for chap in config.CHAPTERS:
+        if st.button(f"bridge_{chap['id']}", key=f"bridge_btn_{chap['id']}"):
+            st.session_state["pending_section"] = chap["id"]
+            st.rerun()
+    ui('</div>')
 
 
 # -----------------------------------------------------------------------------
-# 10. Bottom Navigation Bar (Back to Home + Next Chapter)
+# 11. Bottom Navigation Bar (Back to Home + Next Chapter)
 # -----------------------------------------------------------------------------
 def render_chapter_footer(current_id: str):
     """Render clean navigation footer with Back and Next buttons."""
@@ -681,46 +664,66 @@ def render_chapter_footer(current_id: str):
 # CHAPTER 0 — HOME (Matching Exact Reference UI Mockup)
 # -----------------------------------------------------------------------------
 def render_home():
-    """Render Home page with exact layout, colors, typography and cards from reference UI."""
+    """Render Home page with exact layout: Panoramic Hero Banner + Quote Bar + 2x4 Card Grid."""
     reset_scroll_to_top()
     c = content.HOME_SECTION
-    hero_img = get_hero_image_html()
+    banner_b64 = get_hero_panorama_b64()
 
-    # 1. Panoramic Hero Section (2-Column Layout)
-    ui('<div class="v2-main-wrap">')
-    hcol_left, hcol_right = st.columns([1.08, 1.0], gap="large")
+    # Calculate real progress for floating stats card
+    visited_set = st.session_state.get("visited_chapters", set())
+    visited_pct = int((len(visited_set) / len(config.CHAPTERS)) * 100)
+    hero_pct = max(12, visited_pct)
 
-    with hcol_left:
-        ui(f"""
-        <div class="v2-hero-text-wrap">
-            <div class="floating-doodle-heart">♡</div>
-            <h1 class="v2-hero-headline">
-                A Farewell<br>
-                <span class="hero-cursive-calligraphy">That Stays</span><br>
-                in the Heart
-            </h1>
-            <p class="v2-hero-subtitle">{c["hero_subtitle"]}</p>
+    # 1. Panoramic Unified Hero Card (Exact Mockup Composition)
+    ui(f"""
+    <div class="v2-main-wrap">
+        <div class="hero-panoramic-card">
+            <img src="data:image/jpeg;base64,{banner_b64}" class="hero-panoramic-bg-img" alt="A Farewell That Stays">
+            
+            <!-- Atmospheric Layers -->
+            <div class="hero-panoramic-gradient-overlay"></div>
+            <div class="hero-atmospheric-haze"></div>
+            <div class="hero-horizon-sweep"></div>
+            
+            <!-- Left Typography Overlay -->
+            <div class="hero-left-overlay">
+                <div class="hero-heart-doodle">♡</div>
+                <h1 class="hero-headline">
+                    A Farewell<br>
+                    <span class="hero-cursive">That Stays</span><br>
+                    in the Heart
+                </h1>
+                <p class="hero-subtitle">
+                    Some goodbyes are not the end.<br>
+                    They are the beginning of a beautiful memory that stays forever.
+                </p>
+                <div class="hero-action-buttons">
+                    <button class="hero-btn-primary" onclick="window.parent.__farewellNav('welcome')">
+                        <span class="btn-heart-glyph">♡</span> Start the Journey
+                    </button>
+                    <button class="hero-btn-secondary" onclick="window.parent.__farewellNav('welcome')">
+                        <span class="btn-play-glyph">▷</span> Watch Intro
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Floating Memories Collected Stats Card -->
+            <div class="hero-floating-stats-card">
+                <div class="stats-card-heart-circle">
+                    <span class="stats-card-heart">♡</span>
+                </div>
+                <div class="stats-card-title">Memories Collected</div>
+                <div class="stats-card-pct">{hero_pct}% Complete</div>
+                <div class="stats-card-track">
+                    <div class="stats-card-fill" style="width: {hero_pct}%;"></div>
+                </div>
+                <div class="stats-card-caption">Keep going... beautiful moments await you.</div>
+                <div class="stats-card-flower">🌸</div>
+            </div>
         </div>
-        """)
+    """)
 
-        bcol1, bcol2 = st.columns([1.1, 1.0])
-        with bcol1:
-            if st.button("♡  Start the Journey", key="hero_start_btn", type="primary", use_container_width=True):
-                st.session_state["pending_section"] = "welcome"
-                st.rerun()
-        with bcol2:
-            if st.button("▷  Watch Intro", key="hero_intro_btn", use_container_width=True):
-                st.session_state["pending_section"] = "welcome"
-                st.rerun()
-
-    with hcol_right:
-        ui(f"""
-        <div class="v2-hero-art-container">
-            {hero_img}
-        </div>
-        """)
-
-    # 2. Quotation Bar (matching reference mockup)
+    # 2. Quotation Bar (Horizontal Glowing Dark Glass Strip)
     ui(f"""
     <div class="v2-quote-banner">
         <span class="v2-quote-mark">“</span>
@@ -730,78 +733,133 @@ def render_home():
     </div>
     """)
 
-    # 3. Chapter Cards Grid (2 rows × 4 columns = 8 cards total)
+    # 3. 2×4 Chapter Cards Grid (8 Cards: 7 Light Cream Cards + 1 Dark Twilight Lantern Card)
     cards = content.HOME_CARDS
+    
+    # Load all thumbnails into memory
+    t_welcome = get_thumbnail_b64("thumb_welcome")
+    t_memories = get_thumbnail_b64("thumb_memories")
+    t_words = get_thumbnail_b64("thumb_words")
+    t_respect = get_thumbnail_b64("thumb_respect")
+    t_intentions = get_thumbnail_b64("thumb_intentions")
+    t_dua = get_thumbnail_b64("thumb_dua")
+    t_goodbye = get_thumbnail_b64("thumb_goodbye")
+    t_lantern = get_thumbnail_b64("thumb_lantern")
 
-    # Row 1: Cards 1 to 4 (Welcome, Memories, Words From My Heart, Respect)
-    cols_row1 = st.columns(4, gap="medium")
-    for i in range(4):
-        if i < len(cards):
-            card = cards[i]
-            thumb_b64 = get_thumbnail_b64(card["thumb"])
-            img_tag = f'<img src="data:image/png;base64,{thumb_b64}" class="ref-card-thumb" alt="{card["title"]}">' if thumb_b64 else '💐'
-            with cols_row1[i]:
-                ui(f"""
-                <div class="ref-card ref-card-light">
-                    <div class="ref-card-thumb-wrap">
-                        {img_tag}
-                    </div>
-                    <div class="ref-card-body">
-                        <h3 class="ref-card-title">{card['title']}</h3>
-                        <p class="ref-card-desc">{card['desc']}</p>
-                    </div>
+    ui(f"""
+    <div class="ref-cards-grid">
+        <!-- Card 1: Welcome -->
+        <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('welcome')">
+            <div class="ref-card-thumb-wrap">
+                <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Welcome">
+            </div>
+            <div class="ref-card-content">
+                <h3 class="ref-card-title">Welcome</h3>
+                <p class="ref-card-desc">Start here with a warm hello and a message from the heart.</p>
+                <div class="ref-card-btn-row">
+                    <span class="ref-card-open-btn">Open →</span>
                 </div>
-                """)
-                if st.button("Open →", key=f"open_card_{card['id']}", use_container_width=True):
-                    st.session_state["pending_section"] = card["id"]
-                    st.rerun()
+            </div>
+        </div>
 
-    ui('<div style="height: 1.2rem;"></div>')
-
-    # Row 2: Cards 5 to 7 (Intentions, Dua, Final Note) + Card 8 (Dark Lantern Card)
-    cols_row2 = st.columns(4, gap="medium")
-    for i in range(4, 7):
-        if i < len(cards):
-            card = cards[i]
-            col_idx = i - 4
-            thumb_b64 = get_thumbnail_b64(card["thumb"])
-            img_tag = f'<img src="data:image/png;base64,{thumb_b64}" class="ref-card-thumb" alt="{card["title"]}">' if thumb_b64 else '💝'
-            with cols_row2[col_idx]:
-                ui(f"""
-                <div class="ref-card ref-card-light">
-                    <div class="ref-card-thumb-wrap">
-                        {img_tag}
-                    </div>
-                    <div class="ref-card-body">
-                        <h3 class="ref-card-title">{card['title']}</h3>
-                        <p class="ref-card-desc">{card['desc']}</p>
-                    </div>
+        <!-- Card 2: Memories -->
+        <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('memories')">
+            <div class="ref-card-thumb-wrap">
+                <img src="data:image/png;base64,{t_memories}" class="ref-card-thumb" alt="Memories">
+            </div>
+            <div class="ref-card-content">
+                <h3 class="ref-card-title">Memories</h3>
+                <p class="ref-card-desc">Relive the moments that will always stay close.</p>
+                <div class="ref-card-btn-row">
+                    <span class="ref-card-open-btn">Open →</span>
                 </div>
-                """)
-                if st.button("Open →", key=f"open_card_{card['id']}", use_container_width=True):
-                    st.session_state["pending_section"] = card["id"]
-                    st.rerun()
+            </div>
+        </div>
 
-    # 8th Special Night Card (Dark navy with glowing lantern from mockup)
-    lantern_b64 = get_thumbnail_b64("thumb_lantern")
-    lantern_tag = f'<img src="data:image/png;base64,{lantern_b64}" class="ref-card-thumb-lantern" alt="Lantern">' if lantern_b64 else '🏮'
-    with cols_row2[3]:
-        ui(f"""
-        <div class="ref-card ref-card-dark">
-            <div class="ref-card-dark-body">
+        <!-- Card 3: Words From My Heart -->
+        <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('words')">
+            <div class="ref-card-thumb-wrap">
+                <img src="data:image/png;base64,{t_words}" class="ref-card-thumb" alt="Words From My Heart">
+            </div>
+            <div class="ref-card-content">
+                <h3 class="ref-card-title">Words From My Heart</h3>
+                <p class="ref-card-desc">Letters and words I wish I could say to you, always.</p>
+                <div class="ref-card-btn-row">
+                    <span class="ref-card-open-btn">Open →</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 4: Why I Respect You -->
+        <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('respect')">
+            <div class="ref-card-thumb-wrap">
+                <img src="data:image/png;base64,{t_respect}" class="ref-card-thumb" alt="Why I Respect You">
+            </div>
+            <div class="ref-card-content">
+                <h3 class="ref-card-title">Why I Respect You</h3>
+                <p class="ref-card-desc">The reasons that make you truly admirable.</p>
+                <div class="ref-card-btn-row">
+                    <span class="ref-card-open-btn">Open →</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 5: Intentions -->
+        <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('intentions')">
+            <div class="ref-card-thumb-wrap">
+                <img src="data:image/png;base64,{t_intentions}" class="ref-card-thumb" alt="Intentions">
+            </div>
+            <div class="ref-card-content">
+                <h3 class="ref-card-title">Intentions</h3>
+                <p class="ref-card-desc">My heartfelt intentions for your happiness and success.</p>
+                <div class="ref-card-btn-row">
+                    <span class="ref-card-open-btn">Open →</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 6: Dua -->
+        <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('dua')">
+            <div class="ref-card-thumb-wrap">
+                <img src="data:image/png;base64,{t_dua}" class="ref-card-thumb" alt="Dua">
+            </div>
+            <div class="ref-card-content">
+                <h3 class="ref-card-title">Dua</h3>
+                <p class="ref-card-desc">Prayers for your well-being, peace and success.</p>
+                <div class="ref-card-btn-row">
+                    <span class="ref-card-open-btn">Open →</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 7: Final Note -->
+        <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('goodbye')">
+            <div class="ref-card-thumb-wrap">
+                <img src="data:image/png;base64,{t_goodbye}" class="ref-card-thumb" alt="Final Note">
+            </div>
+            <div class="ref-card-content">
+                <h3 class="ref-card-title">Final Note</h3>
+                <p class="ref-card-desc">A gentle note to close this chapter with love.</p>
+                <div class="ref-card-btn-row">
+                    <span class="ref-card-open-btn">Open →</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 8: Special Twilight Lantern Card -->
+        <div class="ref-card ref-card-dark" onclick="window.parent.__farewellNav('goodbye')">
+            <div class="ref-card-dark-content">
                 <h3 class="ref-card-dark-title">You will always have a special place in my heart.</h3>
                 <div class="ref-card-dark-heart">♡</div>
             </div>
-            <div class="ref-card-dark-thumb-wrap">
-                {lantern_tag}
+            <div class="ref-card-thumb-wrap">
+                <img src="data:image/png;base64,{t_lantern}" class="ref-card-thumb-lantern" alt="Lantern">
             </div>
         </div>
-        """)
-        if st.button("View Lantern 🌸", key="open_lantern_card", use_container_width=True):
-            st.session_state["pending_section"] = "goodbye"
-            st.rerun()
+    </div>
+    """)
 
-    # 4. Bottom Footer Bar (matching reference mockup)
+    # 4. Bottom Footer Bar (Matching Reference Mockup)
     ui(f"""
     <div class="v2-bottom-footer-bar">
         <span>🌸 &nbsp; 🌿 &nbsp; {c['bottom_quote']} &nbsp; ♡ &nbsp; 🌿 &nbsp; 🌸</span>
@@ -1111,7 +1169,7 @@ def render_goodbye():
 
 
 # -----------------------------------------------------------------------------
-# 11. Main Application Controller & Router
+# 12. Main Application Controller & Router
 # -----------------------------------------------------------------------------
 def main():
     """Main state router and layout orchestrator."""
@@ -1119,7 +1177,6 @@ def main():
         "session_started": False,
         "active_section": "home",
         "pending_section": None,
-        "music_playing": True,
         "show_final_words": False,
         "selected_memory": None,
         "visited_chapters": {"home"},
@@ -1128,17 +1185,14 @@ def main():
         if k not in st.session_state:
             st.session_state[k] = v
 
+    # Support URL query parameter routing
+    url_chap = st.query_params.get("chapter")
+    if url_chap and url_chap in [c["id"] for c in config.CHAPTERS]:
+        if st.session_state["active_section"] != url_chap:
+            st.session_state["active_section"] = url_chap
+
     # 1. Global Styles
     load_styles()
-
-    # Floating Music Controller (Always accessible at top-right on desktop & mobile)
-    ui("""
-    <div class="floating-music-bar" id="floatingMusicBar">
-        <button class="floating-music-btn" id="floatingMusicToggle" title="Click to Start or Stop Music">
-            <span class="music-pill-icon music-note-anim">🎵</span> Music Playing
-        </button>
-    </div>
-    """)
 
     # 2. First-load Startup Overlay
     if not st.session_state["session_started"]:
@@ -1148,18 +1202,24 @@ def main():
     # 3. Always Render Exact Sidebar Architecture (Brand -> Nav -> Music -> Progress)
     render_sidebar()
 
-    # 4. Handle Pending Navigation Transition
+    # 4. Hidden Bridge Buttons for Smooth Card Clicks
+    render_hidden_bridge_buttons()
+
+    # 5. Handle Pending Navigation Transition
     if st.session_state.get("pending_section"):
         target = st.session_state["pending_section"]
         render_nav_loader(target)
         return
 
-    # 5. Route to Active Chapter
+    # 6. Route to Active Chapter
     active = st.session_state.get("active_section", "home")
     st.session_state["visited_chapters"].add(active)
 
     # Render Chapter Ambient Atmosphere Layer
     render_cinematic_atmosphere(active)
+
+    # Connect JavaScript Audio & Navigation Bridge
+    render_sidebar_and_navigation_bridge()
 
     router = {
         "home": render_home,
