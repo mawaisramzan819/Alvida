@@ -1,7 +1,7 @@
 """
 =============================================================================
-A FAREWELL THAT STAYS (Exact Reference UI Implementation)
-Interactive Storytelling Web Experience matching Reference Mockup
+A FAREWELL THAT STAYS — EXACT REFERENCE UI IMPLEMENTATION
+Interactive Storytelling Web Experience with Full-Featured Cinematic Sidebar
 =============================================================================
 """
 
@@ -22,7 +22,7 @@ try:
 except Exception:
     pass
 
-# Page Configuration — Expanded sidebar for cinematic desktop UI
+# Page Configuration — Wide cinematic layout with expanded sidebar
 st.set_page_config(
     page_title=config.APP_TITLE,
     page_icon=config.APP_ICON,
@@ -299,74 +299,129 @@ def render_startup_state_machine():
 
 
 # -----------------------------------------------------------------------------
-# 6. Audio Sync Controller
+# 6. Interactive Sidebar Music Bridge (Real-Time Audio Player Integration)
 # -----------------------------------------------------------------------------
-def sync_audio_player():
-    """Synchronize audio element state with st.session_state['music_playing']."""
-    is_playing = st.session_state.get("music_playing", True)
-    if is_playing:
-        components.html(
-            """
-        <script>
-        (function() {
-            try {
-                const pDoc = window.parent.document;
-                let audio = pDoc.getElementById('farewellBgAudioMain');
-                if (audio && audio.paused) {
-                    audio.volume = 0;
-                    let playPromise = audio.play();
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            let start = performance.now();
-                            function fadeIn() {
-                                let el = performance.now() - start;
-                                let frac = Math.min(el / 400, 1);
-                                audio.volume = frac * 0.22;
-                                if (frac < 1) requestAnimationFrame(fadeIn);
-                            }
-                            requestAnimationFrame(fadeIn);
-                        }).catch(err => {
-                            console.log("Audio play gesture required:", err);
-                        });
-                    }
+def render_sidebar_audio_bridge():
+    """Bind real-time interactive controls to sidebar music card DOM elements."""
+    components.html(
+        """
+    <script>
+    (function() {
+        const pDoc = window.parent.document;
+        const audio = pDoc.getElementById('farewellBgAudioMain');
+
+        function fmtTime(sec) {
+            if (!sec || isNaN(sec)) return "00:00";
+            const m = Math.floor(sec / 60);
+            const s = Math.floor(sec % 60);
+            return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
+        }
+
+        function bindControls() {
+            if (!audio) return;
+            const playBtn = pDoc.getElementById('musicBtnPlayPause');
+            const prevBtn = pDoc.getElementById('musicBtnPrev');
+            const nextBtn = pDoc.getElementById('musicBtnNext');
+            const heartBtn = pDoc.getElementById('musicBtnHeart');
+            const track = pDoc.getElementById('musicProgressTrack');
+            const fill = pDoc.getElementById('musicProgressFill');
+            const dot = pDoc.getElementById('musicProgressDot');
+            const curTime = pDoc.getElementById('musicTimeCurrent');
+            const totTime = pDoc.getElementById('musicTimeTotal');
+
+            function updateUI() {
+                if (!audio) return;
+                if (playBtn) {
+                    playBtn.innerHTML = audio.paused ? '▶' : '❚❚';
                 }
-            } catch(e) {}
-        })();
-        </script>
-        """,
-            height=0,
-            width=0,
-        )
-    else:
-        components.html(
-            """
-        <script>
-        (function() {
-            try {
-                const pDoc = window.parent.document;
-                let audio = pDoc.getElementById('farewellBgAudioMain');
-                if (audio && !audio.paused) {
-                    let start = performance.now();
-                    let initVol = audio.volume;
-                    function fadeOut() {
-                        let el = performance.now() - start;
-                        let frac = Math.min(el / 300, 1);
-                        audio.volume = Math.max(0, initVol * (1 - frac));
-                        if (frac < 1) {
-                            requestAnimationFrame(fadeOut);
-                        } else {
-                            audio.pause();
-                        }
-                    }
-                    requestAnimationFrame(fadeOut);
+                if (curTime) {
+                    curTime.textContent = fmtTime(audio.currentTime);
                 }
-            } catch(e) {}
-        })();
-        </script>
-        """,
-            height=0,
-            width=0,
-        )
+                if (totTime && audio.duration && !isNaN(audio.duration)) {
+                    totTime.textContent = fmtTime(audio.duration);
+                }
+                if (fill && dot && audio.duration && !isNaN(audio.duration)) {
+                    const pct = Math.min(100, Math.max(0, (audio.currentTime / audio.duration) * 100));
+                    fill.style.width = pct + '%';
+                    dot.style.left = pct + '%';
+                }
+            }
+
+            if (playBtn && !playBtn.__bound) {
+                playBtn.__bound = true;
+                playBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (audio.paused) {
+                        audio.play().then(updateUI).catch(() => {});
+                    } else {
+                        audio.pause();
+                        updateUI();
+                    }
+                };
+            }
+
+            if (prevBtn && !prevBtn.__bound) {
+                prevBtn.__bound = true;
+                prevBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    audio.currentTime = Math.max(0, audio.currentTime - 10);
+                    updateUI();
+                };
+            }
+
+            if (nextBtn && !nextBtn.__bound) {
+                nextBtn.__bound = true;
+                nextBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (audio.duration) {
+                        audio.currentTime = Math.min(audio.duration, audio.currentTime + 10);
+                    }
+                    updateUI();
+                };
+            }
+
+            if (heartBtn && !heartBtn.__bound) {
+                heartBtn.__bound = true;
+                heartBtn.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const isFav = heartBtn.classList.toggle('favorited');
+                    heartBtn.textContent = isFav ? '♥' : '♡';
+                    heartBtn.style.color = isFav ? '#ff6b81' : '#baa9b4';
+                    heartBtn.style.filter = isFav ? 'drop-shadow(0 0 10px rgba(255, 107, 129, 0.9))' : 'none';
+                };
+            }
+
+            if (track && !track.__bound) {
+                track.__bound = true;
+                track.onclick = function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!audio.duration) return;
+                    const rect = track.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    const pct = Math.max(0, Math.min(1, clickX / rect.width));
+                    audio.currentTime = pct * audio.duration;
+                    updateUI();
+                };
+            }
+
+            updateUI();
+        }
+
+        bindControls();
+        if (!window.parent.__farewellMusicInterval) {
+            window.parent.__farewellMusicInterval = setInterval(bindControls, 350);
+        }
+    })();
+    </script>
+    """,
+        height=0,
+        width=0,
+    )
 
 
 # -----------------------------------------------------------------------------
@@ -448,13 +503,15 @@ def render_nav_loader(target_key: str):
 # 9. Sidebar Component (Matching Exact Reference UI Mockup)
 # -----------------------------------------------------------------------------
 def render_sidebar():
-    """Render cinematic left sidebar matching exact reference UI."""
+    """Render cinematic left sidebar matching exact reference UI with full 4-tier hierarchy."""
     with st.sidebar:
-        # 1. Brand Logo Header
+        # =====================================================================
+        # 1. TOP BRAND / TITLE AREA
+        # =====================================================================
         ui("""
         <div class="sidebar-brand-wrapper">
             <div class="sidebar-brand-heart-glow">
-                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#e57373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#e57373" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
                 </svg>
             </div>
@@ -463,7 +520,9 @@ def render_sidebar():
         </div>
         """)
 
-        # 2. Navigation Items (8 exact chapters)
+        # =====================================================================
+        # 2. VERTICAL CHAPTER NAVIGATION (8 exact items)
+        # =====================================================================
         active_id = st.session_state.get("active_section", "home")
         for chap in config.CHAPTERS:
             is_active = (active_id == chap["id"])
@@ -474,9 +533,11 @@ def render_sidebar():
                     st.session_state["pending_section"] = chap["id"]
                     st.rerun()
 
-        # 3. Mini Music Player Box (matching reference mockup)
+        # =====================================================================
+        # 3. LOWER: MUSIC PLAYER CARD (Integrated & Fully Interactive)
+        # =====================================================================
         ui(f"""
-        <div class="sidebar-music-card">
+        <div class="sidebar-music-card" id="sidebarMusicCard">
             <div class="music-card-header">
                 <div>
                     <div class="music-card-title">{config.AUDIO_CONFIG["song_title"]}</div>
@@ -485,33 +546,37 @@ def render_sidebar():
                 <div class="music-card-icon">🎵</div>
             </div>
             <div class="music-progress-wrap">
-                <span class="music-time-lbl">01:45</span>
-                <div class="music-progress-track">
-                    <div class="music-progress-fill"></div>
-                    <span class="music-progress-dot"></span>
+                <span class="music-time-lbl music-time-current" id="musicTimeCurrent">01:45</span>
+                <div class="music-progress-track" id="musicProgressTrack" title="Click to seek track">
+                    <div class="music-progress-fill" id="musicProgressFill"></div>
+                    <span class="music-progress-dot" id="musicProgressDot"></span>
                 </div>
-                <span class="music-time-lbl">04:58</span>
+                <span class="music-time-lbl music-time-total" id="musicTimeTotal">04:58</span>
             </div>
             <div class="music-controls-row">
-                <span class="music-ctrl-icon">⏮</span>
-                <span class="music-ctrl-playpause-glow">❚❚</span>
-                <span class="music-ctrl-icon">⏭</span>
-                <span class="music-ctrl-heart">♡</span>
+                <span class="music-ctrl-icon music-btn-prev" id="musicBtnPrev" title="Previous / Rewind 10s">⏮</span>
+                <button class="music-ctrl-playpause-glow" id="musicBtnPlayPause" title="Play / Pause">❚❚</button>
+                <span class="music-ctrl-icon music-btn-next" id="musicBtnNext" title="Next / Forward 10s">⏭</span>
+                <span class="music-ctrl-heart" id="musicBtnHeart" title="Favorite">♡</span>
             </div>
         </div>
         """)
 
-        # Music toggle button
-        is_playing = st.session_state.get("music_playing", True)
-        toggle_label = "⏸ Pause Music" if is_playing else "▶ Play Music"
-        if st.button(toggle_label, key="sb_music_toggle", use_container_width=True):
-            st.session_state["music_playing"] = not is_playing
-            st.rerun()
+        # =====================================================================
+        # 4. BOTTOM: JOURNEY PROGRESS CARD (Calculated from Real Chapter Position)
+        # =====================================================================
+        chapter_order = ["home", "welcome", "memories", "words", "respect", "intentions", "dua", "goodbye"]
+        active_idx = chapter_order.index(active_id) if active_id in chapter_order else 0
 
-        # 4. Our Journey Progress Box (matching reference mockup)
-        visited_count = len(st.session_state["visited_chapters"].difference({"home"}))
-        progress_pct = int((visited_count / config.TOTAL_STORY_CHAPTERS) * 100) if config.TOTAL_STORY_CHAPTERS > 0 else 0
-        progress_pct = min(100, max(progress_pct, 72 if active_id == "home" else 35))
+        # Milestones progression: Home (12%) -> Goodbye (100%)
+        milestones = [12, 25, 38, 50, 63, 75, 88, 100]
+        pos_pct = milestones[active_idx]
+
+        visited_set = st.session_state.get("visited_chapters", set())
+        visited_ratio = len(visited_set.intersection(set(chapter_order))) / len(chapter_order)
+        visited_pct = int(visited_ratio * 100)
+
+        progress_pct = max(pos_pct, visited_pct)
 
         ui(f"""
         <div class="sidebar-progress-card">
@@ -531,6 +596,9 @@ def render_sidebar():
             </div>
         </div>
         """)
+
+    # Connect persistent JavaScript bridge to sidebar music card
+    render_sidebar_audio_bridge()
 
 
 # -----------------------------------------------------------------------------
@@ -621,7 +689,7 @@ def render_home():
     # 3. Chapter Cards Grid (2 rows × 4 columns = 8 cards total)
     cards = content.HOME_CARDS
 
-    # Row 1: Cards 1 to 4 (Welcome, Memories, Words, Respect)
+    # Row 1: Cards 1 to 4 (Welcome, Memories, Words From My Heart, Respect)
     cols_row1 = st.columns(4, gap="medium")
     for i in range(4):
         if i < len(cards):
@@ -814,7 +882,7 @@ def render_memories():
 # CHAPTER 3 — WORDS FROM MY HEART
 # -----------------------------------------------------------------------------
 def render_words():
-    """Render Chapter 3: Words from My Heart intimate letter."""
+    """Render Chapter 3: Words From My Heart intimate letter."""
     reset_scroll_to_top()
     c = content.WORDS_SECTION
     ui(f"""
@@ -1016,16 +1084,15 @@ def main():
         if k not in st.session_state:
             st.session_state[k] = v
 
-    # 1. Global Styles & Audio Sync
+    # 1. Global Styles
     load_styles()
-    sync_audio_player()
 
     # 2. First-load Startup Overlay
     if not st.session_state["session_started"]:
         st.session_state["session_started"] = True
         render_startup_state_machine()
 
-    # 3. Always Render Sidebar
+    # 3. Always Render Exact Sidebar Architecture (Brand -> Nav -> Music -> Progress)
     render_sidebar()
 
     # 4. Handle Pending Navigation Transition

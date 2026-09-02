@@ -43,10 +43,10 @@ HOME_SECTION = {
 
 # Chapter card descriptions for Home grid (Exact Reference UI)
 HOME_CARDS = [
-    {"id": "welcome",    "title": "Welcome",            "desc": "Start here with a warm hello and a message from the heart.", "thumb": "thumb_welcome"},
-    {"id": "memories",   "title": "Memories",           "desc": "Relive the moments that will always stay close.", "thumb": "thumb_memories"},
-    {"id": "words",      "title": "Words from My Heart","desc": "Letters and words I wish I could say to you, always.", "thumb": "thumb_words"},
-    {"id": "respect",    "title": "Why I Respect You",  "desc": "The reasons that make you truly admirable.", "thumb": "thumb_respect"},
+    {"id": "welcome",    "title": "Welcome",              "desc": "Start here with a warm hello and a message from the heart.", "thumb": "thumb_welcome"},
+    {"id": "memories",   "title": "Memories",             "desc": "Relive the moments that will always stay close.", "thumb": "thumb_memories"},
+    {"id": "words",      "title": "Words From My Heart",  "desc": "Letters and words I wish I could say to you, always.", "thumb": "thumb_words"},
+    {"id": "respect",    "title": "Why I Respect You",    "desc": "The reasons that make you truly admirable.", "thumb": "thumb_respect"},
     {"id": "intentions", "title": "Intentions",         "desc": "My heartfelt intentions for your happiness and success.", "thumb": "thumb_intentions"},
     {"id": "dua",        "title": "Dua",                "desc": "Prayers for your well-being, peace and success.", "thumb": "thumb_dua"},
     {"id": "goodbye",    "title": "Final Note",         "desc": "A gentle note to close this chapter with love.", "thumb": "thumb_goodbye"},

@@ -50,7 +50,7 @@ GOOGLE_FONTS = [
 AUDIO_CONFIG = {
     "filename": "farewell.mp3",
     "song_title": "A Song for the Journey",
-    "song_artist": "Safarnama – Lucky Ali",
+    "song_artist": "Safarnama — Lucky Ali",
     "enable_audio": True,
 }
 
@@ -63,14 +63,14 @@ SETTINGS = {
 
 # Navigation Chapters (Exact 8 Chapters from Reference UI)
 CHAPTERS = [
-    {"id": "home",       "label": "Home",               "icon": "🏠", "num": 0},
-    {"id": "welcome",    "label": "Welcome",            "icon": "♡",  "num": 1},
-    {"id": "memories",   "label": "Memories",           "icon": "🖼️", "num": 2},
-    {"id": "words",      "label": "Words from My Heart","icon": "🪶", "num": 3},
-    {"id": "respect",    "label": "Why I Respect You",  "icon": "⭐", "num": 4},
-    {"id": "intentions", "label": "Intentions",         "icon": "💝", "num": 5},
-    {"id": "dua",        "label": "Dua",                "icon": "🤲", "num": 6},
-    {"id": "goodbye",    "label": "Final Note",         "icon": "✉️", "num": 7},
+    {"id": "home",       "label": "Home",                 "icon": "🏠", "num": 0},
+    {"id": "welcome",    "label": "Welcome",              "icon": "♡",  "num": 1},
+    {"id": "memories",   "label": "Memories",             "icon": "🖼️", "num": 2},
+    {"id": "words",      "label": "Words From My Heart",  "icon": "🪶", "num": 3},
+    {"id": "respect",    "label": "Why I Respect You",    "icon": "⭐", "num": 4},
+    {"id": "intentions", "label": "Intentions",           "icon": "💝", "num": 5},
+    {"id": "dua",        "label": "Dua",                  "icon": "🤲", "num": 6},
+    {"id": "goodbye",    "label": "Final Note",           "icon": "✉️", "num": 7},
 ]
 
 # Story chapters excluding home

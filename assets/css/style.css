@@ -139,164 +139,243 @@ p {
 }
 
 /* Sidebar Navigation Buttons */
+[data-testid="stSidebar"] div.stButton {
+  margin-bottom: 0.42rem !important;
+}
+
 [data-testid="stSidebar"] div.stButton > button {
   text-align: left !important;
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
-  padding: 0.62rem 1.1rem !important;
-  margin-bottom: 0.35rem !important;
-  border-radius: 12px !important;
+  gap: 0.75rem !important;
+  padding: 0.68rem 1.15rem !important;
+  border-radius: 14px !important;
   font-family: var(--font-ui) !important;
-  font-size: 0.94rem !important;
+  font-size: 0.95rem !important;
   font-weight: 500 !important;
-  transition: all 0.25s ease !important;
+  letter-spacing: 0.2px !important;
+  width: 100% !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-/* Sidebar Active Chapter Button (Exact Reference UI) */
+[data-testid="stSidebar"] div.stButton > button div[data-testid="stMarkdownContainer"] p {
+  font-family: var(--font-ui) !important;
+  font-size: 0.95rem !important;
+  font-weight: inherit !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+/* Active Item: Warm Pink/Orange Gradient + Subtle Glow + Soft Border */
 [data-testid="stSidebar"] div.stButton > button[kind="primary"] {
-  background: linear-gradient(90deg, rgba(185, 75, 75, 0.5) 0%, rgba(135, 45, 55, 0.3) 100%) !important;
-  border: 1px solid rgba(225, 110, 110, 0.45) !important;
+  background: linear-gradient(90deg, #c24b52 0%, #e06d6d 100%) !important;
+  border: 1px solid rgba(255, 190, 190, 0.5) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 18px rgba(225, 110, 110, 0.25) !important;
+  font-weight: 600 !important;
+  box-shadow: 0 4px 20px rgba(224, 109, 109, 0.45), inset 0 1px 0 rgba(255, 220, 220, 0.3) !important;
+  transform: translateX(2px) !important;
 }
 
-/* Sidebar Inactive Chapter Button */
+[data-testid="stSidebar"] div.stButton > button[kind="primary"] div[data-testid="stMarkdownContainer"] p {
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Inactive Items */
 [data-testid="stSidebar"] div.stButton > button[kind="secondary"] {
   background: transparent !important;
   border: 1px solid transparent !important;
   color: var(--text-muted) !important;
 }
 
-[data-testid="stSidebar"] div.stButton > button[kind="secondary"]:hover {
-  background: rgba(255, 180, 180, 0.08) !important;
-  color: #f8ede8 !important;
-  border-color: rgba(255, 180, 180, 0.12) !important;
+[data-testid="stSidebar"] div.stButton > button[kind="secondary"] div[data-testid="stMarkdownContainer"] p {
+  color: var(--text-muted) !important;
 }
 
-/* Sidebar Mini Music Player Box (matching reference mockup) */
+[data-testid="stSidebar"] div.stButton > button[kind="secondary"]:hover {
+  background: rgba(255, 180, 180, 0.08) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 180, 180, 0.15) !important;
+  transform: translateX(3px) !important;
+}
+
+[data-testid="stSidebar"] div.stButton > button[kind="secondary"]:hover div[data-testid="stMarkdownContainer"] p {
+  color: #ffffff !important;
+}
+
+/* Sidebar Dedicated Music Player Card */
 .sidebar-music-card {
   margin-top: 1.6rem;
-  padding: 1.1rem;
-  background: rgba(22, 17, 30, 0.75);
+  padding: 1.15rem 1.15rem 1rem 1.15rem;
+  background: rgba(22, 17, 30, 0.78);
+  backdrop-filter: blur(12px);
   border-radius: 16px;
   border: 1px solid var(--border-subtle);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 200, 200, 0.08);
 }
 
 .music-card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.7rem;
+  margin-bottom: 0.75rem;
 }
 
 .music-card-title {
   font-family: var(--font-ui);
-  font-size: 0.86rem;
+  font-size: 0.88rem;
   font-weight: 600;
-  color: #e2d8de;
+  color: #f0e6eb;
+  letter-spacing: 0.2px;
 }
 
 .music-card-artist {
+  font-family: var(--font-ui);
   font-size: 0.76rem;
-  color: #9b8d96;
+  color: #a4949f;
+  margin-top: 0.15rem;
 }
 
 .music-card-icon {
-  font-size: 1.15rem;
-  color: #d98282;
+  font-size: 1.25rem;
+  color: #e57373;
+  filter: drop-shadow(0 0 8px rgba(229, 115, 115, 0.5));
 }
 
 .music-progress-wrap {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  margin: 0.6rem 0 0.8rem 0;
+  gap: 0.6rem;
+  margin: 0.7rem 0 0.85rem 0;
 }
 
 .music-time-lbl {
   font-family: var(--font-ui);
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: #8b7d87;
+  font-variant-numeric: tabular-nums;
+  min-width: 32px;
 }
 
 .music-progress-track {
   position: relative;
   flex: 1;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: height 0.15s;
+}
+
+.music-progress-track:hover {
+  height: 7px;
 }
 
 .music-progress-fill {
-  width: 44%;
+  width: 35%;
   height: 100%;
   background: linear-gradient(90deg, #d35454, #f08080);
-  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(240, 128, 128, 0.5);
+  border-radius: 3px;
+  transition: width 0.2s linear;
 }
 
 .music-progress-dot {
   position: absolute;
-  top: -3px;
-  left: 44%;
+  top: 50%;
+  left: 35%;
+  transform: translate(-50%, -50%);
   width: 10px;
   height: 10px;
   border-radius: 50%;
   background: #ffffff;
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9), 0 0 12px rgba(229, 115, 115, 0.8);
+  pointer-events: none;
+  transition: left 0.2s linear;
 }
 
 .music-controls-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 0.5rem;
+  padding: 0 0.4rem;
+  margin-top: 0.4rem;
 }
 
 .music-ctrl-icon {
-  font-size: 1rem;
+  font-size: 1.05rem;
   color: #baa9b4;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: all 0.2s;
+  user-select: none;
 }
 
 .music-ctrl-icon:hover {
   color: #ffffff;
+  transform: scale(1.15);
 }
 
 .music-ctrl-playpause-glow {
-  width: 32px;
-  height: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  border: none;
   background: linear-gradient(135deg, #e57373, #d35454);
-  box-shadow: 0 0 16px rgba(229, 115, 115, 0.65);
+  box-shadow: 0 0 18px rgba(229, 115, 115, 0.7), 0 2px 8px rgba(0, 0, 0, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #ffffff;
-  font-size: 0.75rem;
-  letter-spacing: -1px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  outline: none;
+}
+
+.music-ctrl-playpause-glow:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px rgba(229, 115, 115, 0.95);
+}
+
+.music-ctrl-playpause-glow:active {
+  transform: scale(0.94);
 }
 
 .music-ctrl-heart {
-  font-size: 1.15rem;
+  font-size: 1.2rem;
   color: #baa9b4;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
 }
 
-/* Sidebar Our Journey Progress Box (matching reference mockup) */
+.music-ctrl-heart:hover {
+  color: #ff6b81;
+  transform: scale(1.2);
+}
+
+/* Sidebar Journey Progress Card */
 .sidebar-progress-card {
   margin-top: 1rem;
-  padding: 1.1rem;
-  background: rgba(22, 17, 30, 0.75);
+  padding: 1.15rem 1.15rem 1rem 1.15rem;
+  background: rgba(22, 17, 30, 0.78);
+  backdrop-filter: blur(12px);
   border-radius: 16px;
   border: 1px solid var(--border-subtle);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 200, 200, 0.08);
 }
 
 .progress-card-title-row {
+  display: flex;
+  align-items: center;
   font-family: var(--font-ui);
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   color: var(--accent-rose);
   font-weight: 600;
   margin-bottom: 0.35rem;
@@ -308,28 +387,48 @@ p {
   align-items: center;
   font-size: 0.76rem;
   color: var(--text-muted);
-  margin-bottom: 0.55rem;
+  margin-bottom: 0.6rem;
 }
 
 .progress-pct-bold {
+  font-family: var(--font-ui);
   font-weight: 700;
   color: #ffffff;
+  font-size: 0.86rem;
+  text-shadow: 0 0 10px rgba(229, 115, 115, 0.5);
 }
 
 .progress-card-track {
   width: 100%;
-  height: 5px;
+  height: 6px;
   background: rgba(255, 255, 255, 0.08);
   border-radius: 3px;
   overflow: hidden;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.55rem;
 }
 
 .progress-card-fill {
   height: 100%;
   background: linear-gradient(90deg, #d35454, #f08080);
+  box-shadow: 0 0 10px rgba(240, 128, 128, 0.6);
   border-radius: 3px;
-  transition: width 0.6s ease;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-footer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.74rem;
+  color: #9b8d96;
+  font-style: italic;
+}
+
+.progress-heart-icon {
+  color: var(--accent-rose);
+  font-style: normal;
+  font-size: 0.85rem;
+  filter: drop-shadow(0 0 6px rgba(229, 115, 115, 0.5));
 }
 
 .progress-footer-row {
