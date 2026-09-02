@@ -1,6 +1,8 @@
 """
-Configuration settings for the Streamlit Farewell Web App.
-Premium Modern Dark Cinematic Theme (Deep Navy, Charcoal, Warm Champagne Gold, Sunset Orange).
+=============================================================================
+CONFIGURATION — A Farewell That Stays (Exact Reference UI)
+Deep Midnight Purple/Navy + Warm Rose-Coral + Peach Cream Cards
+=============================================================================
 """
 
 from pathlib import Path
@@ -13,39 +15,42 @@ IMAGES_DIR = ASSETS_DIR / "images"
 CSS_DIR = ASSETS_DIR / "css"
 
 # Application Metadata
-APP_TITLE = "A Farewell — With Gratitude"
-APP_ICON = "🪷"
+APP_TITLE = "A Farewell That Stays"
+APP_ICON = "💗"
 PAGE_LAYOUT = "wide"
-INITIAL_SIDEBAR_STATE = "collapsed"
+INITIAL_SIDEBAR_STATE = "expanded"
 
-# Visual Theme Tokens (Deep Navy, Charcoal, Champagne Gold, Sunset Orange, Muted Blue/Teal)
+# Visual Theme Tokens (Sampled from Reference Mockup)
 THEME = {
-    "bg_midnight": "#070a13",
-    "bg_navy": "#0c111d",
-    "bg_surface": "#121826",
-    "bg_card": "rgba(18, 24, 38, 0.75)",
-    "bg_card_hover": "rgba(25, 34, 54, 0.9)",
-    "border_subtle": "rgba(255, 255, 255, 0.08)",
-    "border_gold": "rgba(245, 158, 11, 0.35)",
+    "bg_deep": "#0e101a",
+    "bg_navy": "#141324",
+    "bg_surface": "#1b172a",
+    "bg_sidebar": "#161324",
+    "bg_card_light": "#fbf5f2",
+    "bg_card_dark": "#161a2e",
+    "border_subtle": "rgba(255, 180, 180, 0.12)",
+    "border_rose": "rgba(229, 115, 115, 0.35)",
+    "accent_rose": "#e26a6a",
+    "accent_coral": "#ff8a80",
+    "accent_blush": "#fce4ec",
     "accent_gold": "#f59e0b",
-    "accent_gold_light": "#fbbf24",
-    "accent_sunset": "#ea580c",
-    "accent_blue": "#38bdf8",
-    "accent_teal": "#14b8a6",
-    "text_primary": "#f8fafc",
+    "text_primary": "#ffffff",
     "text_secondary": "#cbd5e1",
-    "text_muted": "#94a3b8",
+    "text_muted": "#baa9b4",
+    "text_dark_card": "#2d1f23",
+    "text_dark_card_desc": "#635156",
 }
 
 # Typography Google Fonts
 GOOGLE_FONTS = [
-    "https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Outfit:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Caveat:wght@400;600;700&family=Noto+Nastaliq+Urdu:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap"
+    "https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&display=swap"
 ]
 
 # Audio Settings
 AUDIO_CONFIG = {
-    # Place your audio file in assets/music/farewell.mp3
     "filename": "farewell.mp3",
+    "song_title": "A Song for the Journey",
+    "song_artist": "Safarnama – Lucky Ali",
     "enable_audio": True,
 }
 
@@ -56,14 +61,17 @@ SETTINGS = {
     "enable_ambient_particles": True,
 }
 
-# Navigation Chapters
+# Navigation Chapters (Exact 8 Chapters from Reference UI)
 CHAPTERS = [
-    {"id": "home", "label": "Home", "icon": "🏠"},
-    {"id": "message", "label": "Message", "icon": "✉️"},
-    {"id": "memories", "label": "Memories", "icon": "💭"},
-    {"id": "wishes", "label": "Wishes", "icon": "🌟"},
-    {"id": "dua", "label": "Dua", "icon": "🤲"},
-    {"id": "future", "label": "Future", "icon": "🖋️"},
-    {"id": "thankyou", "label": "Thank You", "icon": "🤍"},
-    {"id": "goodbye", "label": "Goodbye", "icon": "🌙"},
+    {"id": "home",       "label": "Home",               "icon": "🏠", "num": 0},
+    {"id": "welcome",    "label": "Welcome",            "icon": "♡",  "num": 1},
+    {"id": "memories",   "label": "Memories",           "icon": "🖼️", "num": 2},
+    {"id": "words",      "label": "Words from My Heart","icon": "🪶", "num": 3},
+    {"id": "respect",    "label": "Why I Respect You",  "icon": "⭐", "num": 4},
+    {"id": "intentions", "label": "Intentions",         "icon": "💝", "num": 5},
+    {"id": "dua",        "label": "Dua",                "icon": "🤲", "num": 6},
+    {"id": "goodbye",    "label": "Final Note",         "icon": "✉️", "num": 7},
 ]
+
+# Story chapters excluding home
+TOTAL_STORY_CHAPTERS = 7

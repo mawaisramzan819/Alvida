@@ -1,107 +1,91 @@
 """
 =============================================================================
-STREAMLIT FAREWELL WEB APP — CENTRALIZED CONTENT CONFIGURATION
-Roman Urdu Authentic Heartfelt Farewell Story
+A FAREWELL THAT STAYS — Version 2 Content
+All chapter text, loader messages, and UI strings.
+Roman Urdu + Simple English — Mature, Respectful, Sincere
 =============================================================================
 """
 
-# Personalization placeholders
 RECIPIENT_NAME = "Almas"
 SENDER_NAME = "Awais"
 
 # -----------------------------------------------------------------------------
-# CHAPTER LOADING MESSAGES (Roman Urdu)
+# CHAPTER LOADING MESSAGES
 # -----------------------------------------------------------------------------
 CHAPTER_LOADERS = {
-    "home": {
-        "title": "Home",
-        "message": "Dil ki baat dobara khul rahi hai...",
-    },
-    "message": {
-        "title": "Message",
-        "message": "Woh alfaaz jo kabhi keh nahi saka...",
-    },
-    "memories": {
-        "title": "Memories",
-        "message": "Purani yaadon ko sameta ja raha hai...",
-    },
-    "wishes": {
-        "title": "Wishes",
-        "message": "Adhoori khwahishon ko parha ja raha hai...",
-    },
-    "dua": {
-        "title": "Dua",
-        "message": "Dil se nikli dua khul rahi hai...",
-    },
-    "future": {
-        "title": "Future",
-        "message": "Woh mustaqbil jo ap k saath socha tha...",
-    },
-    "thankyou": {
-        "title": "Thank You",
-        "message": "ap ka shukriya ada kiya ja raha hai...",
-    },
-    "goodbye": {
-        "title": "Goodbye",
-        "message": "Woh alvida jo main kehna nahi chahta...",
-    },
+    "home":       {"title": "Home",               "message": "Gathering the moments that stayed..."},
+    "welcome":    {"title": "Welcome",            "message": "Opening a chapter I never wanted to forget..."},
+    "memories":   {"title": "Memories",           "message": "Some feelings take a moment to put into words..."},
+    "words":      {"title": "Words from My Heart","message": "Dil ke woh alfaaz jo sirf ap k liye the..."},
+    "respect":    {"title": "Why I Respect You",  "message": "Woh baat jo ap ko aur khoobsurat banati hai..."},
+    "learned":    {"title": "What I Learned",     "message": "Har ghalti ne kuch sikha diya..."},
+    "intentions": {"title": "Intentions",         "message": "Woh iradey jo dil ne sachche rakhe..."},
+    "dua":        {"title": "Dua",                "message": "Dil se nikli dua khul rahi hai..."},
+    "thankyou":   {"title": "Thank You",          "message": "Shukriya ada kiya ja raha hai..."},
+    "goodbye":    {"title": "Final Note",         "message": "Aakhri alfaaz... dil ki gehraiyon se..."},
 }
 
 # -----------------------------------------------------------------------------
-# CHAPTER 1 — HOME
+# HOME PAGE
 # -----------------------------------------------------------------------------
-OPENING_SECTION = {
-    "eyebrow": "AP K JAANE SE PEHLE",
-    "main_title": "Maine kabhi nahi socha tha ke hamari kahani ka aakhri lafz “Alvida” hoga.",
-    "subtitle": (
-        "Mere dil ka ek hissa abhi bhi ap k ruk jaane ka intezar kar raha hai. "
-        "Main nahi jaanta ke ap k baghair zindagi ko kaise sochun. In safhon mein woh sab kuch hai "
-        "jo main ap k saamne kabhi keh nahi saka—meri mohabbat, hamari yaadein, meri ghaltiyon ka afsos "
-        "aur woh har dua jo aaj bhi ap k liye nikalti hai."
+HOME_SECTION = {
+    "hero_headline": "A Farewell\nThat Stays\nin the Heart",
+    "hero_subtitle": (
+        "Some goodbyes are not the end.\n"
+        "They are the beginning of a beautiful memory\n"
+        "that stays forever."
     ),
-    "primary_button": "Woh Parho Jo Mera Dil Keh Na Saka →",
-    "music_play_btn": "▶ Start background music",
-    "music_pause_btn": "⏸ Stop background music",
-    "bottom_quote": "“Agar main is kahani ka anjaam badal sakta, to main ek baar phir sirf ap ko hi chunta.”",
+    "primary_button": "Start the Journey",
+    "secondary_button": "Watch Intro",
+    "quote_bar": "Distance may take you far away, but you'll always stay in my prayers and heart.",
+    "bottom_quote": "No matter where life takes you, I'll always be cheering for you.",
 }
 
+# Chapter card descriptions for Home grid (Exact Reference UI)
+HOME_CARDS = [
+    {"id": "welcome",    "title": "Welcome",            "desc": "Start here with a warm hello and a message from the heart.", "thumb": "thumb_welcome"},
+    {"id": "memories",   "title": "Memories",           "desc": "Relive the moments that will always stay close.", "thumb": "thumb_memories"},
+    {"id": "words",      "title": "Words from My Heart","desc": "Letters and words I wish I could say to you, always.", "thumb": "thumb_words"},
+    {"id": "respect",    "title": "Why I Respect You",  "desc": "The reasons that make you truly admirable.", "thumb": "thumb_respect"},
+    {"id": "intentions", "title": "Intentions",         "desc": "My heartfelt intentions for your happiness and success.", "thumb": "thumb_intentions"},
+    {"id": "dua",        "title": "Dua",                "desc": "Prayers for your well-being, peace and success.", "thumb": "thumb_dua"},
+    {"id": "goodbye",    "title": "Final Note",         "desc": "A gentle note to close this chapter with love.", "thumb": "thumb_goodbye"},
+]
+
 # -----------------------------------------------------------------------------
-# CHAPTER 2 — MESSAGE
+# CHAPTER 1 — WELCOME
 # -----------------------------------------------------------------------------
-MESSAGE_SECTION = {
-    "eyebrow": "EK AAKHRI PAIKAAR",
-    "title": "WOH ALFAAZ JO MAIN KEH NAHI SAKA",
-    "subtitle": "Kash main waqt ko peeche le ja sakta aur sab kuch theek kar pata...",
+WELCOME_SECTION = {
+    "eyebrow": "A LETTER BEFORE GOODBYE",
+    "title": "Before You Go, Read This",
+    "subtitle": "Ye website kisi argument, complaint ya guilt ke liye nahi banayi gayi.",
     "paragraphs": [
         (
-            "Main maanta hoon ke hamare darmiyan jo sab se gehra zakhm bana, uski wajah meri ghalti thi. "
-            "Maine woh baatein doosron ko bata dein jo sirf ap k aur mere darmiyan rehni chahiye theen."
+            "Ye ek khat hai—dil se likha hua, imaandari se, izzat ke saath. "
+            "In safhon mein woh sab kuch hai jo main ap k saamne kabhi keh nahi saka."
         ),
         (
-            "Us waqt main samajh nahi saka ke kisi se mohabbat karne ka matlab uske bharose, "
-            "uski izzat aur uski privacy ki hifazat karna bhi hota hai."
+            "Yahan koi ilzaam nahi hai. Kisi par ungli nahi uthayi gayi. "
+            "Na ap par, na ap k ghar walon par, na kisi aur par."
         ),
         (
-            "Main guzra hua waqt badal nahi sakta. ap ko meri wajah se jo baatein sunni pareen aur jo takleef mili, "
-            "main usay mita nahi sakta. Lekin agar mera afsos waqt ko peechhe le ja sakta, to main apni kahani ko "
-            "poori duniya se chhupa kar sirf apne dil mein rakhta."
+            "Sirf ek insaan hai jo ap ki izzat karta hai, ap k liye dua karta hai, "
+            "aur chahta hai ke ap ye jaanein ke uske dil mein kya tha—isse pehle ke raaste alag ho jayein."
         ),
         (
-            "Do saal ki khamoshi mein bhi koi din aisa nahi tha jab ap  meri yaadon se door rahi ho."
-        ),
-        (
-            "Main ye sab is liye nahi likh raha ke main ap ko khushi se alvida keh raha hoon. "
-            "Main ye is liye likh raha hoon kyun ke mera dil aaj bhi ap ko khone ke liye tayyar nahi."
+            "Ap chaahein to yahan ruk jayein. Ya phir aage padhein. "
+            "Har safha ap ki marzi se khulega, koi zabardasti nahi."
         ),
     ],
+    "closing_note": "Bas itna yaad rakhna... ye sab dil se hai.",
 }
 
 # -----------------------------------------------------------------------------
-# CHAPTER 3 — MEMORIES (8 Authentic Timeline Cards)
+# CHAPTER 2 — MEMORIES
 # -----------------------------------------------------------------------------
 MEMORIES_SECTION = {
     "eyebrow": "SAFAR-E-YADEIN",
-    "title": "WOH YADEIN JO AAJ BHI MERE SAATH HAIN",
+    "title": "Moments That Stayed With Me",
     "subtitle": "Hamari kahani ke woh lamhe jo mere dil par hamesha ke liye naqsh ho gaye.",
     "cards": [
         {
@@ -123,12 +107,12 @@ MEMORIES_SECTION = {
             ),
         },
         {
-            "category": "Jab ap  Achi Lagne Lageen",
+            "category": "Jab Ap Achi Lagne Lageen",
             "icon": "✨",
             "accent_color": "#38bdf8",
             "placeholder": (
                 "Mujhe yaad nahi ke woh kaunsa ek lamha tha. Bas ap ki rehnumai, hamari baaton "
-                "aur ek doosre ko samajhte samajhte ap  mere liye sab kuch ban gayi."
+                "aur ek doosre ko samajhte samajhte ap mere liye sab kuch ban gayi."
             ),
         },
         {
@@ -150,7 +134,7 @@ MEMORIES_SECTION = {
             ),
         },
         {
-            "category": "Accident Aur ap ki Dua",
+            "category": "Accident Aur Ap Ki Dua",
             "icon": "🤲",
             "accent_color": "#fbbf24",
             "placeholder": (
@@ -159,7 +143,7 @@ MEMORIES_SECTION = {
             ),
         },
         {
-            "category": "ap ka Dobara Lautna",
+            "category": "Ap Ka Dobara Lautna",
             "icon": "🕊️",
             "accent_color": "#14b8a6",
             "placeholder": (
@@ -168,137 +152,266 @@ MEMORIES_SECTION = {
             ),
         },
         {
-            "category": "Aaj",
+            "category": "Aaj — This Moment",
             "icon": "🌙",
-            "accent_color": "#ea580c",
+            "accent_color": "#d4796a",
             "placeholder": (
-                "Itna sab kuch sehne ke baad bhi maine kabhi nahi socha tha ke ek din main ap ko "
-                "apne se door jaate hue dekhunga."
+                "Itna sab kuch sehne ke baad bhi maine kabhi nahi socha tha ke ek din main "
+                "ap ko apne se door jaate hue dekhunga. Lekin aaj yehi sach hai."
             ),
         },
     ],
 }
 
 # -----------------------------------------------------------------------------
-# CHAPTER 4 — WISHES (5 Heartfelt Roman Urdu Wishes)
+# CHAPTER 3 — WORDS FROM MY HEART
 # -----------------------------------------------------------------------------
-WISHES_SECTION = {
-    "eyebrow": "DIL KI KHWAHISHEIN",
-    "title": "MERI ADHOORI KHWAHISHEIN",
-    "subtitle": "Kash ye sab badal sakta...",
-    "cards": [
-        {
-            "title": "Pehla Kaash",
-            "icon": "🤍",
-            "accent_type": "teal",
-            "description": "Kaash main waqt par ap k bharose ki hifazat kar pata.",
-        },
-        {
-            "title": "Doosra Kaash",
-            "icon": "✨",
-            "accent_type": "amber",
-            "description": "Kaash hamare darmiyan jo toot gaya, usay jorne ka ek aur mauqa mil jata.",
-        },
-        {
-            "title": "Teesra Kaash",
-            "icon": "🌱",
-            "accent_type": "blue",
-            "description": "Kaash ap  dekh pateen ke main hamare liye kaisa insaan banne ki koshish kar raha tha.",
-        },
-        {
-            "title": "Chautha Kaash",
-            "icon": "🕊️",
-            "accent_type": "violet",
-            "description": "Kaash hamari aakhri yaad ek alvida na hoti.",
-        },
-        {
-            "title": "Aakhri Kaash",
-            "icon": "🪷",
-            "accent_type": "rose",
-            "description": "Aur sab se zyada… kaash ap  ruk jao.",
-        },
+WORDS_SECTION = {
+    "eyebrow": "DIL KI BAAT",
+    "title": "Words I Wish I Could Say to You",
+    "subtitle": "Kash ye alfaaz pehle keh pata...",
+    "paragraphs": [
+        (
+            "Main jaanta hoon ke hamare darmiyan jo sab se gehra zakhm bana, uski wajah "
+            "meri ghalti thi. Maine woh baatein doosron ko bata dein jo sirf hamare darmiyan "
+            "rehni chahiye theen. Us waqt main samajh nahi saka ke mohabbat ka matlab "
+            "sirf feelings nahi—bharosa, izzat aur privacy ki hifazat bhi hota hai."
+        ),
+        (
+            "Main guzra hua waqt badal nahi sakta. Ap ko meri wajah se jo takleef mili, "
+            "main usay mita nahi sakta. Lekin agar mera afsos waqt ko peechhe le ja sakta, "
+            "to main apni kahani ko poori duniya se chhupa kar sirf apne dil mein rakhta."
+        ),
+        (
+            "Do saal ki khamoshi mein bhi koi din aisa nahi tha jab ap meri yaadon se door rahi ho. "
+            "Main ye is liye nahi likh raha ke ap ko guilty feel ho. Main ye is liye likh raha hoon "
+            "ke ap jaanein ke meri mohabbat sirf alfaaz nahi thi."
+        ),
     ],
+    "closing_thought": (
+        "Main ye sab is liye nahi keh raha ke ap ko rokun. Main ye is liye keh raha hoon "
+        "ke ap jaanein ke ek insaan tha jiske liye ap duniya thi."
+    ),
 }
 
 # -----------------------------------------------------------------------------
-# CHAPTER 5 — DUA
+# CHAPTER 4 — WHY I RESPECT YOU (Special Visual Treatment)
+# -----------------------------------------------------------------------------
+RESPECT_SECTION = {
+    "eyebrow": "WOH BAAT JO AP KO AUR KHOOBSURAT BANATI HAI",
+    "title": "One Thing I Will Always Respect About You",
+    "subtitle": "This is not about religion as an argument. This is about admiration.",
+    "main_content": [
+        (
+            "Jab bhi maine ap se contact karne ki koshish ki, ap ne ek baat kahi jo mujhe "
+            "ruk kar sochne par majboor kar deti thi."
+        ),
+        (
+            "Ap ne mujhe yaad dilaya ke hum na-mehram hain, aur ke ap Allah ko naraz nahi karna chahtin. "
+            "Ye baat ap ne logon ke darr se nahi kahi thi. Ye baat ap ne apne Rab ki mohabbat aur khauf se kahi thi."
+        ),
+        (
+            "Isse meri izzat ap k liye kam nahi hui—balke aur barh gayi."
+        ),
+        (
+            "Isse mujhe ye samajh aaya ke agar mera iraada sachcha hai, to mera pehla maqsad "
+            "chhup kar baat karne ke tareeqe dhoondna nahi hona chahiye. Mera pehla maqsad ye hona chahiye "
+            "ke main itna qabil banun ke ap k saamne sahih tareeqe se, izzat ke saath aa sakun."
+        ),
+        (
+            "Main ap ko kabhi us position mein nahi rakhna chahta jahan ap ko apne jazbaat "
+            "aur apne Rab ke rishte mein se kisi ek ko chunna pade."
+        ),
+    ],
+    "golden_line": (
+        "Meri sab se bari koshish ye nahi honi chahiye ke ap ko ek aur message bhejun. "
+        "Meri sab se bari koshish ye honi chahiye ke main is qabil banun ke sahih raaste se ap k liye aa sakun."
+    ),
+    "closing": (
+        "Agar kabhi Allah ne hamari kismet mein bhalayi likhi, to main chahta hoon ke woh aise ho "
+        "jahan Allah raazi ho, ap ka ghar sukoon mein ho, ap ki izzat salamat ho, "
+        "aur koi chhupa hua raasta ya dabao na ho."
+    ),
+}
+
+# -----------------------------------------------------------------------------
+# CHAPTER 5 — WHAT I LEARNED (Self-Accountability)
+# -----------------------------------------------------------------------------
+LEARNED_SECTION = {
+    "eyebrow": "SEEKH",
+    "title": "What Loving You Taught Me",
+    "subtitle": "Har rishte mein insaan kuch seekhta hai. Maine bhi seekha.",
+    "lessons": [
+        {
+            "title": "Bharosa Ek Amanat Hai",
+            "content": (
+                "Kisi ki personal baat doosron ko batana — chahe naadaani mein hi sahi — "
+                "ek amanat mein khayanat hai. Ye sabaq mujhe sab se mehnga pada."
+            ),
+        },
+        {
+            "title": "Sachche Jazbaat Ghalat Harkatein Justify Nahi Karte",
+            "content": (
+                "Sirf is liye ke mere dil mein mohabbat thi, iska matlab ye nahi ke mera har qadam sahih tha. "
+                "Achi niyyat ke baawajood kuch cheezein main aur behtar handle kar sakta tha."
+            ),
+        },
+        {
+            "title": "Sabr Ka Matlab Sirf Intezaar Nahi",
+            "content": (
+                "Sabr ka matlab hai apne aap ko behtar banana us waqt ke liye jab Allah mauqa de. "
+                "Main ne seekha ke bechain hona mohabbat nahi, balke apne aap par qabu na hona hai."
+            ),
+        },
+        {
+            "title": "Izzat Dene Ka Matlab",
+            "content": (
+                "Kisi ki izzat karna sirf unke saamne ache alfaaz bolna nahi. "
+                "Izzat ka matlab hai unki na-maujoodgi mein bhi unka naam mehfooz rakhna."
+            ),
+        },
+    ],
+    "honest_note": (
+        "Main perfect insaan nahi hoon. Main ne ghaltiyan ki hain. Emotions ne mujhe besabra bhi banaya. "
+        "Lekin har ghalti ne mujhe ye dikha diya ke agar main sachchi mohabbat ka haqdar banna chahta hoon, "
+        "to mujhe pehle khud ko badalna hoga."
+    ),
+}
+
+# -----------------------------------------------------------------------------
+# CHAPTER 6 — INTENTIONS
+# -----------------------------------------------------------------------------
+INTENTIONS_SECTION = {
+    "eyebrow": "SACHCHE IRADEY",
+    "title": "What My Heart Truly Wants",
+    "subtitle": "Ye koi waada nahi. Ye iradey hain — sachche aur khalis.",
+    "intentions": [
+        {
+            "title": "Ap Ki Khushi",
+            "content": (
+                "Chahe hamare raaste milein ya na milein — mera sabse pehla iraada ye hai "
+                "ke ap khush rahein. Ap ki khushi mere liye kisi bhi cheez se zyada ahem hai."
+            ),
+        },
+        {
+            "title": "Ap K Ghar Walon Ka Sukoon",
+            "content": (
+                "Main kabhi nahi chahunga ke ap apne ghar walon ko mere liye khoyen. "
+                "Jin logon ne ap ko pala, ap ki hifazat ki — unka sukoon mere liye bhi zaroori hai. "
+                "Agar kabhi main ap ki zindagi mein aaunga, to main chahunga ke ap k apnon ko bhi "
+                "is faislay par sukoon ho."
+            ),
+        },
+        {
+            "title": "Sahih Raasta",
+            "content": (
+                "Agar Allah ne hamare liye koi bhalayi likhi hai, to main chahta hoon ke woh "
+                "sahih tareeqe se aaye — izzat ke saath, khul kar, bina kisi chhupao ke. "
+                "Main chhup kar baat karne mein yakeen nahi rakhta."
+            ),
+        },
+        {
+            "title": "Khud Ko Behtar Banana",
+            "content": (
+                "Chahe kuch bhi ho, main apne aap ko behtar insaan banata rahunga. "
+                "Ye kisi ke liye nahi — ye mera apna farz hai. Lekin agar kabhi mauqa mila, "
+                "to main chahta hoon ke us waqt main us laayiq hoon."
+            ),
+        },
+    ],
+    "family_note": (
+        "Main samajhta hoon ke ap k apne ap k liye protective hain. Ye unki mohabbat hai. "
+        "Main un logon ko challenge nahi karna chahta — main unka aitbaar jeena chahta hoon."
+    ),
+}
+
+# -----------------------------------------------------------------------------
+# CHAPTER 7 — DUA
 # -----------------------------------------------------------------------------
 DUA_SECTION = {
     "eyebrow": "EK KHALIS DUA",
-    "title": "JAB KUCH NA KAR SAKA TO ap k LIYE DUA KI",
-    "subtitle": "Rab ke huzoor dil ka har haal rakh diya...",
+    "title": "A Prayer from the Deepest Part of My Heart",
+    "subtitle": "Jab kuch na kar saka, to Rab ke aage haath utha diye.",
     "paragraphs": [
         (
-            "Ya Allah, Ap hamare dilon ka haal jaanty hain. Ap hamari mohabbat, hamari ghaltiyan, "
-            "hamari takleef aur woh har baat jaanty hain jo hum kabhi ek doosre se keh nahi sake."
+            "Ya Allah, Tu hamare dilon ka haal jaanta hai. Tu hamari mohabbat, hamari ghaltiyan, "
+            "hamari takleef aur woh har baat jaanta hai jo hum kabhi ek doosre se keh nahi sake."
         ),
         (
-            "Agar hamara saath hum dono ke haq mein behtar hai, to hamare darmiyan khari har deewar hata de. "
-            "Hamari ghaltiyan maaf kar de, hamare dil narm kar de aur izzat ke saath hamare raste dobara mila de."
+            "Agar hamara saath hum dono ke haq mein behtar hai, to hamare darmiyan khari har deewar "
+            "hata de. Hamari ghaltiyan maaf kar de, hamare dil narm kar de, aur izzat ke saath "
+            "hamare raste dobara mila de."
         ),
         (
-            "Aur agar hamara saath muqaddar mein nahi, to woh jahan bhi rahe usay hamesha khush, mehfooz "
-            "aur pur-sukoon rakhna—chahe uske saath khara hone wala shakhs main na rahun."
+            "Aur agar hamara saath muqaddar mein nahi, to woh jahan bhi rahe usay hamesha "
+            "khush, mehfooz aur pur-sukoon rakhna — chahe uske saath khara hone wala shakhs main na rahun."
         ),
         (
-            "Lekin Ya Allah… agar abhi bhi koi rasta baqi hai, to isay hamara aakhri alvida mat banne dena."
+            "Lekin Ya Allah... agar abhi bhi koi rasta baqi hai, to isay hamara aakhri alvida "
+            "mat banne dena."
         ),
     ],
+    "closing_ayah": "Hasbunallahu wa ni'mal wakeel.",
+    "closing_meaning": "Allah hamara kaafi hai, aur woh sab se behtar karsaaz hai.",
 }
 
 # -----------------------------------------------------------------------------
-# CHAPTER 6 — FUTURE
+# CHAPTER 8 — THANK YOU
 # -----------------------------------------------------------------------------
-FUTURE_SECTION = {
-    "eyebrow": "SOCHA HUA KAL",
-    "title": "WOH MUSTAQBIL JO MAINE ap k SAATH SOCHA THA",
-    "subtitle": "Woh khwab jo sirf ap k naam se shuru aur ap  par khatam hotay thay.",
-    "quote_art": "ap  sirf meri khwahish nahi, mera mustaqbil theen...",
-    "content": [
-        "Jab bhi maine apne career, kamyabi aur ek behtar zindagi ka socha, us tasveer mein ap  hamesha mere saath theen.",
-        "Main ap ko sirf apne aasaan dino mein nahi chahta tha. Main ap k liye ek aisa insaan banna chahta tha jo izzat ke saath ap ka haath maang sake aur zindagi bhar ap k saath khara reh sake.",
-        "Shayad mujhe bohat waqt lag gaya. Shayad zindagi mujhse zyada tez chalti rahi. Lekin jis mustaqbil ke liye main mehnat kar raha tha, woh ap k baghair kabhi mukammal nahi tha.",
-    ],
-}
-
-# -----------------------------------------------------------------------------
-# CHAPTER 7 — THANK YOU
-# -----------------------------------------------------------------------------
-THANK_YOU_SECTION = {
-    "eyebrow": "DIL KI GEHRAIYON SE",
-    "title": "MERI ZINDAGI MEIN AANE KA SHUKRIYA",
-    "main_quote": "Har us lamhe ke liye jo ap ne meri zindagi ko diya...",
-    "lines": [
+THANKYOU_SECTION = {
+    "eyebrow": "SHUKRIYA",
+    "title": "Thank You for Everything",
+    "subtitle": "Har us lamhe ke liye jo ap ne meri zindagi ko diya...",
+    "gratitudes": [
         "Mujhe samjhane aur guide karne ka shukriya.",
-        "Mujhe volleyball khelte hue dekhne wale un chote lekin khoobsurat lamhon ka shukriya.",
+        "Volleyball khelte hue dekhne wale un chote lekin khoobsurat lamhon ka shukriya.",
         "Us waqt mere liye dua karne ka shukriya jab main khud apne liye dua karne ke qabil nahi tha.",
         "Do saal ki khamoshi ke baad meri zindagi mein dobara lautne ka shukriya.",
         "Meri ghaltiyon ke bawajood hamari kahani ko ek aur mauqa dene ka shukriya.",
+        "Mujhe ye sikhane ka shukriya ke mohabbat mein izzat sab se pehle aati hai.",
     ],
-    "final_line": (
+    "closing": (
         "Main ap ka shukriya is liye nahi kar raha ke main ap ko khone ke liye tayyar hoon. "
         "Main shukriya is liye kar raha hoon kyun ke ap se mohabbat ne mujhe hamesha ke liye badal diya."
     ),
+    "wishes": [
+        "Ap ki zindagi mein hamesha khushi ho.",
+        "Ap ki har dua qubool ho.",
+        "Ap ko woh sab kuch mile jo ap deserve karti hain.",
+        "Ap ki aankhon mein kabhi aansu na aayein.",
+        "Ap jahan bhi jaayein, ap ki raahein aasan hon.",
+    ],
 }
 
 # -----------------------------------------------------------------------------
-# CHAPTER 8 — GOODBYE
+# CHAPTER 9 — FINAL NOTE (Goodbye)
 # -----------------------------------------------------------------------------
 GOODBYE_SECTION = {
-    "eyebrow": "WOH LAFZ JO MAIN KEH NAHI PA RAHA",
-    "heading": "Main ap ko alvida kaise kahun?",
+    "eyebrow": "AAKHRI BAAT",
+    "title": "A Farewell, Not a Forgetting",
+    "subtitle": "Some love asks to be held. Some love learns to make dua and let Allah decide.",
     "paragraphs": [
-        "Main us shakhs ko alvida kaise kahun jo meri itni saari yaadon mein basa hua hai?",
-        "Main kaise maan loon ke jisne kabhi meri zindagi ke liye dua ki, woh ab meri zindagi ka hissa nahi rahegi?",
-        "Main jaanta hoon ke maine ap ko takleef di. Main ye bhi jaanta hoon ke sirf mohabbat guzra hua sab kuch nahi mita sakti. Lekin ap ko kho dena aaj bhi mere dil ko qabool nahi.",
-        "Main ap  par koi zabardasti nahi karna chahta. Main ap ki takleef ko chota bhi nahi kehna chahta. Main sirf itna chahta hoon ke agar ap k dil ke kisi kone mein hamari kahani abhi bhi zinda hai, to please isay yahin khatam mat hone dena.",
+        (
+            "Agar zindagi ap ko mujhse door le jaaye, to main hamari yaadon ko "
+            "talkhi mein nahi badlunga. Main ap ko izzat ke saath yaad rakhunga."
+        ),
+        (
+            "Aur agar hamare raaste kabhi ek hone ke liye nahi likhe gaye, to bhi main dua karunga "
+            "ke Allah ap k liye jo shakhs aur jo zindagi chunein, woh ap ko sukoon dein."
+        ),
+        (
+            "Lekin agar zindagi ne kabhi mujhe ek sachcha, izzat bhara mauqa diya ke main ap k saamne "
+            "dobara aa sakun — to main umeed karta hoon ke us waqt tak main ek behtar, "
+            "zyada zimmadar insaan ban chuka hounga."
+        ),
     ],
-    "highlighted_line": "Main ap k baghair zindagi nahi chahta tha… aur aaj bhi nahi chahta.",
-    "button_label": "Meri Aakhri Baat Parho",
-    "revealed_text": (
-        "Main ap se ye nahi keh raha ke ap  apni takleef bhool jao. Main sirf ek sachhi aur aakhri baat ka "
-        "mauqa maang raha hoon, is se pehle ke hamare itne saalon ki yaadein hamesha ki khamoshi ban jayein. "
-        "Agar hamare liye abhi bhi koi chota sa rasta baqi hai, to please bina dil ki baat sune mat jaana."
+    "highlighted_line": (
+        "Kuch mohabbatein thamne ko kehti hain. "
+        "Kuch mohabbatein dua karna seekh leti hain... aur faisla Allah par chor deti hain."
     ),
-    "final_quote": "“ap  door ja rahi ho, lekin mera dil aaj bhi ap ko jaane ki ijazat nahi de pa raha.”",
+    "final_visual_text": "You will always have a special place in my heart.",
+    "absolute_last_line": (
+        "Alvida nahi kehta... bas itna kehta hoon: "
+        "Allah hafiz. Dua mein yaad rakhna."
+    ),
 }
