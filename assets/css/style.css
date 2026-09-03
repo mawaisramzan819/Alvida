@@ -1678,6 +1678,152 @@ button[key="btn_start_journey"]:hover,
   line-height: 1;
 }
 
+/* ==========================================================================
+   LUXURY ROMANTIC EDITORIAL CARD (STORY OVERVIEW & HEARTFELT ESSAYS)
+   ========================================================================== */
+.editorial-story-card {
+  position: relative !important;
+  background: radial-gradient(circle at 50% -10%, rgba(46, 26, 48, 0.94) 0%, rgba(20, 16, 28, 0.98) 100%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.38) !important;
+  border-radius: 28px !important;
+  padding: 48px 42px 42px 42px !important;
+  margin: 1.5rem auto 2.4rem auto !important;
+  max-width: 720px !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.15), 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 45px rgba(233, 101, 130, 0.18) !important;
+  overflow: hidden !important;
+  animation: gentleFloat 6s ease-in-out infinite alternate !important;
+}
+
+/* Tasteful Corner Floral Flourishes */
+.card-corner-flourish {
+  position: absolute !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 16px !important;
+  color: rgba(244, 143, 177, 0.35) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  line-height: 1 !important;
+}
+.corner-tl { top: 16px !important; left: 18px !important; }
+.corner-tr { top: 16px !important; right: 18px !important; }
+.corner-bl { bottom: 16px !important; left: 18px !important; }
+.corner-br { bottom: 16px !important; right: 18px !important; }
+
+/* Background Watermark */
+.editorial-watermark-decor {
+  position: absolute !important;
+  bottom: -20px !important;
+  right: 15px !important;
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 160px !important;
+  color: rgba(244, 143, 177, 0.035) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  line-height: 1 !important;
+  z-index: 0 !important;
+}
+
+/* Card Top Motif */
+.story-card-top-motif {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  margin-bottom: 24px !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.story-motif-line {
+  height: 1px !important;
+  flex-grow: 1 !important;
+  max-width: 80px !important;
+  background: linear-gradient(90deg, transparent, rgba(244, 143, 177, 0.4), transparent) !important;
+}
+
+.story-motif-heart {
+  font-size: 18px !important;
+  color: #E96582 !important;
+  filter: drop-shadow(0 0 8px rgba(233, 101, 130, 0.6)) !important;
+  animation: heartGlow 2.5s ease-in-out infinite alternate !important;
+}
+
+@keyframes heartGlow {
+  0% { transform: scale(0.95); opacity: 0.8; filter: drop-shadow(0 0 6px rgba(233, 101, 130, 0.4)); }
+  100% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 14px rgba(233, 101, 130, 0.9)); }
+}
+
+/* Body Content */
+.story-body-content {
+  position: relative !important;
+  z-index: 1 !important;
+  text-align: left !important;
+}
+
+.story-paragraph-text {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 17.5px !important;
+  line-height: 1.88 !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.012em !important;
+  color: #F8EDE4 !important;
+  margin-bottom: 22px !important;
+  text-align: left !important;
+}
+
+.story-paragraph-text:last-of-type {
+  margin-bottom: 0 !important;
+}
+
+/* Inset Emotional Climax Quote Box */
+.story-climax-quote-box {
+  position: relative !important;
+  z-index: 1 !important;
+  background: radial-gradient(circle at 50% 50%, rgba(233, 101, 130, 0.12) 0%, rgba(36, 20, 38, 0.65) 100%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.45) !important;
+  border-radius: 20px !important;
+  padding: 26px 32px !important;
+  margin-top: 32px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 25px rgba(233, 101, 130, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+  text-align: center !important;
+}
+
+.quote-center-heart {
+  display: block !important;
+  font-size: 17px !important;
+  color: #EAB378 !important;
+  margin: 0 auto 10px auto !important;
+  filter: drop-shadow(0 0 8px rgba(234, 179, 120, 0.6)) !important;
+}
+
+.story-climax-quote-text {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 19px !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  line-height: 1.75 !important;
+  color: #ffccd8 !important;
+  text-shadow: 0 0 16px rgba(244, 143, 177, 0.3) !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 768px) {
+  .editorial-story-card {
+    padding: 32px 22px 26px 22px !important;
+    border-radius: 22px !important;
+  }
+  .story-paragraph-text {
+    font-size: 16px !important;
+    line-height: 1.8 !important;
+  }
+  .story-climax-quote-box {
+    padding: 20px 18px !important;
+  }
+  .story-climax-quote-text {
+    font-size: 17.5px !important;
+  }
+}
+
 .chapter-highlight-quote-box {
   background: rgba(233, 101, 130, 0.08);
   border-left: 3px solid var(--accent-primary);

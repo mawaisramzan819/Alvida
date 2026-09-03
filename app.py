@@ -1662,23 +1662,45 @@ def render_section_preview():
 # STATE 3 — SECTION VIEW: HOME / OVERVIEW
 # -----------------------------------------------------------------------------
 def render_home_overview():
-    """Render Story Overview & Reflections Section with smooth 3D slide-down."""
+    """Render Story Overview & Reflections Section with luxury romantic editorial card."""
     reset_scroll_to_top()
-    c = content.HOME_SECTION
-    ui(f"""
+    ui("""
     <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_home" id="sec_wrapper_home">
         <div class="chapter-eyebrow-badge">✦ HAMARI KAHANI KA SAFAR</div>
         <h2 class="chapter-main-title">A Farewell That Stays in the Heart</h2>
         <p class="chapter-subtitle-italic">Kuch alvida asal mein khatam nahi hotay — wo bas khoobsurat yaadon ki shuruat ban jatay hain.</p>
         
-        <div class="chapter-letter-card floating-element">
-            <div class="chapter-letter-body">
-                <p>Kuch log sirf zindagi ka hissa nahi bante… wo aadat ban jaate hain.<br>Unki baatein, unki hansi, unka hona — sab kuch itna apna lagne lagta hai ke faasla aane ke baad bhi dil unhein chhor nahi pata.</p>
-                <p>Shayad waqt ke saath sab kuch badal jaye, lekin kuch yaadein aisi hoti hain jo dil khud sambhal kar rakhta hai. Unhein na waqt mita pata hai, na faaslay kam kar pate hain.</p>
-                <p>Is safar mein jo kuch bhi hai, wo bas un jazbaat ka ek chhota sa hissa hai jo shayad alfaaz mein poore kabhi aa hi nahi sakte.</p>
+        <div class="editorial-story-card floating-element">
+            <!-- Decorative Corner Flourishes -->
+            <div class="card-corner-flourish corner-tl">🌸</div>
+            <div class="card-corner-flourish corner-tr">🌿</div>
+            <div class="card-corner-flourish corner-bl">🌿</div>
+            <div class="card-corner-flourish corner-br">🌸</div>
+            
+            <!-- Faint Background Watermark -->
+            <div class="editorial-watermark-decor">”</div>
+            
+            <!-- Card Top Motif -->
+            <div class="story-card-top-motif">
+                <div class="story-motif-line"></div>
+                <span class="story-motif-heart">♡</span>
+                <div class="story-motif-line"></div>
             </div>
-            <div class="chapter-handwritten-note">
-                “Bas itna hai ke tumhari kami shayad waqt ke saath aadat ban jaye…<br>lekin tumhari jagah kabhi koi nahi le sakega.”
+            
+            <!-- Main Body Paragraphs -->
+            <div class="story-body-content">
+                <p class="story-paragraph-text">Kuch log sirf zindagi ka hissa nahi bante… wo aadat ban jaate hain.</p>
+                <p class="story-paragraph-text">Unki baatein, unki hansi, unka hona — sab kuch itna apna lagne lagta hai ke faasla aane ke baad bhi dil unhein chhor nahi pata.</p>
+                <p class="story-paragraph-text">Shayad waqt ke saath sab kuch badal jaye, lekin kuch yaadein aisi hoti hain jo dil khud sambhal kar rakhta hai. Unhein na waqt mita pata hai, na faaslay kam kar pate hain.</p>
+                <p class="story-paragraph-text">Is safar mein jo kuch bhi hai, wo bas un jazbaat ka ek chhota sa hissa hai jo shayad alfaaz mein poore kabhi aa hi nahi sakte.</p>
+            </div>
+            
+            <!-- Inset Emotional Climax Quote Box -->
+            <div class="story-climax-quote-box">
+                <span class="quote-center-heart">✦ &nbsp; ♡ &nbsp; ✦</span>
+                <p class="story-climax-quote-text">
+                    “ Bas itna hai ke tumhari kami shayad waqt ke saath aadat ban jaye…<br>lekin tumhari jagah kabhi koi nahi le sakega. ”
+                </p>
             </div>
         </div>
     </div>
