@@ -1018,6 +1018,30 @@ def render_sidebar():
 
 
 # -----------------------------------------------------------------------------
+# Navigation State Callbacks (Executed BEFORE script execution phase)
+# -----------------------------------------------------------------------------
+def on_navigate_section(target_id: str):
+    """Callback to queue target section and trigger 1.0s transition analyzer."""
+    st.session_state.pending_section = target_id
+    st.session_state.app_view = "section_transition"
+    st.session_state.selected_memory = None
+
+
+def on_navigate_menu():
+    """Callback to trigger 2.0s journey entry analyzer to Journey Menu."""
+    st.session_state.app_view = "journey_transition"
+    st.session_state.active_section = None
+    st.session_state.selected_memory = None
+
+
+def on_navigate_landing():
+    """Callback to return directly to Landing Screen."""
+    st.session_state.app_view = "landing"
+    st.session_state.active_section = None
+    st.session_state.selected_memory = None
+
+
+# -----------------------------------------------------------------------------
 # 11. Bottom Navigation Bar (Back to Journey + Next/Prev Chapter)
 # -----------------------------------------------------------------------------
 def render_chapter_footer(current_id: str):
@@ -1040,29 +1064,33 @@ def render_chapter_footer(current_id: str):
 
     with bcol1:
         if prev_id and prev_label:
-            if st.button(f"← Prev: {prev_label}", key=f"foot_prev_{current_id}", use_container_width=True):
-                st.session_state.pending_section = prev_id
-                st.session_state.app_view = "section_transition"
-                st.session_state.selected_memory = None
-                reset_scroll_to_top()
-                st.rerun()
+            st.button(
+                f"← Prev: {prev_label}",
+                key=f"foot_prev_{current_id}",
+                use_container_width=True,
+                on_click=on_navigate_section,
+                args=(prev_id,),
+            )
 
     with bcol2:
-        if st.button("← Back to Journey", key=f"foot_back_{current_id}", type="secondary", use_container_width=True):
-            st.session_state.app_view = "journey_menu"
-            st.session_state.active_section = None
-            st.session_state.selected_memory = None
-            reset_scroll_to_top()
-            st.rerun()
+        st.button(
+            "← Back to Journey",
+            key=f"foot_back_{current_id}",
+            type="secondary",
+            use_container_width=True,
+            on_click=on_navigate_menu,
+        )
 
     with bcol3:
         if next_id and next_label:
-            if st.button(f"Next: {next_label} →", key=f"foot_next_{current_id}", type="primary", use_container_width=True):
-                st.session_state.pending_section = next_id
-                st.session_state.app_view = "section_transition"
-                st.session_state.selected_memory = None
-                reset_scroll_to_top()
-                st.rerun()
+            st.button(
+                f"Next: {next_label} →",
+                key=f"foot_next_{current_id}",
+                type="primary",
+                use_container_width=True,
+                on_click=on_navigate_section,
+                args=(next_id,),
+            )
 
 
 # -----------------------------------------------------------------------------
@@ -1102,27 +1130,17 @@ def render_hidden_bridge_dispatcher():
         )
         c = st.columns(1)[0]
         with c:
-            if st.button("bridge_go_landing", key="_bridge_landing", help="bridge_hidden"):
-                st.session_state.app_view = "landing"
-                st.session_state.active_section = None
-                st.session_state.selected_memory = None
-                reset_scroll_to_top()
-                st.rerun()
-
-            if st.button("bridge_go_menu", key="_bridge_menu", help="bridge_hidden"):
-                st.session_state.app_view = "journey_transition"
-                st.session_state.active_section = None
-                st.session_state.selected_memory = None
-                reset_scroll_to_top()
-                st.rerun()
+            st.button("bridge_go_landing", key="_bridge_landing", help="bridge_hidden", on_click=on_navigate_landing)
+            st.button("bridge_go_menu", key="_bridge_menu", help="bridge_hidden", on_click=on_navigate_menu)
 
             for chap in config.CHAPTERS:
-                if st.button(f"bridge_go_{chap['id']}", key=f"_bridge_{chap['id']}", help="bridge_hidden"):
-                    st.session_state.pending_section = chap["id"]
-                    st.session_state.app_view = "section_transition"
-                    st.session_state.selected_memory = None
-                    reset_scroll_to_top()
-                    st.rerun()
+                st.button(
+                    f"bridge_go_{chap['id']}",
+                    key=f"_bridge_{chap['id']}",
+                    help="bridge_hidden",
+                    on_click=on_navigate_section,
+                    args=(chap["id"],),
+                )
 
 
 # -----------------------------------------------------------------------------
@@ -1896,30 +1914,18 @@ def main():
         st.session_state.app_view = "landing"
         st.rerun()
 
-    # 4. Top-Level Bridge Navigation Dispatcher (Evaluated FIRST to prevent waterfall re-renders)
-    render_hidden_bridge_dispatcher()
-
-    # 5. Connect JavaScript Audio, 3D WebGL & Navigation Bridge
-    app_view = st.session_state.app_view
-    active_section = st.session_state.get("active_section") or "home"
-    render_cinematic_atmosphere(active_section if app_view == "section" else "home")
-    render_sidebar_and_navigation_bridge(app_view, active_section)
-
-    # 6. Sidebar (Mounted ONLY inside the Journey — not on Landing or Journey Transition)
-    if app_view in ["journey_menu", "section"]:
-        render_sidebar()
-
-    # 7. PHASE 2: Main Mutually Exclusive Views
-    if app_view == "landing":
-        render_landing()
-    elif app_view == "journey_transition":
+    # 4. TRANSITION ANALYZER GUARDS (Strictly executed BEFORE any view, sidebar, or atmospheric rendering)
+    if st.session_state.app_view == "journey_transition":
+        reset_scroll_to_top()
         render_journey_analyzer_loader()
         time.sleep(2.0)
         st.session_state.app_view = "journey_menu"
         st.session_state.active_section = None
         reset_scroll_to_top()
         st.rerun()
-    elif app_view == "section_transition":
+
+    if st.session_state.app_view == "section_transition":
+        reset_scroll_to_top()
         target_sec = st.session_state.get("pending_section") or "welcome"
         render_dynamic_section_analyzer(target_sec)
         time.sleep(1.0)
@@ -1930,6 +1936,23 @@ def main():
             st.session_state.visited_chapters.add(target_sec)
         reset_scroll_to_top()
         st.rerun()
+
+    # 5. Top-Level Bridge Navigation Dispatcher
+    render_hidden_bridge_dispatcher()
+
+    # 6. Connect JavaScript Audio, 3D WebGL & Navigation Bridge
+    app_view = st.session_state.app_view
+    active_section = st.session_state.get("active_section") or "home"
+    render_cinematic_atmosphere(active_section if app_view == "section" else "home")
+    render_sidebar_and_navigation_bridge(app_view, active_section)
+
+    # 7. Sidebar (Mounted ONLY inside the Journey — not on Landing or Transitions)
+    if app_view in ["journey_menu", "section"]:
+        render_sidebar()
+
+    # 8. Main Mutually Exclusive Active Views
+    if app_view == "landing":
+        render_landing()
     elif app_view in ["journey_menu", "menu"]:
         render_journey_menu()
     elif app_view == "section":
