@@ -871,6 +871,113 @@ def render_journey_loader():
     render_journey_analyzer_loader()
 
 
+def render_dynamic_section_analyzer(target_id: str):
+    """Render 1.0s dedicated dynamic Section Transition Analyzer."""
+    reset_scroll_to_top()
+    target_label = "Next Chapter"
+    target_icon = "✦"
+    for c in config.CHAPTERS:
+        if c["id"] == target_id:
+            target_label = c["label"]
+            target_icon = c.get("icon", "✦")
+            break
+
+    st.markdown(
+        f"""
+    <style>
+    .section-analyzer-backdrop {{
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: radial-gradient(circle at center, #1e131d 0%, #0a070a 100%) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        z-index: 99999999 !important;
+        text-align: center !important;
+        padding: 2rem !important;
+    }}
+    .section-analyzer-orb {{
+        width: 64px !important;
+        height: 64px !important;
+        border-radius: 50% !important;
+        background: radial-gradient(circle, rgba(244, 143, 177, 0.25) 0%, transparent 70%) !important;
+        border: 2px solid rgba(244, 143, 177, 0.6) !important;
+        box-shadow: 0 0 25px rgba(244, 143, 177, 0.45) !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        font-size: 26px !important;
+        animation: orbPulse 1.0s ease-in-out infinite alternate !important;
+        margin: 0 auto 20px auto !important;
+    }}
+    .section-analyzer-title {{
+        color: #ffffff !important;
+        font-family: 'Cormorant Garamond', Georgia, serif !important;
+        font-size: 1.55rem !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.01em !important;
+        margin-bottom: 6px !important;
+        text-shadow: 0 0 18px rgba(244, 143, 177, 0.35);
+    }}
+    .section-analyzer-sub {{
+        color: #e2a8b8 !important;
+        font-family: 'Lora', Georgia, serif !important;
+        font-size: 0.95rem !important;
+        margin-bottom: 14px !important;
+        font-style: italic !important;
+    }}
+    .section-analyzer-track {{
+        width: 240px !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-radius: 999px !important;
+        overflow: hidden !important;
+        position: relative !important;
+        margin: 0 auto 14px auto !important;
+    }}
+    .section-analyzer-fill {{
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100% !important;
+        width: 100% !important;
+        background: linear-gradient(90deg, #e2557e, #f78da7, #ffffff) !important;
+        border-radius: 999px !important;
+        animation: sectionAnalyzerFill 1.0s cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
+    }}
+    @keyframes sectionAnalyzerFill {{
+        0% {{ transform: translateX(-100%); }}
+        60% {{ transform: translateX(0%); }}
+        100% {{ transform: translateX(100%); }}
+    }}
+    .section-analyzer-quote {{
+        color: #9d8c96 !important;
+        font-family: 'Lora', Georgia, serif !important;
+        font-size: 0.85rem !important;
+        max-width: 400px !important;
+        line-height: 1.5 !important;
+        font-style: italic !important;
+        margin: 0 auto !important;
+    }}
+    </style>
+    <div class="section-analyzer-backdrop">
+        <div class="section-analyzer-orb">{target_icon}</div>
+        <div class="section-analyzer-title">Opening: {target_label}...</div>
+        <div class="section-analyzer-sub">Agla safha khul raha hai...</div>
+        <div class="section-analyzer-track">
+            <div class="section-analyzer-fill"></div>
+        </div>
+        <div class="section-analyzer-quote">“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”</div>
+    </div>
+    """,
+        unsafe_allow_html=True,
+    )
+
+
 def render_section(section_id: str):
     """Render the requested section view with mutually exclusive layout."""
     sec = section_id or "welcome"
@@ -934,11 +1041,9 @@ def render_chapter_footer(current_id: str):
     with bcol1:
         if prev_id and prev_label:
             if st.button(f"← Prev: {prev_label}", key=f"foot_prev_{current_id}", use_container_width=True):
-                st.session_state.app_view = "section"
-                st.session_state.active_section = prev_id
+                st.session_state.pending_section = prev_id
+                st.session_state.app_view = "section_transition"
                 st.session_state.selected_memory = None
-                if "visited_chapters" in st.session_state:
-                    st.session_state.visited_chapters.add(prev_id)
                 reset_scroll_to_top()
                 st.rerun()
 
@@ -953,11 +1058,9 @@ def render_chapter_footer(current_id: str):
     with bcol3:
         if next_id and next_label:
             if st.button(f"Next: {next_label} →", key=f"foot_next_{current_id}", type="primary", use_container_width=True):
-                st.session_state.app_view = "section"
-                st.session_state.active_section = next_id
+                st.session_state.pending_section = next_id
+                st.session_state.app_view = "section_transition"
                 st.session_state.selected_memory = None
-                if "visited_chapters" in st.session_state:
-                    st.session_state.visited_chapters.add(next_id)
                 reset_scroll_to_top()
                 st.rerun()
 
@@ -1015,11 +1118,9 @@ def render_hidden_bridge_dispatcher():
 
             for chap in config.CHAPTERS:
                 if st.button(f"bridge_go_{chap['id']}", key=f"_bridge_{chap['id']}", help="bridge_hidden"):
-                    st.session_state.app_view = "section"
-                    st.session_state.active_section = chap["id"]
+                    st.session_state.pending_section = chap["id"]
+                    st.session_state.app_view = "section_transition"
                     st.session_state.selected_memory = None
-                    if "visited_chapters" in st.session_state:
-                        st.session_state.visited_chapters.add(chap["id"])
                     reset_scroll_to_top()
                     st.rerun()
 
@@ -1766,12 +1867,14 @@ def main():
         st.session_state.selected_memory = None
     if "memory_transition_target" not in st.session_state:
         st.session_state.memory_transition_target = None
+    if "pending_section" not in st.session_state:
+        st.session_state.pending_section = None
     if "visited_chapters" not in st.session_state:
         st.session_state.visited_chapters = {"home"}
 
     # Support URL query parameter routing
     url_view = st.query_params.get("view")
-    if url_view in ["landing", "journey_transition", "journey_menu", "menu", "section"]:
+    if url_view in ["landing", "journey_transition", "section_transition", "journey_menu", "menu", "section"]:
         mapped_view = "journey_menu" if url_view == "menu" else url_view
         if st.session_state.app_view != mapped_view:
             st.session_state.app_view = mapped_view
@@ -1814,6 +1917,17 @@ def main():
         time.sleep(2.0)
         st.session_state.app_view = "journey_menu"
         st.session_state.active_section = None
+        reset_scroll_to_top()
+        st.rerun()
+    elif app_view == "section_transition":
+        target_sec = st.session_state.get("pending_section") or "welcome"
+        render_dynamic_section_analyzer(target_sec)
+        time.sleep(1.0)
+        st.session_state.app_view = "section"
+        st.session_state.active_section = target_sec
+        st.session_state.pending_section = None
+        if "visited_chapters" in st.session_state:
+            st.session_state.visited_chapters.add(target_sec)
         reset_scroll_to_top()
         st.rerun()
     elif app_view in ["journey_menu", "menu"]:
