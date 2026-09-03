@@ -854,8 +854,7 @@ def reset_scroll_to_top():
 def render_journey_analyzer_loader():
     """Journey Transition Analyzer (Start the Journey Par)"""
     reset_scroll_to_top()
-    st.markdown(
-        """
+    ui("""
     <style>
     .cinematic-loader-backdrop {
         position: fixed !important;
@@ -919,14 +918,15 @@ def render_journey_analyzer_loader():
         font-family: 'Cormorant Garamond', Georgia, serif !important;
         font-size: 1.65rem !important;
         font-weight: 700 !important;
-        letter-spacing: -0.01em !important;
+        letter-spacing: 0.5px !important;
         margin-bottom: 6px !important;
-        text-shadow: 0 0 18px rgba(244, 143, 177, 0.35);
+        text-shadow: 0 0 18px rgba(244, 143, 177, 0.4) !important;
     }
     .loader-sub-glow {
-        color: #e2a8b8 !important;
+        color: #f7a8b8 !important;
         font-family: 'Lora', Georgia, serif !important;
-        font-size: 0.95rem !important;
+        font-size: 1.05rem !important;
+        letter-spacing: 0.2px !important;
         margin-bottom: 12px !important;
         font-style: italic !important;
     }
@@ -949,9 +949,7 @@ def render_journey_analyzer_loader():
             “Kuch alvida asal mein khatam nahi hotay, wo bas khoobsurat yaadon ki shuruat ban jatay hain.”
         </div>
     </div>
-    """,
-        unsafe_allow_html=True,
-    )
+    """)
 
 
 def render_journey_loader():
@@ -1002,8 +1000,7 @@ def render_dynamic_transition_analyzer(target_id: str = None, mode: str = "next"
         subtitle = "Agla safha khul raha hai..."
         quote = "“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”"
 
-    st.markdown(
-        f"""
+    ui(f"""
     <style>
     .section-analyzer-backdrop {{
         position: fixed !important;
@@ -1093,9 +1090,7 @@ def render_dynamic_transition_analyzer(target_id: str = None, mode: str = "next"
         </div>
         <div class="section-analyzer-quote">{quote}</div>
     </div>
-    """,
-        unsafe_allow_html=True,
-    )
+    """)
 
 
 def render_dynamic_section_analyzer(target_id: str):
@@ -1737,8 +1732,7 @@ def render_memories():
     # Check if a memory switch transition loader is in progress
     if st.session_state.get("memory_transition_target") is not None:
         target_idx = st.session_state["memory_transition_target"]
-        st.markdown(
-            """
+        ui("""
         <style>
         .memory-switch-loader-backdrop {
             min-height: 280px !important;
@@ -1811,9 +1805,7 @@ def render_memories():
                 <div class="memory-switch-fill"></div>
             </div>
         </div>
-        """,
-            unsafe_allow_html=True,
-        )
+        """)
         time.sleep(1.25)
         st.session_state["selected_memory"] = target_idx
         st.session_state["memory_transition_target"] = None
@@ -1854,13 +1846,12 @@ def render_memories():
                     st.session_state["selected_memory"] = i
                     st.rerun()
 
-    # Mode B: Opened Memory View
+    # Mode B: Opened Memory View (High-End Glassmorphism Keepsake UI)
     else:
         mem = c["cards"][idx]
         ts_id = int(time.time() * 1000)
         anim_class = f"mem-slide-{idx}-{ts_id}"
-        st.markdown(
-            f"""
+        ui(f"""
         <style>
         .{anim_class} {{
             animation: keepsakeEntrance 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
@@ -1883,9 +1874,7 @@ def render_memories():
                 <p class="memory-story-text">{mem['placeholder']}</p>
             </div>
         </div>
-        """,
-            unsafe_allow_html=True,
-        )
+        """)
 
         mcol1, mcol2, mcol3 = st.columns([1, 1.2, 1])
         with mcol1:
