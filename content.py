@@ -118,75 +118,173 @@ MEMORIES_SECTION = {
     "subtitle": "Hamari kahani ke woh lamhe jo mere dil par hamesha ke liye naqsh ho gaye.",
     "cards": [
         {
+            "id": "mem_1",
             "category": "Pehli Salam",
+            "title": "Pehli Salam",
             "icon": "🌱",
             "accent_color": "#6ee7b7",
+            "preview": "Ek choti si salam… jo baad mein meri zindagi ki sab se gehri yaadon mein se ek ban gayi.",
+            "full_text": (
+                "School ka woh din shayad ap ke liye bas ek aam sa din tha… lekin mujhe kya pata tha "
+                "ke ap ki ek choti si salam meri zindagi ki itni badi yaad ban jayegi. Us waqt bas "
+                "muskura kar jawab de diya tha… kaash pata hota ke ek din isi choti si mulaqat ko "
+                "yaad karke dil itna bhar aayega. Kuch lamhe us waqt bilkul mamooli lagte hain, aur phir "
+                "waqt guzarne ke baad pata chalta hai ke wahi lamhe kitne anmol thay."
+            ),
             "placeholder": (
-                "School ke ek aam se din mein hamari kahani ek choti si salam se shuru hui. "
-                "Humein kya pata tha ke woh chota sa lamha meri zindagi ki sab se gehri yaad ban jayega."
+                "School ka woh din shayad ap ke liye bas ek aam sa din tha… lekin mujhe kya pata tha "
+                "ke ap ki ek choti si salam meri zindagi ki itni badi yaad ban jayegi. Us waqt bas "
+                "muskura kar jawab de diya tha… kaash pata hota ke ek din isi choti si mulaqat ko "
+                "yaad karke dil itna bhar aayega. Kuch lamhe us waqt bilkul mamooli lagte hain, aur phir "
+                "waqt guzarne ke baad pata chalta hai ke wahi lamhe kitne anmol thay."
             ),
         },
         {
+            "id": "mem_2",
             "category": "Volleyball Ground",
+            "title": "Volleyball Ground",
             "icon": "🏐",
             "accent_color": "#fbbf24",
+            "preview": "Match apni jagah tha… meri nazar hamesha ap ko dhoondti thi.",
+            "full_text": (
+                "Main volleyball khelta zaroor tha, lekin sach kahun to meri tawajju aksar game se "
+                "zyada ap ko dhoondne mein hoti thi. Pata nahi kyun, lekin jab ap nazar aa jati theen "
+                "to ek aam sa match bhi dil ke liye khaas ban jata tha. Aur jab ap na hoti theen, "
+                "to jeet bhi kuch adhoori si lagti thi… shayad is liye ke meri nazar score se pehle "
+                "hamesha ap ko talash karti thi."
+            ),
             "placeholder": (
-                "Main volleyball khelta tha, lekin meri nazrein aksar ap ko dhoondti rehti theen. "
-                "Ap ka mujhe dekhna ek aam se match ko mere liye khaas bana deta tha."
+                "Main volleyball khelta zaroor tha, lekin sach kahun to meri tawajju aksar game se "
+                "zyada ap ko dhoondne mein hoti thi. Pata nahi kyun, lekin jab ap nazar aa jati theen "
+                "to ek aam sa match bhi dil ke liye khaas ban jata tha. Aur jab ap na hoti theen, "
+                "to jeet bhi kuch adhoori si lagti thi… shayad is liye ke meri nazar score se pehle "
+                "hamesha ap ko talash karti thi."
             ),
         },
         {
-            "category": "Jab Ap Achi Lagne Lageen",
+            "id": "mem_3",
+            "category": "Jab Ap Khaas Ban Gayin",
+            "title": "Jab Ap Khaas Ban Gayin",
             "icon": "✨",
             "accent_color": "#f472b6",
+            "preview": "Pata hi nahi chala ke ek aam sa rishta dil ke itna qareeb kab aa gaya.",
+            "full_text": (
+                "Mujhe khud nahi pata ke woh kaunsa lamha tha jab sab kuch badal gaya. Bas ap ki "
+                "rehnumai, hamari choti choti baatein aur ek doosre ko samajhte samajhte pata hi nahi "
+                "chala ke ap mere liye itni khaas kab ban gayin. Shayad kuch rishte ek pal mein nahi "
+                "bante… woh aahista aahista dil mein utarte hain, aur phir ek din ehsaas hota hai "
+                "ke ab unke baghair sab kuch adhoora sa lagta hai."
+            ),
             "placeholder": (
-                "Mujhe yaad nahi ke woh kaunsa ek lamha tha. Bas ap ki rehnumai, hamari baaton "
-                "aur ek doosre ko samajhte samajhte ap mere liye sab kuch ban gayi."
+                "Mujhe khud nahi pata ke woh kaunsa lamha tha jab sab kuch badal gaya. Bas ap ki "
+                "rehnumai, hamari choti choti baatein aur ek doosre ko samajhte samajhte pata hi nahi "
+                "chala ke ap mere liye itni khaas kab ban gayin. Shayad kuch rishte ek pal mein nahi "
+                "bante… woh aahista aahista dil mein utarte hain, aur phir ek din ehsaas hota hai "
+                "ke ab unke baghair sab kuch adhoora sa lagta hai."
             ),
         },
         {
+            "id": "mem_4",
             "category": "Meri Sab Se Bari Ghalti",
+            "title": "Meri Sab Se Bari Ghalti",
             "icon": "🥀",
             "accent_color": "#f87171",
+            "preview": "Kuch ghaltiyan waqt ke saath purani ho jati hain… lekin dil ka bojh kam nahi hota.",
+            "full_text": (
+                "Maine hamari baatein un logon tak pohancha dein jahan unhein kabhi nahi jana "
+                "chahiye tha. Baad mein jab bharosa toota to dukh un se zyada apne aap se hua… "
+                "kyun ke pehli zimmedari meri thi. Mujhe ap ke bharose, ap ki izzat aur hamari baaton "
+                "ki hifazat karni chahiye thi. Shayad kuch ghaltiyan maafi ke baad bhi dil par bojh "
+                "ban kar reh jaati hain… aur meri ye ghalti unhi mein se ek hai."
+            ),
             "placeholder": (
-                "Maine hamari baatein ghalat logon ko bata dein. Unhon ne mera bharosa toda, "
-                "lekin pehli ghalti meri thi—main ap k bharose aur izzat ki hifazat nahi kar saka."
+                "Maine hamari baatein un logon tak pohancha dein jahan unhein kabhi nahi jana "
+                "chahiye tha. Baad mein jab bharosa toota to dukh un se zyada apne aap se hua… "
+                "kyun ke pehli zimmedari meri thi. Mujhe ap ke bharose, ap ki izzat aur hamari baaton "
+                "ki hifazat karni chahiye thi. Shayad kuch ghaltiyan maafi ke baad bhi dil par bojh "
+                "ban kar reh jaati hain… aur meri ye ghalti unhi mein se ek hai."
             ),
         },
         {
+            "id": "mem_5",
             "category": "Do Saal Ki Khamoshi",
+            "title": "Do Saal Ki Khamoshi",
             "icon": "⏳",
             "accent_color": "#a78bfa",
+            "preview": "Do saal ki khamoshi thi… lekin dil ke andar sab kuch ab bhi zinda tha.",
+            "full_text": (
+                "Do saal tak hamare darmiyan koi baat nahi hui… lekin khamoshi ka matlab ye kabhi "
+                "nahi tha ke sab kuch khatam ho gaya tha. Ap ki yaadein, apni ghaltiyon ka afsos aur "
+                "wo khaali pan jo ap ke baghair mehsoos hota tha, har din mere saath raha. Waqt guzarta "
+                "raha, zindagi chalti rahi… lekin dil ke andar ek jagah aisi thi jo bilkul waisi hi "
+                "rahi. Shayad isi liye ke kuch log door ho jaate hain, magar unki kami dil se kabhi door nahi hoti."
+            ),
             "placeholder": (
-                "Do saal tak hamare darmiyan koi baat nahi hui. Sirf yaadein, afsos aur "
-                "ap k baghair reh jaane wali khamoshi mere saath rahi."
+                "Do saal tak hamare darmiyan koi baat nahi hui… lekin khamoshi ka matlab ye kabhi "
+                "nahi tha ke sab kuch khatam ho gaya tha. Ap ki yaadein, apni ghaltiyon ka afsos aur "
+                "wo khaali pan jo ap ke baghair mehsoos hota tha, har din mere saath raha. Waqt guzarta "
+                "raha, zindagi chalti rahi… lekin dil ke andar ek jagah aisi thi jo bilkul waisi hi "
+                "rahi. Shayad isi liye ke kuch log door ho jaate hain, magar unki kami dil se kabhi door nahi hoti."
             ),
         },
         {
+            "id": "mem_6",
             "category": "Accident Aur Ap Ki Dua",
+            "title": "Accident Aur Ap Ki Dua",
             "icon": "🤲",
             "accent_color": "#fcd34d",
+            "preview": "Jab hosh kam tha… dil phir bhi ap ko yaad kar raha tha.",
+            "full_text": (
+                "Jab main zindagi aur behoshi ke darmiyan tha, mujhe khud kuch yaad nahi… lekin "
+                "ye jaan kar ke ap ki duaein mere liye uth rahi theen, dil ko ajeeb sa sukoon milta hai. "
+                "Aur jab hosh wapas aaya, sab se pehle jo naam dil ne mehsoos kiya, wo ap ka tha. "
+                "Shayad isi liye kuch log sirf yaadon mein nahi rehte… wo insan ki saanson aur duaon ka hissa ban jaate hain."
+            ),
             "placeholder": (
-                "Jab main zindagi aur behoshi ke darmiyan tha, ap ki duaein mere saath theen. "
-                "Jab mujhe hosh aaya, mere dil ne sab se pehle sirf ap ko yaad kiya."
+                "Jab main zindagi aur behoshi ke darmiyan tha, mujhe khud kuch yaad nahi… lekin "
+                "ye jaan kar ke ap ki duaein mere liye uth rahi theen, dil ko ajeeb sa sukoon milta hai. "
+                "Aur jab hosh wapas aaya, sab se pehle jo naam dil ne mehsoos kiya, wo ap ka tha. "
+                "Shayad isi liye kuch log sirf yaadon mein nahi rehte… wo insan ki saanson aur duaon ka hissa ban jaate hain."
             ),
         },
         {
+            "id": "mem_7",
             "category": "Ap Ka Dobara Lautna",
+            "title": "Ap Ka Dobara Lautna",
             "icon": "🕊️",
             "accent_color": "#38bdf8",
+            "preview": "Kuch cheezen wapas mil kar bhi nayi nahi lagtin… wo bas apni lagti hain.",
+            "full_text": (
+                "Itne arsay ke baad ap ka ehsaas dobara meri zindagi mein lautna aisa tha jaise "
+                "dil ne apni koi bohat purani, bohat apni cheez dobara paa li ho. Us pal laga ke "
+                "zindagi ne meri khoi hui duniya ka ek hissa mujhe wapas kar diya."
+            ),
             "placeholder": (
-                "Itne arsay ke baad ap ki awaaz dobara sunna aisa tha jaise zindagi ne mujhe "
-                "meri khoi hui duniya wapas kar di ho."
+                "Itne arsay ke baad ap ka ehsaas dobara meri zindagi mein lautna aisa tha jaise "
+                "dil ne apni koi bohat purani, bohat apni cheez dobara paa li ho. Us pal laga ke "
+                "zindagi ne meri khoi hui duniya ka ek hissa mujhe wapas kar diya."
             ),
         },
         {
+            "id": "mem_8",
             "category": "Aaj — Ye Lamha",
+            "title": "Aaj — Ye Lamha",
             "icon": "🌙",
             "accent_color": "#f1f5f9",
+            "preview": "Sab kuch seh liya tha… bas ap ka yun door jana kabhi socha nahi tha.",
+            "full_text": (
+                "Itna sab kuch sehne ke baad bhi dil ne kabhi ye tasavvur nahi kiya tha ke ek din "
+                "ap ko apne se door jaate hue dekhna parega. Shayad is liye ke kahin na kahin dil ko "
+                "hamesha ye umeed thi ke ap yunhi paas rahengi. Lekin aaj jab ye faasla haqeeqat ban "
+                "kar saamne khara hai, to samajh aa raha hai ke kuch alvida sirf lafzon se nahi hote… "
+                "wo andar bohat gehri khamoshi chhor jaate hain."
+            ),
             "placeholder": (
-                "Itna sab kuch sehne ke baad bhi maine kabhi nahi socha tha ke ek din main "
-                "ap ko apne se door jaate hue dekhunga. Lekin aaj yehi sach hai."
+                "Itna sab kuch sehne ke baad bhi dil ne kabhi ye tasavvur nahi kiya tha ke ek din "
+                "ap ko apne se door jaate hue dekhna parega. Shayad is liye ke kahin na kahin dil ko "
+                "hamesha ye umeed thi ke ap yunhi paas rahengi. Lekin aaj jab ye faasla haqeeqat ban "
+                "kar saamne khara hai, to samajh aa raha hai ke kuch alvida sirf lafzon se nahi hote… "
+                "wo andar bohat gehri khamoshi chhor jaate hain."
             ),
         },
     ],

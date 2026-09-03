@@ -2284,9 +2284,10 @@ div[data-testid="stColumn"] div.stButton > button:hover {
 /* Base Card Style */
 .mem-art-card {
   position: relative !important;
-  height: 190px !important;
+  min-height: 200px !important;
+  height: auto !important;
   border-radius: 20px !important;
-  padding: 1.6rem 1.1rem !important;
+  padding: 1.4rem 1.1rem !important;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -2317,8 +2318,8 @@ div[data-testid="stColumn"] div.stButton > button:hover {
 }
 
 .mem-art-icon {
-  font-size: 2.35rem !important;
-  margin-bottom: 0.7rem !important;
+  font-size: 2.2rem !important;
+  margin-bottom: 0.5rem !important;
   line-height: 1 !important;
   position: relative !important;
   z-index: 2 !important;
@@ -2327,13 +2328,43 @@ div[data-testid="stColumn"] div.stButton > button:hover {
 
 .mem-art-title {
   font-family: 'Cormorant Garamond', Georgia, serif !important;
-  font-size: 1.28rem !important;
+  font-size: 1.25rem !important;
   font-weight: 700 !important;
-  line-height: 1.25 !important;
+  line-height: 1.22 !important;
   margin: 0 !important;
   position: relative !important;
   z-index: 2 !important;
   letter-spacing: 0.2px !important;
+}
+
+.mem-art-preview {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 0.78rem !important;
+  font-style: italic !important;
+  line-height: 1.38 !important;
+  margin: 6px 0 0 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  opacity: 0.9 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  max-width: 95% !important;
+}
+
+.mem-theme-1 .mem-art-preview,
+.mem-theme-3 .mem-art-preview,
+.mem-theme-6 .mem-art-preview,
+.mem-theme-8 .mem-art-preview {
+  color: #f3e6ed !important;
+}
+
+.mem-theme-2 .mem-art-preview,
+.mem-theme-4 .mem-art-preview,
+.mem-theme-5 .mem-art-preview,
+.mem-theme-7 .mem-art-preview {
+  color: #3d1b28 !important;
 }
 
 /* Specific Background Themes Matching the Image */

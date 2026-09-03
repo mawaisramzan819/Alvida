@@ -1782,8 +1782,11 @@ def render_welcome():
 # -----------------------------------------------------------------------------
 # CHAPTER 2 — MEMORIES
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
+# CHAPTER 2 — MEMORIES
+# -----------------------------------------------------------------------------
 def render_memories():
-    """Render Chapter 2: Memories timeline / cards matching reference image."""
+    """Render Chapter 2: Memories timeline / cards with clean emotional sequence and full content mapping."""
     reset_scroll_to_top()
     c = content.MEMORIES_SECTION
     ui("""
@@ -1798,9 +1801,14 @@ def render_memories():
     # Check if a memory switch transition loader is in progress
     if st.session_state.get("memory_transition_target") is not None:
         target_idx = st.session_state["memory_transition_target"]
-        current_idx = st.session_state.get("selected_memory", 0)
-        status_msg = "Moving to next memory..." if target_idx > current_idx else "Moving to previous memory..."
-        target_title = c["cards"][target_idx]["category"]
+        current_idx = st.session_state.get("selected_memory")
+        if current_idx is None:
+            status_msg = "Opening memory..."
+        elif target_idx > current_idx:
+            status_msg = "Moving to next memory..."
+        else:
+            status_msg = "Moving to previous memory..."
+        target_title = c["cards"][target_idx]["title"]
         ui(f"""
         <div class="memory-transition-overlay" id="memoryTransitionOverlay">
             <div class="memory-switch-modal-card">
@@ -1843,11 +1851,12 @@ def render_memories():
                     <div class="mem-card-flare"></div>
                     {decor_arts[i]}
                     <div class="mem-art-icon">{mem['icon']}</div>
-                    <h4 class="mem-art-title">{mem['category']}</h4>
+                    <h4 class="mem-art-title">{mem['title']}</h4>
+                    <p class="mem-art-preview">{mem['preview']}</p>
                 </div>
                 """)
                 if st.button("Open Memory 📖", key=f"mem_btn_{i}", use_container_width=True):
-                    st.session_state["selected_memory"] = i
+                    st.session_state["memory_transition_target"] = i
                     st.rerun()
 
         ui('<div style="height: 1.4rem;"></div>')
@@ -1862,11 +1871,12 @@ def render_memories():
                     <div class="mem-card-flare"></div>
                     {decor_arts[i]}
                     <div class="mem-art-icon">{mem['icon']}</div>
-                    <h4 class="mem-art-title">{mem['category']}</h4>
+                    <h4 class="mem-art-title">{mem['title']}</h4>
+                    <p class="mem-art-preview">{mem['preview']}</p>
                 </div>
                 """)
                 if st.button("Open Memory 📖", key=f"mem_btn_{i}", use_container_width=True):
-                    st.session_state["selected_memory"] = i
+                    st.session_state["memory_transition_target"] = i
                     st.rerun()
         ui('</div>')
 
@@ -1890,24 +1900,24 @@ def render_memories():
                     <div class="memory-icon-ambient-badge" style="border-color: {mem['accent_color']}66;">{mem['icon']}</div>
                     <div class="memory-keepsake-meta">
                         <div class="memory-counter-badge">✦ MEMORY #{idx + 1} OF {len(c['cards'])}</div>
-                        <h3 class="memory-keepsake-title">{mem['category']}</h3>
+                        <h3 class="memory-keepsake-title">{mem['title']}</h3>
                     </div>
                 </div>
                 
                 <div class="memory-luminous-divider"></div>
-                <p class="memory-story-text">{mem['placeholder']}</p>
+                <p class="memory-story-text">{mem['full_text']}</p>
             </div>
         </div>
         """)
 
-        mcol1, mcol2, mcol3 = st.columns([1, 1.2, 1])
+        mcol1, mcol2, mcol3 = st.columns([1, 1.3, 1])
         with mcol1:
             if idx > 0:
                 if st.button("← Previous Memory", key=f"mem_prev_{idx}", use_container_width=True):
                     st.session_state["memory_transition_target"] = idx - 1
                     st.rerun()
         with mcol2:
-            if st.button("Close View ×", key=f"mem_close_{idx}", use_container_width=True):
+            if st.button("Back to Memories ↺", key=f"mem_close_{idx}", use_container_width=True):
                 st.session_state["selected_memory"] = None
                 st.session_state["memory_transition_target"] = None
                 st.rerun()
