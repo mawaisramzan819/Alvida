@@ -3,7 +3,7 @@
    Theme: Midnight Navy (#090D1B) + Warm Ivory (#F8EDE4) + Dusty Rose (#E96582) + Peach (#F5B18F)
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
 :root {
   /* COLORS */
@@ -2109,83 +2109,133 @@ div[data-testid="stColumn"] div.stButton > button:hover {
   }
 }
 
+/* ========================================================
+   HIGH-END GLASSMORPHISM MEMORY KEEPSAKE CARD
+   ======================================================== */
+@keyframes keepsakeEntrance {
+  0% {
+    opacity: 0;
+    transform: translateY(22px) scale(0.985);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+.memory-keepsake-card,
 .memory-opened-card,
 .active-memory-card {
-  background: rgba(24, 18, 26, 0.9) !important;
-  border: 1px solid rgba(233, 101, 130, 0.25) !important;
-  border-radius: 20px !important;
-  padding: 2.4rem 2.6rem !important;
-  margin-bottom: 2rem !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(233, 101, 130, 0.12) !important;
-  backdrop-filter: blur(14px) !important;
-  min-height: 280px !important;
+  position: relative !important;
+  background: rgba(26, 17, 27, 0.76) !important;
+  backdrop-filter: blur(18px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(18px) saturate(160%) !important;
+  border: 1px solid rgba(244, 143, 177, 0.25) !important;
+  border-radius: 24px !important;
+  padding: 36px 32px !important;
+  margin: 20px auto 24px auto !important;
+  max-width: 680px !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.12), 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 40px rgba(226, 85, 126, 0.12) !important;
+  overflow: hidden !important;
   display: flex !important;
   flex-direction: column !important;
-  justify-content: flex-start !important;
-  position: relative !important;
-  transition: all 0.35s ease !important;
+  text-align: left !important;
+  animation: keepsakeEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
 }
 
-.memory-opened-header {
+.memory-watermark-decor {
+  position: absolute !important;
+  bottom: -20px !important;
+  right: -10px !important;
+  font-size: 140px !important;
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  line-height: 1 !important;
+  color: rgba(244, 143, 177, 0.04) !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  z-index: 0 !important;
+}
+
+.memory-keepsake-header {
   display: flex !important;
   align-items: center !important;
-  gap: 1.2rem !important;
-  margin-bottom: 1.2rem !important;
+  gap: 16px !important;
+  margin-bottom: 12px !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
-.memory-opened-icon-badge {
-  width: 56px !important;
-  height: 56px !important;
-  min-width: 56px !important;
-  border-radius: 14px !important;
-  background: rgba(233, 101, 130, 0.15) !important;
-  border: 1px solid rgba(233, 101, 130, 0.35) !important;
+.memory-icon-ambient-badge {
+  width: 58px !important;
+  height: 58px !important;
+  min-width: 58px !important;
+  border-radius: 16px !important;
+  background: radial-gradient(circle, rgba(244, 143, 177, 0.22) 0%, rgba(234, 179, 120, 0.1) 100%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.4) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 1.8rem !important;
-  box-shadow: 0 0 15px rgba(233, 101, 130, 0.2) !important;
+  font-size: 28px !important;
+  box-shadow: 0 0 22px rgba(233, 101, 130, 0.28) !important;
 }
 
-.memory-opened-meta {
+.memory-keepsake-meta {
   display: flex !important;
   flex-direction: column !important;
+  gap: 4px !important;
 }
 
-.memory-opened-badge {
-  font-family: var(--font-body) !important;
-  font-size: 0.78rem !important;
-  color: var(--accent-primary) !important;
-  font-weight: 600 !important;
+.memory-counter-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  width: fit-content !important;
+  background: rgba(244, 143, 177, 0.12) !important;
+  border: 1px solid rgba(244, 143, 177, 0.35) !important;
+  border-radius: 999px !important;
+  font-family: 'Inter', -apple-system, sans-serif !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.14em !important;
   text-transform: uppercase !important;
-  letter-spacing: 1.2px !important;
-  margin-bottom: 0.2rem !important;
-}
-
-.memory-opened-title {
-  font-family: var(--font-display) !important;
-  font-size: 1.85rem !important;
   font-weight: 700 !important;
-  color: #ffffff !important;
+  color: #f7a8b8 !important;
+  padding: 4px 14px !important;
+  box-shadow: 0 0 12px rgba(244, 143, 177, 0.15) !important;
+}
+
+.memory-keepsake-title {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 2.15rem !important;
+  font-weight: 700 !important;
   line-height: 1.2 !important;
+  background: linear-gradient(135deg, #ffffff 20%, #fde2e4 70%, #f48fb1 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
   margin: 0 !important;
-  text-shadow: 0 0 12px rgba(233, 101, 130, 0.2) !important;
+  text-shadow: 0 0 20px rgba(244, 143, 177, 0.2) !important;
 }
 
-.memory-opened-divider {
+.memory-luminous-divider {
   height: 1px !important;
-  background: linear-gradient(90deg, rgba(233, 101, 130, 0.45) 0%, rgba(255, 255, 255, 0.08) 70%, transparent 100%) !important;
-  margin-bottom: 1.4rem !important;
   width: 100% !important;
+  margin: 18px 0 22px 0 !important;
+  background: linear-gradient(90deg, rgba(244, 143, 177, 0.5) 0%, rgba(244, 143, 177, 0.15) 60%, transparent 100%) !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
-.memory-opened-body {
-  font-family: var(--font-body) !important;
-  font-size: 1.02rem !important;
-  line-height: 1.88 !important;
-  color: #f0e6eb !important;
+.memory-story-text {
+  font-family: 'Plus Jakarta Sans', 'Lora', Georgia, sans-serif !important;
+  font-size: 1.05rem !important;
+  font-weight: 400 !important;
+  color: #f1f5f9 !important;
+  line-height: 1.85 !important;
+  letter-spacing: 0.015em !important;
+  text-align: left !important;
   margin: 0 !important;
-  flex-grow: 1 !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
 /* ==========================================================================

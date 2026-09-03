@@ -41,9 +41,9 @@ THEME = {
     "border_light": "#E7C9C2",
 }
 
-# Typography Google Fonts (Cormorant Garamond, Allura, Lora, Inter)
+# Typography Google Fonts (Cormorant Garamond, Allura, Lora, Inter, Plus Jakarta Sans)
 GOOGLE_FONTS = [
-    "https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap"
+    "https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
 ]
 
 # Audio Settings

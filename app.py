@@ -449,7 +449,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
                 }} else if (mode === 'back_to_menu') {{
                     icon = '✦';
                     title = 'Going back to journey...';
-                    sub = 'Returning to chapters overview...';
+                    sub = 'Hamari kahani ke safhay par wapis ja rahe hain...';
                     quote = '“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”';
                 }} else if (mode === 'prev') {{
                     const item = chapMap[chapterId] || {{ label: 'Previous Chapter', icon: '✦' }};
@@ -991,7 +991,7 @@ def render_dynamic_transition_analyzer(target_id: str = None, mode: str = "next"
     elif mode == "back_to_menu":
         target_icon = "✦"
         title = "Going back to journey..."
-        subtitle = "Returning to chapters overview..."
+        subtitle = "Hamari kahani ke safhay par wapis ja rahe hain..."
         quote = "“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”"
     elif mode == "prev":
         title = f"Back to {target_label}..."
@@ -1204,36 +1204,16 @@ def on_close_respect_plate():
 
 
 # -----------------------------------------------------------------------------
-# 11. Bottom Navigation Bar (Back to Journey + Next/Prev Chapter)
+# 11. Bottom Navigation Bar (Centered Single "Back to Journey")
 # -----------------------------------------------------------------------------
 def render_chapter_footer(current_id: str):
-    """Render clean navigation footer with Back to Journey and Next/Prev buttons."""
-    chapter_ids = [c["id"] for c in config.CHAPTERS]
-    curr_idx = chapter_ids.index(current_id) if current_id in chapter_ids else 0
-    prev_id = chapter_ids[curr_idx - 1] if curr_idx > 0 else None
-    next_id = chapter_ids[curr_idx + 1] if curr_idx + 1 < len(chapter_ids) else None
+    """Render clean, streamlined navigation footer with a single prominent centered Back to Journey button."""
+    ui("""
+    <div class="chapter-footer-divider"></div>
+    <div class="chapter-footer-single-wrap">
+    """)
 
-    prev_label = None
-    next_label = None
-    for c in config.CHAPTERS:
-        if c["id"] == prev_id:
-            prev_label = c["label"]
-        if c["id"] == next_id:
-            next_label = c["label"]
-
-    ui('<div class="chapter-footer-divider"></div>')
-    bcol1, bcol2, bcol3 = st.columns([1.2, 1.4, 1.2])
-
-    with bcol1:
-        if prev_id and prev_label:
-            st.button(
-                f"← Prev: {prev_label}",
-                key=f"foot_prev_{current_id}",
-                use_container_width=True,
-                on_click=on_navigate_prev,
-                args=(prev_id,),
-            )
-
+    bcol1, bcol2, bcol3 = st.columns([1, 1.8, 1])
     with bcol2:
         st.button(
             "← Back to Journey",
@@ -1243,16 +1223,7 @@ def render_chapter_footer(current_id: str):
             on_click=on_navigate_back_to_menu,
         )
 
-    with bcol3:
-        if next_id and next_label:
-            st.button(
-                f"Next: {next_label} →",
-                key=f"foot_next_{current_id}",
-                type="primary",
-                use_container_width=True,
-                on_click=on_navigate_next,
-                args=(next_id,),
-            )
+    ui("</div>")
 
 
 # -----------------------------------------------------------------------------
@@ -1781,44 +1752,31 @@ def render_memories():
             f"""
         <style>
         .{anim_class} {{
-            animation: memorySlideUpFadeIn 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+            animation: keepsakeEntrance 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
             will-change: transform, opacity, filter;
-        }}
-        @keyframes memorySlideUpFadeIn {{
-            0% {{
-                opacity: 0;
-                transform: translateY(16px) scale(0.985);
-                filter: blur(8px);
-            }}
-            50% {{
-                opacity: 0.85;
-                filter: blur(2px);
-            }}
-            100% {{
-                opacity: 1;
-                transform: translateY(0px) scale(1);
-                filter: blur(0px);
-            }}
         }}
         </style>
         <div class="memory-detail-wrapper {anim_class}" id="wrap_mem_{idx}">
-            <div class="memory-opened-card active-memory-card memory-content-fade" style="border-left: 5px solid {mem['accent_color']} !important;">
-                <div class="memory-opened-header">
-                    <div class="memory-opened-icon-badge">{mem['icon']}</div>
-                    <div class="memory-opened-meta">
-                        <div class="memory-opened-badge">Memory #{idx + 1} of {len(c['cards'])}</div>
-                        <h3 class="memory-opened-title">{mem['category']}</h3>
+            <div class="memory-keepsake-card" style="border-left: 4px solid {mem['accent_color']} !important;">
+                <div class="memory-watermark-decor">✦</div>
+                
+                <div class="memory-keepsake-header">
+                    <div class="memory-icon-ambient-badge" style="border-color: {mem['accent_color']}66;">{mem['icon']}</div>
+                    <div class="memory-keepsake-meta">
+                        <div class="memory-counter-badge">✦ MEMORY #{idx + 1} OF {len(c['cards'])}</div>
+                        <h3 class="memory-keepsake-title">{mem['category']}</h3>
                     </div>
                 </div>
-                <div class="memory-opened-divider"></div>
-                <p class="memory-opened-body">{mem['placeholder']}</p>
+                
+                <div class="memory-luminous-divider"></div>
+                <p class="memory-story-text">{mem['placeholder']}</p>
             </div>
         </div>
         """,
             unsafe_allow_html=True,
         )
 
-        mcol1, mcol2, mcol3 = st.columns([1, 1, 1])
+        mcol1, mcol2, mcol3 = st.columns([1, 1.2, 1])
         with mcol1:
             if idx > 0:
                 if st.button("← Previous Memory", key=f"mem_prev_{idx}", use_container_width=True):
