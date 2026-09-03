@@ -1665,13 +1665,21 @@ def render_home_overview():
     """Render Story Overview & Reflections Section with luxury romantic editorial card."""
     reset_scroll_to_top()
     ui("""
-    <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_home" id="sec_wrapper_home">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_home" id="sec_wrapper_home" style="position: relative;">
+        <!-- Atmospheric Drifting Embers -->
+        <div class="story-starlight-layer">
+            <div class="starlight-ember"></div>
+            <div class="starlight-ember"></div>
+            <div class="starlight-ember"></div>
+            <div class="starlight-ember"></div>
+        </div>
+
         <div class="chapter-eyebrow-badge">✦ HAMARI KAHANI KA SAFAR</div>
         <h2 class="chapter-main-title">A Farewell That Stays in the Heart</h2>
         <p class="chapter-subtitle-italic">Kuch alvida asal mein khatam nahi hotay — wo bas khoobsurat yaadon ki shuruat ban jatay hain.</p>
         
         <div class="editorial-story-card floating-element">
-            <!-- Decorative Corner Flourishes -->
+            <!-- Decorative Corner Botanical Flourishes -->
             <div class="card-corner-flourish corner-tl">🌸</div>
             <div class="card-corner-flourish corner-tr">🌿</div>
             <div class="card-corner-flourish corner-bl">🌿</div>
@@ -1695,12 +1703,16 @@ def render_home_overview():
                 <p class="story-paragraph-text">Is safar mein jo kuch bhi hai, wo bas un jazbaat ka ek chhota sa hissa hai jo shayad alfaaz mein poore kabhi aa hi nahi sakte.</p>
             </div>
             
-            <!-- Inset Emotional Climax Quote Box -->
+            <!-- Spotlight Callout Box -->
             <div class="story-climax-quote-box">
                 <span class="quote-center-heart">✦ &nbsp; ♡ &nbsp; ✦</span>
-                <p class="story-climax-quote-text">
-                    “ Bas itna hai ke tumhari kami shayad waqt ke saath aadat ban jaye…<br>lekin tumhari jagah kabhi koi nahi le sakega. ”
-                </p>
+                <div class="story-quote-bracket-wrap">
+                    <span class="story-quote-large-mark open-mark">“</span>
+                    <p class="story-climax-quote-text">
+                        Bas itna hai ke tumhari kami shayad waqt ke saath aadat ban jaye…<br>lekin tumhari jagah kabhi koi nahi le sakega.
+                    </p>
+                    <span class="story-quote-large-mark close-mark">”</span>
+                </div>
             </div>
         </div>
     </div>
