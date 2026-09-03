@@ -1753,14 +1753,16 @@ def render_welcome():
 # CHAPTER 2 — MEMORIES
 # -----------------------------------------------------------------------------
 def render_memories():
-    """Render Chapter 2: Memories timeline / cards with cinematic entrance & floating cards."""
+    """Render Chapter 2: Memories timeline / cards matching reference image."""
     reset_scroll_to_top()
     c = content.MEMORIES_SECTION
-    ui(f"""
+    ui("""
     <div class="v2-chapter-container feature-section-enter memories-page-enter section-floating-enter" key="sec_wrapper_memories" id="sec_wrapper_memories">
-        <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
-        <h2 class="chapter-main-title">{c['title']}</h2>
-        <p class="chapter-subtitle-italic">{c['subtitle']}</p>
+        <div class="memories-header-decor">
+            <div class="memories-alvida-badge">♥ &nbsp; Alvida... &nbsp; ♥</div>
+            <div class="memories-header-flourish">─ &nbsp; ✦ &nbsp; ─</div>
+            <p class="memories-poetic-sub">Hamari kahani ke woh lamhe jo mere dil par hamesha ke liye naqsh ho gaye.</p>
+        </div>
     """)
 
     # Check if a memory switch transition loader is in progress
@@ -1847,24 +1849,37 @@ def render_memories():
 
     idx = st.session_state.get("selected_memory")
 
-    # Mode A: Grid View (8 vintage keepsake cards in 2 rows of 4)
+    # Mode A: Grid View (8 exact themed memory cards in 2 rows of 4)
     if idx is None:
+        decor_arts = [
+            '<div class="mem-decor-art">🌹</div>',
+            '<div class="mem-decor-art">🌸</div>',
+            '<div class="mem-decor-art"></div>',
+            '<div class="mem-decor-art">🌹</div>',
+            '<div class="mem-decor-art">🌿</div>',
+            '<div class="mem-decor-art">🌸</div>',
+            '<div class="mem-decor-art">🕊️</div>',
+            '<div class="mem-decor-art"></div>',
+        ]
+
         ui('<div class="memories-grid-container">')
         cols1 = st.columns(4, gap="medium")
         for i in range(4):
             mem = c["cards"][i]
             with cols1[i]:
                 ui(f"""
-                <div class="memory-polaroid-card memory-item-card memory-card-box feature-card-item memory-card-floating floating-element memory-float-{i+1}" style="border-top: 3.5px solid {mem['accent_color']};">
-                    <div class="memory-polaroid-icon">{mem['icon']}</div>
-                    <h4 class="memory-polaroid-title">{mem['category']}</h4>
+                <div class="mem-art-card mem-theme-{i+1} floating-element memory-float-{i+1}">
+                    <div class="mem-card-flare"></div>
+                    {decor_arts[i]}
+                    <div class="mem-art-icon">{mem['icon']}</div>
+                    <h4 class="mem-art-title">{mem['category']}</h4>
                 </div>
                 """)
                 if st.button("Open Memory 📖", key=f"mem_btn_{i}", use_container_width=True):
                     st.session_state["selected_memory"] = i
                     st.rerun()
 
-        ui('<div style="height: 1.2rem;"></div>')
+        ui('<div style="height: 1.4rem;"></div>')
 
         cols2 = st.columns(4, gap="medium")
         for i in range(4, 8):
@@ -1872,9 +1887,11 @@ def render_memories():
             col_idx = i - 4
             with cols2[col_idx]:
                 ui(f"""
-                <div class="memory-polaroid-card memory-item-card memory-card-box feature-card-item memory-card-floating floating-element memory-float-{i+1}" style="border-top: 3.5px solid {mem['accent_color']};">
-                    <div class="memory-polaroid-icon">{mem['icon']}</div>
-                    <h4 class="memory-polaroid-title">{mem['category']}</h4>
+                <div class="mem-art-card mem-theme-{i+1} floating-element memory-float-{i+1}">
+                    <div class="mem-card-flare"></div>
+                    {decor_arts[i]}
+                    <div class="mem-art-icon">{mem['icon']}</div>
+                    <h4 class="mem-art-title">{mem['category']}</h4>
                 </div>
                 """)
                 if st.button("Open Memory 📖", key=f"mem_btn_{i}", use_container_width=True):

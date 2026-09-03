@@ -2165,73 +2165,211 @@ div[data-testid="stColumn"] div.stButton > button:hover {
 }
 
 /* ========================================================
-   LEVEL 2: INDIVIDUAL MEMORY CARDS (WARM NOSTALGIC VINTAGE KEEPSAKE)
+   EXACT MEMORY CARDS COLOR SYSTEM (MATCHING REFERENCE UI)
    ======================================================== */
+.memories-header-decor {
+  text-align: center !important;
+  margin-bottom: 2.2rem !important;
+}
+
+.memories-alvida-badge {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 1.6rem !important;
+  font-weight: 600 !important;
+  color: #f7a8b8 !important;
+  letter-spacing: 2.5px !important;
+  text-shadow: 0 0 16px rgba(247, 168, 184, 0.5) !important;
+  margin-bottom: 2px !important;
+}
+
+.memories-header-flourish {
+  font-size: 0.95rem !important;
+  color: rgba(244, 143, 177, 0.45) !important;
+  margin-bottom: 10px !important;
+  letter-spacing: 3px !important;
+}
+
+.memories-poetic-sub {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 1.15rem !important;
+  font-style: italic !important;
+  color: #fbd3be !important;
+  letter-spacing: 0.2px !important;
+  margin: 0 auto !important;
+  text-shadow: 0 0 12px rgba(251, 211, 190, 0.3) !important;
+}
+
 .memories-grid-container {
   width: 100% !important;
-  max-width: 960px !important;
+  max-width: 1060px !important;
   margin: 0 auto !important;
 }
 
-.memories-grid-container .memory-item-card,
-.memory-polaroid-card {
+/* Base Card Style */
+.mem-art-card {
   position: relative !important;
-  background: radial-gradient(circle at 50% 0%, rgba(60, 36, 48, 0.65) 0%, rgba(20, 13, 22, 0.85) 100%) !important;
-  border: 1px solid rgba(251, 191, 36, 0.18) !important;
-  border-radius: 18px !important;
-  padding: 1.6rem 1.2rem !important;
+  height: 190px !important;
+  border-radius: 20px !important;
+  padding: 1.6rem 1.1rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
   text-align: center !important;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 236, 210, 0.08) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease !important;
-  margin-bottom: 0.8rem !important;
+  overflow: hidden !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.45) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.55), 0 0 20px rgba(233, 101, 130, 0.2) !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
+  margin-bottom: 0.75rem !important;
 }
 
-.memories-grid-container .memory-item-card:hover,
-.memory-polaroid-card:hover {
-  transform: translateY(-8px) scale(1.02) !important;
-  border-color: rgba(251, 191, 36, 0.45) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(251, 191, 36, 0.2) !important;
+.mem-art-card:hover {
+  transform: translateY(-8px) scale(1.025) !important;
+  border-color: rgba(255, 190, 210, 0.85) !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7), 0 0 35px rgba(244, 143, 177, 0.45) !important;
 }
 
-.memory-polaroid-icon {
-  font-size: 2.1rem !important;
-  margin-bottom: 0.6rem !important;
-  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.35)) !important;
+/* Shiny Corner Flare Highlight */
+.mem-card-flare {
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 1.5px !important;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.7) 18%, transparent 40%, rgba(255, 255, 255, 0.9) 80%, transparent 100%) !important;
+  pointer-events: none !important;
 }
 
-.memory-polaroid-title {
+.mem-art-icon {
+  font-size: 2.35rem !important;
+  margin-bottom: 0.7rem !important;
+  line-height: 1 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3)) !important;
+}
+
+.mem-art-title {
   font-family: 'Cormorant Garamond', Georgia, serif !important;
-  font-size: 1.22rem !important;
+  font-size: 1.28rem !important;
   font-weight: 700 !important;
-  color: #FFF4ED !important;
   line-height: 1.25 !important;
   margin: 0 !important;
+  position: relative !important;
+  z-index: 2 !important;
+  letter-spacing: 0.2px !important;
 }
 
-/* Warm Frosted Glass Buttons for Memory Grid */
-div.stButton:has(button[key^="mem_btn_"]) > button,
-.btn-open-memory {
-  background: rgba(251, 191, 36, 0.08) !important;
-  border: 1px solid rgba(251, 191, 36, 0.28) !important;
-  color: #fef3c7 !important;
+/* Specific Background Themes Matching the Image */
+
+/* 1. Pehli Salam - Dark Midnight Stardust & Rose */
+.mem-theme-1 {
+  background: radial-gradient(circle at 75% 25%, #2d162d 0%, #110a14 100%) !important;
+  border-color: rgba(244, 143, 177, 0.4) !important;
+}
+.mem-theme-1 .mem-art-title { color: #ffffff !important; text-shadow: 0 0 10px rgba(255, 255, 255, 0.4) !important; }
+.mem-theme-1 .mem-decor-art {
+  position: absolute; bottom: 8px; left: 10px; font-size: 32px; opacity: 0.35; filter: drop-shadow(0 0 8px #e2557e); pointer-events: none;
+}
+
+/* 2. Volleyball Ground - Warm Blush Peach-Coral Sunset */
+.mem-theme-2 {
+  background: linear-gradient(135deg, #f8b3a1 0%, #ea8f9a 48%, #c8687b 100%) !important;
+  border-color: rgba(255, 210, 200, 0.75) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 0 25px rgba(248, 179, 161, 0.4) !important;
+}
+.mem-theme-2 .mem-art-title { color: #2e111d !important; font-weight: 800 !important; }
+.mem-theme-2 .mem-decor-art {
+  position: absolute; top: 8px; right: 10px; font-size: 32px; opacity: 0.45; pointer-events: none;
+}
+
+/* 3. Jab Ap Achi Lagne Lageen - Deep Magenta Twilight & Light Swirl */
+.mem-theme-3 {
+  background: radial-gradient(circle at 35% 65%, #4a152f 0%, #1a0815 100%) !important;
+  border-color: rgba(244, 143, 177, 0.45) !important;
+}
+.mem-theme-3 .mem-art-title { color: #ffffff !important; text-shadow: 0 0 12px rgba(255, 200, 220, 0.5) !important; }
+.mem-theme-3 .mem-decor-art {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 55px;
+  background: radial-gradient(ellipse at 50% 100%, rgba(244, 114, 182, 0.38) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* 4. Meri Sab Se Bari Ghalti - Pastel Soft Rose & Petal Bouquet */
+.mem-theme-4 {
+  background: linear-gradient(135deg, #fde4e0 0%, #f8becc 50%, #e88fa3 100%) !important;
+  border-color: rgba(255, 220, 220, 0.8) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 0 25px rgba(248, 190, 204, 0.4) !important;
+}
+.mem-theme-4 .mem-art-title { color: #2e111d !important; font-weight: 800 !important; }
+.mem-theme-4 .mem-decor-art {
+  position: absolute; top: 12px; right: 10px; font-size: 34px; opacity: 0.5; pointer-events: none;
+}
+
+/* 5. Do Saal Ki Khamoshi - Warm Sunset Gold & Botanical Stems */
+.mem-theme-5 {
+  background: linear-gradient(135deg, #fbc8b6 0%, #ee9e90 48%, #d87873 100%) !important;
+  border-color: rgba(255, 220, 200, 0.75) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 0 25px rgba(251, 200, 182, 0.4) !important;
+}
+.mem-theme-5 .mem-art-title { color: #2e111d !important; font-weight: 800 !important; }
+.mem-theme-5 .mem-decor-art {
+  position: absolute; bottom: 8px; left: 10px; font-size: 30px; opacity: 0.45; pointer-events: none;
+}
+
+/* 6. Accident Aur Ap Ki Dua - Deep Midnight Wine & Petal Shower */
+.mem-theme-6 {
+  background: radial-gradient(circle at 50% 50%, #301326 0%, #130711 100%) !important;
+  border-color: rgba(244, 143, 177, 0.4) !important;
+}
+.mem-theme-6 .mem-art-title { color: #ffffff !important; text-shadow: 0 0 12px rgba(255, 255, 255, 0.4) !important; }
+.mem-theme-6 .mem-decor-art {
+  position: absolute; top: 8px; right: 12px; font-size: 24px; opacity: 0.4; pointer-events: none;
+}
+
+/* 7. Ap Ka Dobara Lautna - Light Blush Silk & Feather Doves */
+.mem-theme-7 {
+  background: linear-gradient(135deg, #fbf0ec 0%, #f5cfca 50%, #e09f9d 100%) !important;
+  border-color: rgba(255, 225, 220, 0.8) !important;
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5), 0 0 25px rgba(245, 207, 202, 0.4) !important;
+}
+.mem-theme-7 .mem-art-title { color: #2e111d !important; font-weight: 800 !important; }
+.mem-theme-7 .mem-decor-art {
+  position: absolute; top: 10px; right: 14px; font-size: 26px; opacity: 0.45; pointer-events: none;
+}
+
+/* 8. Aaj — Ye Lamha - Twilight Midnight Mountains & Golden Moon */
+.mem-theme-8 {
+  background: linear-gradient(180deg, #1b122c 0%, #2b1534 50%, #461b38 100%) !important;
+  border-color: rgba(244, 143, 177, 0.45) !important;
+}
+.mem-theme-8 .mem-art-title { color: #ffffff !important; text-shadow: 0 0 12px rgba(255, 220, 180, 0.5) !important; }
+.mem-theme-8 .mem-decor-art {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 46px;
+  background: linear-gradient(0deg, rgba(30, 10, 25, 0.8) 0%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Action Buttons below cards */
+div.stButton:has(button[key^="mem_btn_"]) > button {
+  background: rgba(18, 12, 22, 0.88) !important;
+  border: 1px solid rgba(244, 143, 177, 0.35) !important;
+  color: #F5E8E2 !important;
   border-radius: 999px !important;
   font-family: 'Inter', sans-serif !important;
-  font-size: 0.82rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.04em !important;
+  font-size: 0.84rem !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.03em !important;
   padding: 8px 18px !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
   transition: all 0.3s ease !important;
 }
 
-div.stButton:has(button[key^="mem_btn_"]) > button:hover,
-.btn-open-memory:hover {
-  background: rgba(251, 191, 36, 0.22) !important;
-  border-color: rgba(251, 191, 36, 0.65) !important;
+div.stButton:has(button[key^="mem_btn_"]) > button:hover {
+  background: rgba(233, 101, 130, 0.25) !important;
+  border-color: rgba(244, 143, 177, 0.75) !important;
   color: #ffffff !important;
-  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  box-shadow: 0 0 20px rgba(233, 101, 130, 0.45), 0 8px 24px rgba(0, 0, 0, 0.5) !important;
   transform: translateY(-2px) !important;
 }
 
