@@ -1055,213 +1055,257 @@ button[key="btn_start_journey"]:hover,
   margin-bottom: 0 !important;
 }
 
+/* ==========================================================================
+   JOURNEY MENU HUB — EXACT REFERENCE DESIGN (media_1788465428446.png)
+   ========================================================================== */
+.journey-menu-header {
+  text-align: center !important;
+  margin-bottom: 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
+.journey-menu-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  background: rgba(22, 12, 22, 0.75) !important;
+  border: 1px solid rgba(244, 143, 177, 0.45) !important;
+  border-radius: 999px !important;
+  padding: 6px 22px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.76rem !important;
+  letter-spacing: 0.18em !important;
+  text-transform: uppercase !important;
+  color: #f48fb1 !important;
+  margin-bottom: 16px !important;
+  box-shadow: 0 0 16px rgba(244, 143, 177, 0.2) !important;
+}
+
+.journey-menu-title {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: 2.85rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  margin: 0 0 8px 0 !important;
+  line-height: 1.2 !important;
+  text-shadow: 0 0 25px rgba(244, 143, 177, 0.25) !important;
+}
+
+.journey-menu-subtitle {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-style: italic !important;
+  font-size: 1.12rem !important;
+  color: #d8b4c0 !important;
+  margin: 0 auto !important;
+  max-width: 700px !important;
+}
+
+/* Middle Horizontal Quote Banner */
 .v2-quote-banner {
-  width: 100%;
-  background: var(--gradient-dark);
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-lg);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 30px rgba(0, 0, 0, 0.18);
-  padding: 1.25rem 2.2rem;
-  margin: var(--space-6) 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.1rem;
-  text-align: center;
+  position: relative !important;
+  width: 100% !important;
+  max-width: 1320px !important;
+  background: radial-gradient(circle at 50% 50%, rgba(56, 22, 40, 0.85) 0%, rgba(22, 10, 20, 0.95) 100%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.4) !important;
+  border-radius: 20px !important;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15), 0 14px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(226, 85, 126, 0.22) !important;
+  padding: 18px 36px !important;
+  margin: 22px auto 28px auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  text-align: center !important;
+  overflow: hidden !important;
+}
+
+.v2-quote-left-motif {
+  font-size: 1.6rem !important;
+  color: rgba(244, 143, 177, 0.7) !important;
+  filter: drop-shadow(0 0 8px rgba(233, 101, 130, 0.5)) !important;
+  flex-shrink: 0 !important;
+}
+
+.v2-quote-center-wrap {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  flex: 1 !important;
+  margin: 0 18px !important;
 }
 
 .v2-quote-mark {
-  font-family: var(--font-display);
-  font-size: 2.6rem;
-  color: var(--accent-primary);
-  line-height: 1;
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: 2.2rem !important;
+  color: #e96582 !important;
+  line-height: 1 !important;
+  flex-shrink: 0 !important;
 }
 
 .v2-quote-text {
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-style: italic;
-  color: var(--text-primary-dark-bg);
-  letter-spacing: 0.35px;
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: 1.15rem !important;
+  font-style: italic !important;
+  color: #fdf2f4 !important;
+  letter-spacing: 0.2px !important;
+  line-height: 1.5 !important;
+  text-shadow: 0 0 12px rgba(244, 143, 177, 0.3) !important;
 }
 
-.v2-quote-heart-doodle {
-  font-size: 1.25rem;
-  color: var(--accent-primary);
-}
-
-.v2-quote-branch {
-  font-size: 1.15rem;
-}
-
-/* ==========================================================================
-   5. 2x4 CONTENT CARD GRID (8 Compact Primary Navigation Cards)
-   ========================================================================== */
-.ref-cards-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 14px;
-  width: 100%;
-  margin: var(--space-4) 0 var(--space-8) 0;
-}
-
-.ref-card,
-.journey-card,
-.journey-card-container,
-.card-body-box {
-  position: relative;
-  border-radius: 16px !important;
-  padding: 14px 16px !important;
-  min-height: 150px;
-  height: 100%;
-  cursor: pointer;
-  transition: 
-    transform var(--duration-hover) var(--ease-gentle),
-    box-shadow var(--duration-hover) var(--ease-gentle),
-    border-color var(--duration-hover) var(--ease-gentle);
+.v2-quote-right-motifs {
   display: flex !important;
-  align-items: center;
-  gap: 14px;
-  user-select: none;
-  box-sizing: border-box;
-  background: #fdf5f2 !important;
-  border: 1px solid rgba(229, 101, 130, 0.25) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  will-change: transform, box-shadow;
+  align-items: center !important;
+  gap: 8px !important;
+  font-size: 1.15rem !important;
+  color: #e96582 !important;
+  flex-shrink: 0 !important;
 }
 
-/* Stagger delays across the 8 feature cards */
-.ref-cards-grid .ref-card:nth-child(1), .journey-card:nth-child(1), .float-card-0 { animation-delay: 0.0s !important; }
-.ref-cards-grid .ref-card:nth-child(2), .journey-card:nth-child(2), .float-card-1 { animation-delay: 0.5s !important; }
-.ref-cards-grid .ref-card:nth-child(3), .journey-card:nth-child(3), .float-card-2 { animation-delay: 1.0s !important; }
-.ref-cards-grid .ref-card:nth-child(4), .journey-card:nth-child(4), .float-card-3 { animation-delay: 0.3s !important; }
-.ref-cards-grid .ref-card:nth-child(5), .journey-card:nth-child(5) { animation-delay: 0.6s !important; }
-.ref-cards-grid .ref-card:nth-child(6), .journey-card:nth-child(6) { animation-delay: 1.2s !important; }
-.ref-cards-grid .ref-card:nth-child(7), .journey-card:nth-child(7) { animation-delay: 0.2s !important; }
-.ref-cards-grid .ref-card:nth-child(8), .journey-card:nth-child(8) { animation-delay: 0.8s !important; }
-
-/* Cream Content Cards & Keepsake Hover */
-.ref-card-light {
-  background: #fdf5f2 !important;
-  border: 1px solid rgba(229, 101, 130, 0.25) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
-  visibility: visible !important;
-  opacity: 1 !important;
+/* 6-Column Card Grid on Desktop */
+.ref-cards-grid {
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 14px !important;
+  width: 100% !important;
+  max-width: 1320px !important;
+  margin: 0 auto 2.5rem auto !important;
 }
 
-.ref-card-light:hover,
-.ref-card:hover,
-.journey-card:hover,
-.journey-card-container:hover {
-  transform: translateY(-8px) scale(1.015) !important;
-  box-shadow: 0 20px 48px -10px rgba(54, 31, 45, 0.42), 0 0 28px rgba(235, 140, 170, 0.35) !important;
-  border-color: rgba(233, 101, 130, 0.55) !important;
-  animation-play-state: paused !important;
+.ref-card {
+  position: relative !important;
+  border-radius: 18px !important;
+  padding: 14px 12px !important;
+  min-height: 125px !important;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 12px !important;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45), 0 0 18px rgba(244, 143, 177, 0.18) !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
 }
+
+.ref-card:hover {
+  transform: translateY(-6px) scale(1.02) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55), 0 0 26px rgba(244, 143, 177, 0.35) !important;
+}
+
+/* Individual 8 Card Background Themes */
+.ref-theme-1 { background: #faeee5 !important; border: 1.5px solid rgba(244, 143, 177, 0.5) !important; }
+.ref-theme-2 { background: #fce1e4 !important; border: 1.5px solid rgba(244, 143, 177, 0.5) !important; }
+.ref-theme-3 { background: #fce8dc !important; border: 1.5px solid rgba(244, 143, 177, 0.5) !important; }
+.ref-theme-4 { background: #ede2f0 !important; border: 1.5px solid rgba(244, 143, 177, 0.5) !important; }
+.ref-theme-5 { background: #fce1e4 !important; border: 1.5px solid rgba(244, 143, 177, 0.5) !important; }
+.ref-theme-6 { background: #faeee5 !important; border: 1.5px solid rgba(244, 143, 177, 0.5) !important; }
+.ref-theme-7 { background: #fce1e4 !important; border: 1.5px solid rgba(244, 143, 177, 0.5) !important; }
+.ref-theme-8 { background: #f6e4ea !important; border: 1.5px solid rgba(244, 143, 177, 0.5) !important; }
 
 .ref-card-thumb-wrap {
-  width: 40px;
-  height: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  width: 48px !important;
+  height: 60px !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .ref-card-thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 6px;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  border-radius: 6px !important;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.18)) !important;
 }
 
 .ref-card-content {
-  flex: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  justify-content: space-between;
+  flex: 1 !important;
+  min-width: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
 }
 
-/* Card Titles / Headings (High Contrast Dark Warm Plum on Cream Cards) */
-.ref-card h3,
-.ref-card-title,
-.journey-card h3,
-.card-title,
-.card-title-text,
-.journey-card-heading,
-.ref-card-light .ref-card-title {
-  font-family: var(--font-display) !important;
-  font-size: 1.12rem !important;
+.ref-card-title {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: 1.05rem !important;
   font-weight: 700 !important;
-  color: #24161f !important; /* Dark warm plum for crisp high contrast */
-  margin: 0 0 0.25rem 0 !important;
-  line-height: 1.2 !important;
+  color: #2e1220 !important;
+  margin: 0 0 3px 0 !important;
+  line-height: 1.15 !important;
   white-space: normal !important;
-  overflow: visible !important;
-  text-overflow: unset !important;
-  visibility: visible !important;
-  opacity: 1 !important;
 }
 
-/* Card Description Text */
-.ref-card p,
-.ref-card-desc,
-.journey-card p,
-.card-description,
-.card-desc-text,
-.ref-card-light .ref-card-desc {
-  font-family: var(--font-body) !important;
-  font-size: 0.85rem !important;
-  color: #594751 !important; /* Muted dark rose/gray for readability */
-  line-height: 1.35 !important;
-  margin: 0 0 0.4rem 0 !important;
+.ref-card-desc {
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-style: italic !important;
+  font-size: 0.74rem !important;
+  color: #6a4052 !important;
+  line-height: 1.32 !important;
+  margin: 0 0 8px 0 !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
-  visibility: visible !important;
-  opacity: 1 !important;
 }
 
 .ref-card-btn-row {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: auto;
+  display: flex !important;
+  justify-content: flex-start !important;
+  margin-top: 2px !important;
 }
 
-/* Understated Open Button & Arrow Micro-Interaction */
 .ref-card-open-btn {
-  background: var(--surface-light-soft) !important;
-  color: var(--accent-primary) !important;
-  border-radius: var(--radius-sm) !important;
-  padding: 4px 12px !important;
-  font-family: var(--font-body) !important;
-  font-size: 0.78rem !important;
-  font-weight: 700 !important;
-  border: 1px solid rgba(229, 101, 130, 0.35) !important;
-  transition: 
-    background var(--duration-fast) var(--ease-gentle),
-    color var(--duration-fast) var(--ease-gentle),
-    border-color var(--duration-fast) var(--ease-gentle),
-    transform 300ms var(--ease-gentle) !important;
+  background: linear-gradient(135deg, #c74b6e 0%, #e06d88 100%) !important;
+  color: #ffffff !important;
+  border-radius: 999px !important;
+  padding: 3.5px 14px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  border: none !important;
+  box-shadow: 0 2px 8px rgba(199, 75, 110, 0.4) !important;
+  transition: all 0.25s ease !important;
+  display: inline-block !important;
+  width: fit-content !important;
+}
+
+.ref-card:hover .ref-card-open-btn {
+  background: linear-gradient(135deg, #e06d88 0%, #f48fb1 100%) !important;
+  transform: scale(1.05) !important;
+  box-shadow: 0 4px 14px rgba(244, 143, 177, 0.6) !important;
+}
+
+/* Bottom Back to Intro Button */
+.bottom-back-intro-btn {
+  background: rgba(18, 10, 22, 0.88) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.45) !important;
+  color: #fce8ee !important;
+  border-radius: 999px !important;
+  padding: 10px 28px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(233, 101, 130, 0.22) !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 3px !important;
-  cursor: pointer !important;
-  pointer-events: auto !important;
+  justify-content: center !important;
 }
 
-.ref-card:hover .ref-card-open-btn,
-.journey-card:hover .action-link span,
-.ref-card-light:hover .ref-card-open-btn {
-  background: var(--accent-primary) !important;
-  color: #FFF8F4 !important;
-  border-color: var(--accent-primary) !important;
-  transform: translateX(3px) !important;
+.bottom-back-intro-btn:hover {
+  background: rgba(233, 101, 130, 0.25) !important;
+  border-color: rgba(244, 143, 177, 0.85) !important;
+  box-shadow: 0 0 28px rgba(233, 101, 130, 0.45) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* 3D Card-Flip Interaction (Front / Back Keepsake Preview) */

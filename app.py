@@ -1418,8 +1418,10 @@ def render_landing():
 # -----------------------------------------------------------------------------
 # STATE 2 — MAIN JOURNEY MENU (Central Hub)
 # -----------------------------------------------------------------------------
+# STATE 2 — MAIN JOURNEY MENU (Central Hub)
+# -----------------------------------------------------------------------------
 def render_journey_menu():
-    """Render STATE 2: Main Journey Menu / Central Hub (Quotation Bar + 8 Compact Cards Grid)."""
+    """Render STATE 2: Main Journey Menu / Central Hub matching exact reference image."""
     reset_scroll_to_top()
     c = content.HOME_SECTION
 
@@ -1430,24 +1432,33 @@ def render_journey_menu():
     ui("""
     <div class="v2-main-wrap">
         <div class="journey-menu-header">
-            <div class="journey-menu-badge">✦ A FAREWELL THAT STAYS</div>
+            <div class="journey-menu-badge">
+                <span style="font-size: 13px; margin-right: 2px;">♡</span> A FAREWELL THAT STAYS
+            </div>
             <h1 class="journey-menu-title">Hamari Kahani Ke Safhay</h1>
-            <p class="journey-menu-subtitle">Har safha dil se likhi yaadon, sachche alfaaz aur duaon se sajjaya gaya hai.</p>
+            <p class="journey-menu-subtitle">Har safha dil se likhi yaadon, sachche alfaaz aur duaon se sajaya gaya hai.</p>
         </div>
     """)
 
-    # 2. Quotation Bar (Horizontal Glowing Dark Glass Strip)
+    # 3. Quotation Bar (Horizontal Glowing Dark Glass Strip)
     ui(f"""
-        <div class="v2-quote-banner quote-box floating-element">
-            <span class="v2-quote-mark">“</span>
-            <span class="v2-quote-text">{c['quote_bar']}</span>
-            <span class="v2-quote-heart-doodle">♡</span>
-            <span class="v2-quote-branch">🌿</span>
+        <div class="v2-quote-banner floating-element">
+            <div class="v2-quote-left-motif">🌹</div>
+            <div class="v2-quote-center-wrap">
+                <span class="v2-quote-mark">“</span>
+                <span class="v2-quote-text">{c['quote_bar']}</span>
+            </div>
+            <div class="v2-quote-right-motifs">
+                <span class="v2-quote-heart-doodle">♡</span>
+                <span class="v2-quote-branch">🌿</span>
+                <span class="v2-quote-sparkle">✨</span>
+            </div>
         </div>
     """)
 
-    # 3. 2×4 Chapter Cards Grid (8 Compact Primary Navigation Cards)
-    t_welcome = get_thumbnail_b64("thumb_welcome")
+    # 4. Chapter Cards Grid (Exact 6+2 Layout with Themed Pastel Keepsake Colors)
+    t_home = get_thumbnail_b64("thumb_welcome")
+    t_welcome = get_thumbnail_b64("thumb_respect")
     t_memories = get_thumbnail_b64("thumb_memories")
     t_words = get_thumbnail_b64("thumb_words")
     t_respect = get_thumbnail_b64("thumb_respect")
@@ -1458,13 +1469,13 @@ def render_journey_menu():
     ui(f"""
         <div class="ref-cards-grid">
             <!-- Card 1: Story Overview -->
-            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="home" onclick="window.parent.__farewellNav('home')">
+            <div class="ref-card ref-theme-1 floating-element" data-chapter="home" onclick="window.parent.__farewellNav('home')">
                 <div class="ref-card-thumb-wrap">
-                    <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Overview">
+                    <img src="data:image/png;base64,{t_home}" class="ref-card-thumb" alt="Story Overview">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Story Overview</h3>
-                    <p class="ref-card-desc">Hamari kahani ke woh lamhe jo hamesha dil mein rahein ge.</p>
+                    <p class="ref-card-desc">Hamari kahani ke woh lamhe jo hamesha dil...</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn" data-chapter="home">Open →</span>
                     </div>
@@ -1472,13 +1483,13 @@ def render_journey_menu():
             </div>
 
             <!-- Card 2: Welcome -->
-            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="welcome" onclick="window.parent.__farewellNav('welcome')">
+            <div class="ref-card ref-theme-2 floating-element" data-chapter="welcome" onclick="window.parent.__farewellNav('welcome')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Welcome">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Welcome</h3>
-                    <p class="ref-card-desc">Jaane se pehle, ek baar ye khat zaroor parh lena.</p>
+                    <p class="ref-card-desc">Jaane se pehle, ek baar ye khat zaroor parh...</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn" data-chapter="welcome">Open →</span>
                     </div>
@@ -1486,13 +1497,13 @@ def render_journey_menu():
             </div>
 
             <!-- Card 3: Memories -->
-            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="memories" onclick="window.parent.__farewellNav('memories')">
+            <div class="ref-card ref-theme-3 floating-element" data-chapter="memories" onclick="window.parent.__farewellNav('memories')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_memories}" class="ref-card-thumb" alt="Memories">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Memories</h3>
-                    <p class="ref-card-desc">Woh khoobsurat lamhe jo waqt ke saath kabhi dhundhle nahi honge.</p>
+                    <p class="ref-card-desc">Woh khoobsurat lamhe jo waqt ke saath kabhi...</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn" data-chapter="memories">Open →</span>
                     </div>
@@ -1500,13 +1511,13 @@ def render_journey_menu():
             </div>
 
             <!-- Card 4: Words From My Heart -->
-            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="words" onclick="window.parent.__farewellNav('words')">
+            <div class="ref-card ref-theme-4 floating-element" data-chapter="words" onclick="window.parent.__farewellNav('words')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_words}" class="ref-card-thumb" alt="Words From My Heart">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Words From My Heart</h3>
-                    <p class="ref-card-desc">Woh sachchi baatein jo main ap k saamne keh na saka.</p>
+                    <p class="ref-card-desc">Woh sachchi baatein jo main ap k saamne keh...</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn" data-chapter="words">Open →</span>
                     </div>
@@ -1514,13 +1525,13 @@ def render_journey_menu():
             </div>
 
             <!-- Card 5: Why I Respect You -->
-            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="respect" onclick="window.parent.__farewellNav('respect')">
+            <div class="ref-card ref-theme-5 floating-element" data-chapter="respect" onclick="window.parent.__farewellNav('respect')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_respect}" class="ref-card-thumb" alt="Why I Respect You">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Why I Respect You</h3>
-                    <p class="ref-card-desc">Woh khoobian jin ki wajah se ap ki izzat hamesha dil mein rahe gi.</p>
+                    <p class="ref-card-desc">Woh khoobian jin ki wajah se ap ki izzat...</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn" data-chapter="respect">Open →</span>
                     </div>
@@ -1528,13 +1539,13 @@ def render_journey_menu():
             </div>
 
             <!-- Card 6: Intentions -->
-            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="intentions" onclick="window.parent.__farewellNav('intentions')">
+            <div class="ref-card ref-theme-6 floating-element" data-chapter="intentions" onclick="window.parent.__farewellNav('intentions')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_intentions}" class="ref-card-thumb" alt="Intentions">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Intentions</h3>
-                    <p class="ref-card-desc">Meri sachchi duaein aur iradey jo sirf ap ki khushi ke liye hain.</p>
+                    <p class="ref-card-desc">Meri sachchi duaein aur iradey jo sirf ap ki...</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn" data-chapter="intentions">Open →</span>
                     </div>
@@ -1542,13 +1553,13 @@ def render_journey_menu():
             </div>
 
             <!-- Card 7: Dua -->
-            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="dua" onclick="window.parent.__farewellNav('dua')">
+            <div class="ref-card ref-theme-7 floating-element" data-chapter="dua" onclick="window.parent.__farewellNav('dua')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_dua}" class="ref-card-thumb" alt="Dua">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Dua</h3>
-                    <p class="ref-card-desc">Tumhari khushi, sukoon aur kamyabi ke liye dil se dua.</p>
+                    <p class="ref-card-desc">Tumhari khushi, sukoon aur kamyabi ke liye dil...</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn" data-chapter="dua">Open →</span>
                     </div>
@@ -1556,13 +1567,13 @@ def render_journey_menu():
             </div>
 
             <!-- Card 8: Final Note -->
-            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="goodbye" onclick="window.parent.__farewellNav('goodbye')">
+            <div class="ref-card ref-theme-8 floating-element" data-chapter="goodbye" onclick="window.parent.__farewellNav('goodbye')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_goodbye}" class="ref-card-thumb" alt="Final Note">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Final Note</h3>
-                    <p class="ref-card-desc">Ek aakhri baat... mohabbat, izzat aur duaon ke saath.</p>
+                    <p class="ref-card-desc">Ek aakhri baat... mohabbat, izzat aur...</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn" data-chapter="goodbye">Open →</span>
                     </div>
@@ -1571,15 +1582,10 @@ def render_journey_menu():
         </div>
 
         <!-- Return to Intro Button -->
-        <div style="text-align: center; margin: 1.5rem 0 2.5rem 0;">
-            <button class="bottom-back-btn nav-action-btn floating-element" id="btnBackIntro" data-action="landing" onclick="window.parent.__farewellGoToLanding && window.parent.__farewellGoToLanding()">
-                ↺ Back to Intro Screen
+        <div style="text-align: center; margin: 2rem 0 3.5rem 0;">
+            <button class="bottom-back-intro-btn nav-action-btn floating-element" id="btnBackIntro" data-action="landing" onclick="window.parent.__farewellGoToLanding && window.parent.__farewellGoToLanding()">
+                <span style="font-size: 15px; margin-right: 4px;">♡</span> Back to Intro Screen
             </button>
-        </div>
-
-        <!-- Bottom Footer Bar -->
-        <div class="v2-bottom-footer-bar quote-box floating-element">
-            <span>🌸 &nbsp; 🌿 &nbsp; {c['bottom_quote']} &nbsp; ♡ &nbsp; 🌿 &nbsp; 🌸</span>
         </div>
     </div>
     """)
