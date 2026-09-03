@@ -927,36 +927,53 @@ body.farewell-nav-loading .ref-card {
   gap: var(--space-4);
 }
 
-/* Primary CTA Button */
+/* ==========================================================================
+   PRIMARY HERO CTA BUTTON ("Start the Journey")
+   ========================================================================== */
 .hero-btn-primary,
 #heroStartJourneyBtn,
-button[kind="primary"],
+.hero-cta-button,
+button[key="btn_start_journey"],
+.stButton > button[kind="primary"],
 .stButton > button.hero-btn-primary {
-  background: var(--gradient-primary) !important;
-  color: #FFF8F4 !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  border-radius: var(--radius-pill) !important;
-  padding: 0.95rem 2.4rem !important;
-  box-shadow: 0 8px 24px rgba(229, 101, 130, 0.4) !important;
-  font-family: var(--font-body) !important;
-  font-size: 1.1rem !important;
-  font-weight: 600 !important;
   display: inline-flex !important;
-  align-items: center !important;
-  gap: 0.55rem !important;
-  cursor: pointer !important;
-  transition: all var(--duration-normal) var(--ease-standard) !important;
-  outline: none !important;
+  visibility: visible !important;
+  opacity: 1 !important;
   position: relative !important;
   z-index: 9999 !important;
   pointer-events: auto !important;
-  user-select: none !important;
+  cursor: pointer !important;
+  
+  /* Gentle breathing float */
+  animation: landingBtnFloat 3.4s ease-in-out infinite alternate !important;
+  background: linear-gradient(135deg, #f78da7 0%, #e2557e 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 999px !important;
+  padding: 14px 32px !important;
+  font-family: var(--font-body) !important;
+  font-weight: 600 !important;
+  font-size: 1.05rem !important;
+  box-shadow: 0 8px 24px rgba(226, 85, 126, 0.45) !important;
+  align-items: center !important;
+  gap: 0.55rem !important;
+  text-decoration: none !important;
+  outline: none !important;
+}
+
+@keyframes landingBtnFloat {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(-6px); }
 }
 
 .hero-btn-primary:hover,
-#heroStartJourneyBtn:hover {
-  transform: translateY(-2px) !important;
-  box-shadow: 0 14px 34px rgba(229, 101, 130, 0.65) !important;
+#heroStartJourneyBtn:hover,
+.hero-cta-button:hover,
+button[key="btn_start_journey"]:hover,
+.stButton > button[kind="primary"]:hover {
+  animation-play-state: paused !important;
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow: 0 14px 34px rgba(226, 85, 126, 0.65) !important;
   color: #FFFFFF !important;
 }
 
