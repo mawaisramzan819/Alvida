@@ -169,8 +169,8 @@ def render_cinematic_atmosphere(active_section: str):
 # -----------------------------------------------------------------------------
 # 5. Startup State Machine & Audio Engine (DOM Persistent Injection)
 # -----------------------------------------------------------------------------
-def render_startup_screen():
-    """Display the full cinematic starting loader FIRST. Prevents landing page from flashing."""
+def render_initial_splash_screen():
+    """Display the full cinematic starting loader. Audio engine setup on parent DOM."""
     audio_b64 = get_audio_base64()
     audio_src = f"data:audio/mp3;base64,{audio_b64}" if audio_b64 else "/app/static/farewell.mp3"
 
@@ -233,8 +233,7 @@ def render_startup_screen():
     )
 
     # 2. Render Full-Screen Startup Loader UI directly in Streamlit
-    loader_box = st.empty()
-    loader_html = """
+    ui("""
     <div class="startup-loader-overlay">
         <div class="startup-loader-card">
             <div class="startup-loader-icon-wrap">
@@ -249,13 +248,12 @@ def render_startup_screen():
             </div>
         </div>
     </div>
-    """
-    loader_box.markdown(loader_html, unsafe_allow_html=True)
-    time.sleep(2.2)
-    loader_box.empty()
+    """)
 
-    st.session_state["startup_completed"] = True
-    st.rerun()
+
+def render_startup_screen():
+    """Alias for backward compatibility."""
+    render_initial_splash_screen()
 
 
 # -----------------------------------------------------------------------------
@@ -1476,12 +1474,14 @@ def render_goodbye():
 def main():
     """Main state router and layout orchestrator with 4 mutually exclusive views."""
     # 1. State initialization guarded once per session
+    if "initial_splash_done" not in st.session_state:
+        st.session_state.initial_splash_done = False
+    if "startup_completed" not in st.session_state:
+        st.session_state.startup_completed = False
     if "app_view" not in st.session_state:
         st.session_state.app_view = "landing"
     if "active_section" not in st.session_state:
         st.session_state.active_section = None
-    if "startup_completed" not in st.session_state:
-        st.session_state.startup_completed = False
     if "show_final_words" not in st.session_state:
         st.session_state.show_final_words = False
     if "selected_memory" not in st.session_state:
@@ -1504,10 +1504,14 @@ def main():
     # 2. Global Styles
     load_styles()
 
-    # 3. First-load Startup Screen (Display starting loader FIRST, prevent landing page from flashing)
-    if not st.session_state.get("startup_completed", False):
-        render_startup_screen()
-        return
+    # 3. Splash / Initial Loader Handling (Executes exactly ONCE on initial session startup)
+    if not st.session_state.initial_splash_done:
+        render_initial_splash_screen()
+        time.sleep(1.3)
+        st.session_state.initial_splash_done = True
+        st.session_state.startup_completed = True
+        st.session_state.app_view = "landing"
+        st.rerun()
 
     # 4. Top-Level Bridge Navigation Dispatcher (Evaluated FIRST to prevent waterfall re-renders)
     render_hidden_bridge_dispatcher()
@@ -1527,6 +1531,9 @@ def main():
         render_landing()
     elif app_view == "journey_transition":
         render_journey_loader()
+        time.sleep(1.2)
+        st.session_state.app_view = "journey_menu"
+        st.rerun()
     elif app_view in ["journey_menu", "menu"]:
         render_journey_menu()
     elif app_view == "section":
