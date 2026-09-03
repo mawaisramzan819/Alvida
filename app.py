@@ -169,8 +169,8 @@ def render_cinematic_atmosphere(active_section: str):
 # -----------------------------------------------------------------------------
 # 5. Startup State Machine & Audio Engine (DOM Persistent Injection)
 # -----------------------------------------------------------------------------
-def render_initial_splash_screen():
-    """Display the full cinematic starting loader. Audio engine setup on parent DOM."""
+def render_full_screen_initial_loader():
+    """Display the centralized glowing initial app launch splash loader."""
     audio_b64 = get_audio_base64()
     audio_src = f"data:audio/mp3;base64,{audio_b64}" if audio_b64 else "/app/static/farewell.mp3"
 
@@ -232,28 +232,36 @@ def render_initial_splash_screen():
         width=0,
     )
 
-    # 2. Render Full-Screen Startup Loader UI directly in Streamlit
-    ui("""
-    <div class="startup-loader-overlay">
-        <div class="startup-loader-card">
-            <div class="startup-loader-icon-wrap">
-                <div class="startup-loader-ring"></div>
-                <div class="startup-loader-heart">💗</div>
+    # 2. Render Full-Screen Centered Glowing Initial Splash Loader UI
+    st.markdown(
+        """
+    <div class="initial-loader-overlay startup-loader-overlay">
+        <div class="initial-loader-content startup-loader-card">
+            <div class="initial-loader-icon-wrap startup-loader-icon-wrap">
+                <div class="initial-loader-ring startup-loader-ring"></div>
+                <div class="initial-loader-heart startup-loader-heart">❤️</div>
             </div>
-            <div class="startup-brand-title">A Farewell That Stays</div>
-            <div class="startup-brand-subtitle">Opening a story that was never forgotten...</div>
-            <div class="startup-quote-text">“Some goodbyes stay in the heart forever.”</div>
-            <div class="startup-progress-track">
-                <div class="startup-progress-fill"></div>
+            <div class="initial-brand-title startup-brand-title">A Farewell That Stays</div>
+            <div class="initial-brand-subtitle startup-brand-subtitle">Opening a story that was never forgotten...</div>
+            <div class="initial-quote-text startup-quote-text">“Some goodbyes stay in the heart forever.”</div>
+            <div class="initial-progress-track startup-progress-track">
+                <div class="initial-progress-fill startup-progress-fill"></div>
             </div>
         </div>
     </div>
-    """)
+    """,
+        unsafe_allow_html=True,
+    )
+
+
+def render_initial_splash_screen():
+    """Alias for render_full_screen_initial_loader."""
+    render_full_screen_initial_loader()
 
 
 def render_startup_screen():
-    """Alias for backward compatibility."""
-    render_initial_splash_screen()
+    """Alias for render_full_screen_initial_loader."""
+    render_full_screen_initial_loader()
 
 
 # -----------------------------------------------------------------------------
@@ -673,36 +681,33 @@ def reset_scroll_to_top():
 # -----------------------------------------------------------------------------
 # 8. Navigation Transitions: Journey Loader & Section Router
 # -----------------------------------------------------------------------------
-def render_journey_loader():
-    """Render the dedicated full-screen Journey Entry transition (rotating animation)."""
+def render_journey_analyzer_loader():
+    """Render the dedicated 2.0s Journey Starting Analyzer Loader."""
     reset_scroll_to_top()
-    loader_box = st.empty()
-    html = """
-    <div class="journey-entry-loader-overlay">
-        <div class="journey-entry-loader-card">
-            <div class="journey-entry-icon-wrap">
-                <div class="journey-entry-ring"></div>
-                <div class="journey-entry-heart">✦</div>
+    st.markdown(
+        """
+    <div class="journey-entry-loader-overlay journey-analyzer-overlay">
+        <div class="journey-entry-loader-card journey-analyzer-card">
+            <div class="journey-entry-icon-wrap journey-analyzer-icon-wrap">
+                <div class="journey-entry-ring journey-analyzer-ring"></div>
+                <div class="journey-entry-heart journey-analyzer-heart">✦</div>
             </div>
-            <div class="journey-entry-title">Journey Starting...</div>
-            <div class="journey-entry-subtitle">Hamara safar shuru ho raha hai...</div>
-            <div class="journey-entry-quote">“Kuch alvida asal mein khatam nahi hotay, wo bas khoobsurat yaadon ki shuruat ban jatay hain.”</div>
-            <div class="journey-entry-track">
-                <div class="journey-entry-fill"></div>
+            <div class="journey-entry-title journey-analyzer-title">✦ Journey Starting...</div>
+            <div class="journey-entry-subtitle journey-analyzer-subtitle">Hamara safar shuru ho raha hai...</div>
+            <div class="journey-entry-quote journey-analyzer-quote">“Kuch alvida asal mein khatam nahi hotay, wo bas khoobsurat yaadon ki shuruat ban jatay hain.”</div>
+            <div class="journey-entry-track journey-analyzer-track">
+                <div class="journey-entry-fill journey-analyzer-fill"></div>
             </div>
         </div>
     </div>
-    """
-    loader_box.markdown(html, unsafe_allow_html=True)
+    """,
+        unsafe_allow_html=True,
+    )
 
-    # Let the 0.95s rotating entry animation complete fully
-    time.sleep(0.95)
-    loader_box.empty()
 
-    st.session_state.app_view = "journey_menu"
-    st.session_state.active_section = None
-    reset_scroll_to_top()
-    st.rerun()
+def render_journey_loader():
+    """Alias for render_journey_analyzer_loader."""
+    render_journey_analyzer_loader()
 
 
 def render_section(section_id: str):
@@ -1504,11 +1509,14 @@ def main():
     # 2. Global Styles
     load_styles()
 
-    # 3. Startup Splash Loader (Mounted as seamless overlay on initial session load)
+    # 3. PHASE 1: Initial App Launch Splash Loader (~1.8s)
     if not st.session_state.initial_splash_done:
-        render_initial_splash_screen()
+        render_full_screen_initial_loader()
+        time.sleep(1.8)
         st.session_state.initial_splash_done = True
         st.session_state.startup_completed = True
+        st.session_state.app_view = "landing"
+        st.rerun()
 
     # 4. Top-Level Bridge Navigation Dispatcher (Evaluated FIRST to prevent waterfall re-renders)
     render_hidden_bridge_dispatcher()
@@ -1523,13 +1531,15 @@ def main():
     if app_view in ["journey_menu", "section"]:
         render_sidebar()
 
-    # 7. Strict Mutually Exclusive View Hierarchy
+    # 7. PHASE 2: Main Mutually Exclusive Views
     if app_view == "landing":
         render_landing()
     elif app_view == "journey_transition":
-        render_journey_loader()
-        time.sleep(1.2)
+        render_journey_analyzer_loader()
+        time.sleep(2.0)
         st.session_state.app_view = "journey_menu"
+        st.session_state.active_section = None
+        reset_scroll_to_top()
         st.rerun()
     elif app_view in ["journey_menu", "menu"]:
         render_journey_menu()
