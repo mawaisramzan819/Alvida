@@ -408,13 +408,10 @@ body.view-landing [data-testid="stAppViewContainer"] > .main,
   box-shadow: 0 6px 22px rgba(229, 101, 130, 0.65);
 }
 
-/* Invisible Streamlit Bridge Button Dispatcher */
+/* Invisible Streamlit Bridge Button Dispatcher — zero-size, no pointer events */
 [data-testid="stElementContainer"]:has(button[key^="_bridge_"]),
 div:has(> button[key^="_bridge_"]),
-button[key^="_bridge_"],
-[data-testid="stElementContainer"]:has(button[key="btn_start_journey_hidden"]),
-div:has(> button[key="btn_start_journey_hidden"]),
-button[key="btn_start_journey_hidden"] {
+button[key^="_bridge_"] {
   display: none !important;
   visibility: hidden !important;
   height: 0 !important;
@@ -424,6 +421,13 @@ button[key="btn_start_journey_hidden"] {
   position: absolute !important;
   pointer-events: none !important;
   overflow: hidden !important;
+}
+
+/* Navigation loading state — disable interactive cards while loader is active */
+.nav-loader-overlay ~ .ref-cards-grid .ref-card,
+body.farewell-nav-loading .ref-card {
+  pointer-events: none !important;
+  opacity: 0.6;
 }
 
 /* 1. TOP BRANDING AREA */
@@ -1076,7 +1080,7 @@ button[key="btn_start_journey_hidden"] {
    ========================================================================== */
 .ref-cards-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 14px;
   width: 100%;
   margin: var(--space-4) 0 var(--space-8) 0;
@@ -1085,9 +1089,9 @@ button[key="btn_start_journey_hidden"] {
 .ref-card {
   position: relative;
   border-radius: var(--radius-lg);
-  padding: 14px 16px;
-  min-height: 145px;
-  max-height: 175px;
+  padding: 12px 16px;
+  min-height: 150px;
+  max-height: 180px;
   height: 100%;
   cursor: pointer;
   transition: all var(--duration-normal) var(--ease-standard);
@@ -1112,8 +1116,8 @@ button[key="btn_start_journey_hidden"] {
 }
 
 .ref-card-thumb-wrap {
-  width: 58px;
-  height: 74px;
+  width: 40px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1138,16 +1142,19 @@ button[key="btn_start_journey_hidden"] {
 
 .ref-card-title {
   font-family: var(--font-display);
-  font-size: 1.12rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--text-primary-light-bg);
-  margin: 0 0 0.18rem 0;
+  margin: 0 0 0.15rem 0;
   line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .ref-card-desc {
   font-family: var(--font-body);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   color: var(--text-secondary-light-bg);
   line-height: 1.35;
   margin: 0 0 0.4rem 0;
@@ -1844,7 +1851,7 @@ button[key="btn_start_journey_hidden"] {
   height: 100%;
   background: var(--gradient-primary);
   border-radius: 2px;
-  animation: loaderFillAnim 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  animation: loaderFillAnim 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
 
 /* ==========================================================================
@@ -1981,6 +1988,26 @@ button[key="btn_start_journey_hidden"] {
 @media (max-width: 1024px) {
   .ref-cards-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .ref-card {
+    min-height: 140px;
+    max-height: 170px;
+    padding: 12px 14px;
+  }
+
+  .ref-card-thumb-wrap {
+    width: 54px;
+    height: 70px;
+  }
+
+  .ref-card-title {
+    font-size: 1.08rem;
+  }
+
+  .ref-card-desc {
+    font-size: 0.82rem;
   }
 }
 
@@ -2110,8 +2137,8 @@ button[key="btn_start_journey_hidden"] {
   }
 
   .ref-card-thumb-wrap {
-    width: 52px !important;
-    height: 66px !important;
+    width: 36px !important;
+    height: 44px !important;
   }
 
   .ref-card-title {

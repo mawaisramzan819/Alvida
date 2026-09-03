@@ -401,7 +401,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             const btn = pDoc.querySelector('button[key="_bridge_menu"], button[data-testid*="_bridge_menu"]');
             if (btn) {{
                 btn.click();
-                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1200);
+                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1500);
                 return;
             }}
             window.parent.__farewellNavLock = false;
@@ -419,7 +419,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             const btn = pDoc.querySelector('button[key="_bridge_landing"], button[data-testid*="_bridge_landing"]');
             if (btn) {{
                 btn.click();
-                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1200);
+                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1500);
                 return;
             }}
             window.parent.__farewellNavLock = false;
@@ -434,7 +434,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             const btn = pDoc.querySelector(`button[key="_bridge_${{chapterId}}"], button[data-testid*="_bridge_${{chapterId}}"]`);
             if (btn) {{
                 btn.click();
-                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1200);
+                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1500);
                 return;
             }}
             window.parent.__farewellNavLock = false;
@@ -639,7 +639,21 @@ def reset_scroll_to_top():
 # 8. Intermediate Analyzing / Chapter Loading Transition (300ms Fast & Smooth)
 # -----------------------------------------------------------------------------
 def render_nav_loader(target):
-    """Render 0.30s intermediate chapter loading screen."""
+    """Render smooth chapter loading transition with full animation lifecycle.
+    
+    State machine phases:
+      1. Guard: skip if nav_status is already 'loading'
+      2. Mount: render loader overlay at full opacity
+      3. Await: sleep for full animation duration (0.88s > 0.85s CSS keyframe)
+      4. Swap: update app_view + active_section
+      5. Scroll: reset all scroll containers to top
+      6. Exit: clear loader, set nav_status idle, rerun
+    """
+    # Phase 1: Guard against double-trigger
+    if st.session_state.get("nav_status") == "loading":
+        return
+    st.session_state["nav_status"] = "loading"
+
     reset_scroll_to_top()
     target_section = target if isinstance(target, str) else target.get("section", "welcome")
     target_view = "section" if isinstance(target, str) else target.get("view", "section")
@@ -651,6 +665,7 @@ def render_nav_loader(target):
     title = loader_info.get("title", "Loading...")
     message = loader_info.get("message", "Opening our journey...")
 
+    # Phase 2: Mount loader overlay
     html = f"""
     <div class="nav-loader-overlay">
         <div class="nav-loader-card">
@@ -664,14 +679,20 @@ def render_nav_loader(target):
     </div>
     """
     loader_box.markdown(html, unsafe_allow_html=True)
-    time.sleep(0.78)
-    loader_box.empty()
 
+    # Phase 3: Await full animation (0.88s > 0.85s CSS keyframe)
+    time.sleep(0.88)
+
+    # Phase 4: Swap content state
+    loader_box.empty()
     st.session_state["app_view"] = target_view
     if target_section:
         st.session_state["selected_section"] = target_section
         st.session_state["visited_chapters"].add(target_section)
     st.session_state["pending_target"] = None
+
+    # Phase 5/6: Scroll reset + exit
+    st.session_state["nav_status"] = "idle"
     reset_scroll_to_top()
     st.rerun()
 
@@ -1453,6 +1474,7 @@ def main():
         "app_view": "landing",          # "landing" | "menu" | "section"
         "selected_section": "home",     # active section if in "section" view
         "pending_target": None,         # dict or None: {"view": "section", "section": "welcome"} | {"view": "menu"}
+        "nav_status": "idle",           # "idle" | "loading" — centralized navigation lock
         "show_final_words": False,
         "selected_memory": None,
         "visited_chapters": {"home"},
