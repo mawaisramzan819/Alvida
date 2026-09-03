@@ -1653,12 +1653,12 @@ def render_home_overview():
         
         <div class="chapter-letter-card floating-element">
             <div class="chapter-letter-body">
-                <p>Kuch log zindagi mein aate hain aur dil par aise naqsh chor jaate hain jo waqt ke saath kabhi nahi mit'te.</p>
-                <p>Ye jagah un sabhi khoobsurat yaadon, sachchi seekhon aur be-shart duaon ke liye banayi gayi hai jinhein faaslay kabhi khatam nahi kar sakte.</p>
-                <p>Jaise jaise ap is safar ka har safha kholenge, bas itna yaad rakhna ke alvida kisi izzat, qadar aur duaon ka khatma nahi hota.</p>
+                <p>Kuch log sirf zindagi ka hissa nahi bante… wo aadat ban jaate hain.<br>Unki baatein, unki hansi, unka hona — sab kuch itna apna lagne lagta hai ke faasla aane ke baad bhi dil unhein chhor nahi pata.</p>
+                <p>Shayad waqt ke saath sab kuch badal jaye, lekin kuch yaadein aisi hoti hain jo dil khud sambhal kar rakhta hai. Unhein na waqt mita pata hai, na faaslay kam kar pate hain.</p>
+                <p>Is safar mein jo kuch bhi hai, wo bas un jazbaat ka ek chhota sa hissa hai jo shayad alfaaz mein poore kabhi aa hi nahi sakte.</p>
             </div>
             <div class="chapter-handwritten-note">
-                “Faaslay chahe kitne bhi barh jayein, tum meri duaon aur dil mein hamesha raho gi.”
+                “Bas itna hai ke tumhari kami shayad waqt ke saath aadat ban jaye…<br>lekin tumhari jagah kabhi koi nahi le sakega.”
             </div>
         </div>
     </div>
@@ -1680,12 +1680,14 @@ def render_welcome():
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
         <div class="chapter-letter-card floating-element">
-    """)
-    for p in c["paragraphs"]:
-        ui(f'<p class="chapter-paragraph-text">{p}</p>')
-
-    ui(f"""
-            <div class="chapter-handwritten-note">“ {c["closing_note"]} ”</div>
+            <div class="chapter-letter-body">
+                <p>Kuch log sirf zindagi ka hissa nahi bante… wo aadat ban jaate hain.<br>Unki baatein, unki hansi, unka hona — sab kuch itna apna lagne lagta hai ke faasla aane ke baad bhi dil unhein chhor nahi pata.</p>
+                <p>Shayad waqt ke saath sab kuch badal jaye, lekin kuch yaadein aisi hoti hain jo dil khud sambhal kar rakhta hai. Unhein na waqt mita pata hai, na faaslay kam kar pate hain.</p>
+                <p>Is safar mein jo kuch bhi hai, wo bas un jazbaat ka ek chhota sa hissa hai jo shayad alfaaz mein poore kabhi aa hi nahi sakte.</p>
+            </div>
+            <div class="chapter-handwritten-note">
+                “Bas itna hai ke tumhari kami shayad waqt ke saath aadat ban jaye…<br>lekin tumhari jagah kabhi koi nahi le sakega.”
+            </div>
         </div>
     </div>
     """)

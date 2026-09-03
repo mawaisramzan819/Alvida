@@ -55,28 +55,26 @@ HOME_CARDS = [
 # CHAPTER 1 — WELCOME
 # -----------------------------------------------------------------------------
 WELCOME_SECTION = {
-    "eyebrow": "JAANE SE PEHLE EK KHAT",
-    "title": "Jaane Se Pehle, Ek Baar Parh Lena",
-    "subtitle": "Ye safha kisi gile ya shikway ke liye nahi, sirf dil ki sachai ke liye hai.",
+    "eyebrow": "✦ HAMARI KAHANI KA SAFAR",
+    "title": "A Farewell That Stays in the Heart",
+    "subtitle": "Kuch alvida asal mein khatam nahi hotay — wo bas khoobsurat yaadon ki shuruat ban jatay hain.",
     "paragraphs": [
         (
-            "Ye ek khat hai—dil se likha hua, imaandari se, izzat ke saath. "
-            "In safhon mein woh sab kuch hai jo main ap k saamne kabhi keh nahi saka."
+            "Kuch log sirf zindagi ka hissa nahi bante… wo aadat ban jaate hain.\n"
+            "Unki baatein, unki hansi, unka hona — sab kuch itna apna lagne lagta hai\n"
+            "ke faasla aane ke baad bhi dil unhein chhor nahi pata."
         ),
         (
-            "Yahan koi ilzaam nahi hai. Kisi par ungli nahi uthayi gayi. "
-            "Na ap par, na ap k ghar walon par, na kisi aur par."
+            "Shayad waqt ke saath sab kuch badal jaye, lekin kuch yaadein aisi hoti hain\n"
+            "jo dil khud sambhal kar rakhta hai. Unhein na waqt mita pata hai,\n"
+            "na faaslay kam kar pate hain."
         ),
         (
-            "Sirf ek insaan hai jo ap ki izzat karta hai, ap k liye dua karta hai, "
-            "aur chahta hai ke ap ye jaanein ke uske dil mein kya tha—isse pehle ke raaste alag ho jayein."
-        ),
-        (
-            "Ap chaahein to yahan ruk jayein. Ya phir aage padhein. "
-            "Har safha ap ki marzi se khulega, koi zabardasti nahi."
+            "Is safar mein jo kuch bhi hai, wo bas un jazbaat ka ek chhota sa hissa hai\n"
+            "jo shayad alfaaz mein poore kabhi aa hi nahi sakte."
         ),
     ],
-    "closing_note": "Bas itna yaad rakhna... ye sab dil se hai.",
+    "closing_note": "Bas itna hai ke tumhari kami shayad waqt ke saath aadat ban jaye…\nlekin tumhari jagah kabhi koi nahi le sakega.",
 }
 
 # -----------------------------------------------------------------------------
