@@ -299,55 +299,44 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
         }}
 
-        // 3. Real-Time UI Synchronizer
+        // 3. Real-Time UI Synchronizer (Runs purely in browser JS - NO Streamlit Python reruns!)
         window.parent.__farewellUpdateMusicUI = function() {{
             const audio = window.parent.__farewellGetAudio();
             const isPaused = !audio || audio.paused;
 
-            // Global Music Toggle Pill (Top-Right on Landing / Menu / Sections)
-            const pillBtns = pDoc.querySelectorAll('.global-music-toggle-pill, #globalMusicTogglePill');
-            pillBtns.forEach(pill => {{
-                const icon = pill.querySelector('#globalMusicPillIcon') || pill.querySelector('.global-music-pill-icon');
-                const text = pill.querySelector('#globalMusicPillText') || pill.querySelector('span:not(.global-music-pill-icon)');
-                if (icon) icon.textContent = isPaused ? '🔇' : '🎵';
-                if (text) text.textContent = isPaused ? 'Music Off' : 'Music On';
-                pill.classList.toggle('is-stopped', isPaused);
-                pill.title = isPaused ? 'Click to Turn Music On' : 'Click to Turn Music Off';
+            // 1. All Play/Pause buttons (Top-Center Player, Sidebar, etc.)
+            const playBtns = pDoc.querySelectorAll('#musicBtnPlayPause, .tc-music-playpause, .music-ctrl-playpause-glow');
+            playBtns.forEach(btn => {{
+                btn.innerHTML = isPaused ? '▶' : '❚❚';
+                btn.title = isPaused ? 'Start Music' : 'Pause Music';
             }});
 
-            // Circular Play/Pause button
-            const playBtn = pDoc.getElementById('musicBtnPlayPause');
-            if (playBtn) {{
-                playBtn.innerHTML = isPaused ? '▶' : '❚❚';
-                playBtn.title = isPaused ? 'Start Music' : 'Stop Music';
-            }}
+            // 2. All Stop / Start Pill Buttons
+            const stopStartBtns = pDoc.querySelectorAll('#musicBtnStopStart, .music-stop-start-pill');
+            stopStartBtns.forEach(btn => {{
+                const icon = btn.querySelector('#musicBtnStopStartIcon') || btn.querySelector('span:first-child');
+                const text = btn.querySelector('#musicBtnStopStartText') || btn.querySelector('span:last-child');
+                if (icon) icon.textContent = isPaused ? '▶' : '⏸';
+                if (text) text.textContent = isPaused ? 'Start Music' : 'Stop Music';
+                btn.classList.toggle('is-stopped', isPaused);
+                btn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
+            }});
 
-            // Stop / Start Pill Button
-            const stopStartBtn = pDoc.getElementById('musicBtnStopStart');
-            const stopStartIcon = pDoc.getElementById('musicBtnStopStartIcon');
-            const stopStartText = pDoc.getElementById('musicBtnStopStartText');
-            if (stopStartBtn && stopStartIcon && stopStartText) {{
-                stopStartIcon.textContent = isPaused ? '▶' : '⏸';
-                stopStartText.textContent = isPaused ? 'Start Music' : 'Stop Music';
-                stopStartBtn.classList.toggle('is-stopped', isPaused);
-                stopStartBtn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
-            }}
-
-            // Timeline & Track
+            // 3. All Timeline, Time Text & Track Seekers
             if (audio) {{
-                const curTime = pDoc.getElementById('musicTimeCurrent');
-                const totTime = pDoc.getElementById('musicTimeTotal');
-                const fill = pDoc.getElementById('musicProgressFill');
-                const dot = pDoc.getElementById('musicProgressDot');
+                const curTimes = pDoc.querySelectorAll('#musicTimeCurrent, .music-time-current');
+                curTimes.forEach(el => {{ el.textContent = fmtTime(audio.currentTime); }});
 
-                if (curTime) curTime.textContent = fmtTime(audio.currentTime);
-                if (totTime && audio.duration && !isNaN(audio.duration)) {{
-                    totTime.textContent = fmtTime(audio.duration);
-                }}
-                if (fill && dot && audio.duration && !isNaN(audio.duration)) {{
+                if (audio.duration && !isNaN(audio.duration)) {{
+                    const totTimes = pDoc.querySelectorAll('#musicTimeTotal, .music-time-total');
+                    totTimes.forEach(el => {{ el.textContent = fmtTime(audio.duration); }});
+
                     const pct = Math.min(100, Math.max(0, (audio.currentTime / audio.duration) * 100));
-                    fill.style.width = pct + '%';
-                    dot.style.left = pct + '%';
+                    const fills = pDoc.querySelectorAll('#musicProgressFill, .music-progress-fill, .tc-music-fill');
+                    fills.forEach(f => {{ f.style.width = pct + '%'; }});
+
+                    const dots = pDoc.querySelectorAll('#musicProgressDot, .music-progress-dot, .tc-music-dot');
+                    dots.forEach(d => {{ d.style.left = pct + '%'; }});
                 }}
             }}
         }};
@@ -404,8 +393,15 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             }} catch(e) {{}}
         }};
 
-        window.parent.__farewellGoToMenu = function() {{
+        window.parent.__farewellStartJourney = function() {{
             window.parent.__farewellResetScroll();
+            // 1. Try hidden Streamlit trigger button
+            const hiddenBtns = pDoc.querySelectorAll('button[key="btn_start_journey_hidden"], button[data-testid*="btn_start_journey_hidden"]');
+            for (let b of hiddenBtns) {{
+                b.click();
+                return;
+            }}
+            // 2. Try sidebar if already mounted
             const sidebar = pDoc.querySelector('[data-testid="stSidebar"]');
             if (sidebar) {{
                 const allBtns = sidebar.querySelectorAll('div.stButton > button');
@@ -417,10 +413,15 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
                     }}
                 }}
             }}
+            // 3. Fallback: URL query param
             const url = new URL(window.parent.location.href);
             url.searchParams.set('view', 'menu');
             url.searchParams.delete('chapter');
             window.parent.location.href = url.href;
+        }};
+
+        window.parent.__farewellGoToMenu = function() {{
+            window.parent.__farewellStartJourney();
         }};
 
         window.parent.__farewellGoToLanding = function() {{
@@ -464,15 +465,22 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             const target = e.target;
             if (!target) return;
 
-            const globalPill = target.closest('#globalMusicTogglePill, .global-music-toggle-pill');
-            const stopStart = target.closest('#musicBtnStopStart');
-            const playPause = target.closest('#musicBtnPlayPause');
-            const prevBtn = target.closest('#musicBtnPrev');
-            const nextBtn = target.closest('#musicBtnNext');
-            const heartBtn = target.closest('#musicBtnHeart');
-            const track = target.closest('#musicProgressTrack');
+            const startJourneyBtn = target.closest('#heroStartJourneyBtn, .hero-btn-primary');
+            if (startJourneyBtn) {{
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.__farewellStartJourney();
+                return;
+            }}
 
-            if (globalPill || stopStart || playPause) {{
+            const stopStart = target.closest('#musicBtnStopStart');
+            const playPause = target.closest('#musicBtnPlayPause, .tc-music-playpause, .music-ctrl-playpause-glow');
+            const prevBtn = target.closest('#musicBtnPrev, .tc-music-btn:first-child, .music-btn-prev');
+            const nextBtn = target.closest('#musicBtnNext, .tc-music-btn:last-child, .music-btn-next');
+            const heartBtn = target.closest('#tcMusicHeart, #musicBtnHeart, .music-ctrl-heart, .tc-music-heart');
+            const track = target.closest('#musicProgressTrack, .tc-music-track, .music-progress-track');
+
+            if (playPause || stopStart) {{
                 e.preventDefault();
                 e.stopPropagation();
                 window.parent.__farewellToggleAudio();
@@ -644,10 +652,10 @@ def reset_scroll_to_top():
 
 
 # -----------------------------------------------------------------------------
-# 8. Intermediate Analyzing / Chapter Loading Transition (650ms)
+# 8. Intermediate Analyzing / Chapter Loading Transition (300ms Fast & Smooth)
 # -----------------------------------------------------------------------------
 def render_nav_loader(target):
-    """Render 0.65s intermediate chapter loading screen."""
+    """Render 0.30s intermediate chapter loading screen."""
     reset_scroll_to_top()
     target_section = target if isinstance(target, str) else target.get("section", "welcome")
     target_view = "section" if isinstance(target, str) else target.get("view", "section")
@@ -672,7 +680,7 @@ def render_nav_loader(target):
     </div>
     """
     loader_box.markdown(html, unsafe_allow_html=True)
-    time.sleep(0.65)
+    time.sleep(0.30)
     loader_box.empty()
 
     st.session_state["app_view"] = target_view
@@ -846,16 +854,37 @@ def render_chapter_footer(current_id: str):
 
 
 # -----------------------------------------------------------------------------
-# GLOBAL FLOATING MUSIC PILL
+# TOP-CENTER FULL MUSIC PLAYER
 # -----------------------------------------------------------------------------
-def render_global_music_pill():
-    """Render compact floating music control pill in top-right corner."""
-    ui("""
-    <div class="global-music-pill-container" id="globalMusicPillContainer">
-        <button class="global-music-toggle-pill" id="globalMusicTogglePill" onclick="window.parent.__farewellToggleAudio && window.parent.__farewellToggleAudio()" title="Toggle Music On/Off">
-            <span class="global-music-pill-icon" id="globalMusicPillIcon">🎵</span>
-            <span id="globalMusicPillText">Music On</span>
-        </button>
+def render_top_center_music_player():
+    """Render full horizontal music player at top-center (Song, Artist, Scrub Bar, Time, Controls)."""
+    ui(f"""
+    <div class="top-center-music-container">
+        <div class="top-center-music-player" id="topCenterMusicPlayer">
+            <div class="tc-music-header">
+                <div class="tc-music-info">
+                    <span class="tc-music-note">🎵</span>
+                    <div class="tc-music-titles">
+                        <span class="tc-music-title">{config.AUDIO_CONFIG["song_title"]}</span>
+                        <span class="tc-music-artist">{config.AUDIO_CONFIG["song_artist"]}</span>
+                    </div>
+                </div>
+                <span class="tc-music-heart" id="tcMusicHeart" title="Favorite">♡</span>
+            </div>
+            <div class="tc-music-timeline">
+                <span class="tc-music-time" id="musicTimeCurrent">00:00</span>
+                <div class="tc-music-track" id="musicProgressTrack" title="Click to seek track">
+                    <div class="tc-music-fill" id="musicProgressFill"></div>
+                    <span class="tc-music-dot" id="musicProgressDot"></span>
+                </div>
+                <span class="tc-music-time" id="musicTimeTotal">04:58</span>
+            </div>
+            <div class="tc-music-controls">
+                <button class="tc-music-btn" id="musicBtnPrev" title="Rewind 10s">⏮</button>
+                <button class="tc-music-playpause" id="musicBtnPlayPause" title="Play / Pause">❚❚</button>
+                <button class="tc-music-btn" id="musicBtnNext" title="Forward 10s">⏭</button>
+            </div>
+        </div>
     </div>
     """)
 
@@ -864,7 +893,7 @@ def render_global_music_pill():
 # STATE 1 — LANDING / INTRO SCREEN
 # -----------------------------------------------------------------------------
 def render_landing():
-    """Render STATE 1: Pure Cinematic Hero Intro Screen."""
+    """Render STATE 1: Pure Cinematic Hero Intro Screen with Top-Center Music Player."""
     reset_scroll_to_top()
     c = content.HOME_SECTION
     banner_b64 = get_hero_panorama_b64()
@@ -873,9 +902,16 @@ def render_landing():
     visited_pct = int((len(visited_set) / len(config.CHAPTERS)) * 100)
     hero_pct = max(12, visited_pct)
 
-    # Global Top-Right Music Pill
-    render_global_music_pill()
+    # Hidden Streamlit Bridge Trigger Button
+    if st.button("Start Journey Hidden", key="btn_start_journey_hidden"):
+        st.session_state["pending_target"] = {"view": "menu"}
+        reset_scroll_to_top()
+        st.rerun()
 
+    # 1. Top-Center Full Music Player
+    render_top_center_music_player()
+
+    # 2. Cinematic Hero Card
     ui(f"""
     <div class="v2-main-wrap landing-page-wrap">
         <div class="hero-panoramic-card">
@@ -899,11 +935,8 @@ def render_landing():
                     They are the beginning of a beautiful memory that stays forever.
                 </p>
                 <div class="hero-action-buttons">
-                    <button class="hero-btn-primary" onclick="window.parent.__farewellGoToMenu && window.parent.__farewellGoToMenu()">
+                    <button class="hero-btn-primary" id="heroStartJourneyBtn" onclick="window.parent.__farewellStartJourney && window.parent.__farewellStartJourney()">
                         <span class="btn-heart-glyph">♡</span> Start the Journey
-                    </button>
-                    <button class="hero-btn-secondary" onclick="window.parent.__farewellGoToMenu && window.parent.__farewellGoToMenu()">
-                        <span class="btn-play-glyph">▷</span> Watch Intro
                     </button>
                 </div>
             </div>
@@ -934,10 +967,10 @@ def render_journey_menu():
     reset_scroll_to_top()
     c = content.HOME_SECTION
 
-    # Global Top-Right Music Pill
-    render_global_music_pill()
+    # 1. Top-Center Full Music Player
+    render_top_center_music_player()
 
-    # 1. Header
+    # 2. Header
     ui("""
     <div class="v2-main-wrap">
         <div class="journey-menu-header">

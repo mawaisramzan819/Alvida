@@ -67,7 +67,7 @@
             powerPreference: 'high-performance'
         });
         renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.2 : 2.0));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.0 : 1.5));
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.1;
 
@@ -370,7 +370,7 @@
     // 6. Instanced Realistic Floating Cherry Blossom Petals
     // ------------------------------------------------------------------------
     function setupInstancedPetals() {
-        const petalCount = isMobile ? 180 : 450;
+        const petalCount = isMobile ? 25 : 60;
 
         // Custom Petal Curved Geometry
         const shape = new THREE.Shape();
@@ -745,7 +745,7 @@
         }
         camera.updateProjectionMatrix();
         renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, width < 768 ? 1.25 : 2.0));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, width < 768 ? 1.0 : 1.5));
     }
 
     function onWindowResize() {
