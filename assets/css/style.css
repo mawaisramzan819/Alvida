@@ -77,24 +77,37 @@
   --radius-xl: 22px;
   --radius-pill: 999px;
 
-  /* SHADOWS & GLOWS */
+  /* ATMOSPHERIC SHADOWS & GLOWS */
   --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.18);
   --shadow-light-card: 0 5px 16px rgba(54, 31, 45, 0.14);
   --shadow-glow: 0 0 28px rgba(233, 101, 130, 0.22);
+  --glow-warm: rgba(235, 175, 190, 0.15);
   --glow-accent: rgba(230, 160, 180, 0.18);
   --shadow-soft: 0 12px 32px -8px rgba(0, 0, 0, 0.35);
+  --shadow-elevation: 0 16px 40px -12px rgba(0, 0, 0, 0.45);
   --shadow-hover: 0 20px 48px -10px rgba(0, 0, 0, 0.5), 0 0 24px rgba(230, 160, 180, 0.18);
+  --shadow-hover-elevation: 0 24px 60px -12px rgba(0, 0, 0, 0.65), 0 0 28px rgba(235, 175, 190, 0.15);
 
-  /* CINEMATIC MOTION & EASING */
+  /* CINEMATIC DECELERATION & EASING */
+  --ease-emotional-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-subtle-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-drift: cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-gentle: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* TRANSITION DURATIONS */
+  --dur-glance: 250ms;
+  --dur-card-hover: 450ms;
+  --dur-flip: 750ms;
+  --dur-page-exit: 400ms;
+  --dur-page-enter: 1100ms;
   --duration-fast: 160ms;
   --duration-normal: 280ms;
-  --duration-hover: 400ms;
+  --duration-hover: 450ms;
   --duration-slow: 500ms;
-  --duration-flip: 800ms;
-  --duration-enter: 1000ms;
-  --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-flip: 750ms;
+  --duration-enter: 1100ms;
 }
 
 /* ==========================================================================
@@ -1149,20 +1162,27 @@ button[kind="primary"],
   border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: var(--shadow-soft);
   opacity: 0;
-  transform: translateY(20px) scale(0.98);
-  animation: cardFadeIn var(--duration-enter) var(--ease-cinematic) forwards;
+  transform: translateY(24px) scale(0.98);
+  animation: cascadeIn 900ms var(--ease-emotional-out) forwards;
   will-change: transform, opacity;
 }
 
 /* Stagger delays across the 8 feature cards */
-.ref-cards-grid .ref-card:nth-child(1), .journey-card:nth-child(1) { animation-delay: 100ms; }
-.ref-cards-grid .ref-card:nth-child(2), .journey-card:nth-child(2) { animation-delay: 180ms; }
-.ref-cards-grid .ref-card:nth-child(3), .journey-card:nth-child(3) { animation-delay: 260ms; }
-.ref-cards-grid .ref-card:nth-child(4), .journey-card:nth-child(4) { animation-delay: 340ms; }
-.ref-cards-grid .ref-card:nth-child(5), .journey-card:nth-child(5) { animation-delay: 420ms; }
-.ref-cards-grid .ref-card:nth-child(6), .journey-card:nth-child(6) { animation-delay: 500ms; }
-.ref-cards-grid .ref-card:nth-child(7), .journey-card:nth-child(7) { animation-delay: 580ms; }
-.ref-cards-grid .ref-card:nth-child(8), .journey-card:nth-child(8) { animation-delay: 660ms; }
+.ref-cards-grid .ref-card:nth-child(1), .journey-card:nth-child(1) { animation-delay: 60ms; }
+.ref-cards-grid .ref-card:nth-child(2), .journey-card:nth-child(2) { animation-delay: 130ms; }
+.ref-cards-grid .ref-card:nth-child(3), .journey-card:nth-child(3) { animation-delay: 200ms; }
+.ref-cards-grid .ref-card:nth-child(4), .journey-card:nth-child(4) { animation-delay: 270ms; }
+.ref-cards-grid .ref-card:nth-child(5), .journey-card:nth-child(5) { animation-delay: 340ms; }
+.ref-cards-grid .ref-card:nth-child(6), .journey-card:nth-child(6) { animation-delay: 410ms; }
+.ref-cards-grid .ref-card:nth-child(7), .journey-card:nth-child(7) { animation-delay: 480ms; }
+.ref-cards-grid .ref-card:nth-child(8), .journey-card:nth-child(8) { animation-delay: 550ms; }
+
+@keyframes cascadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
 
 @keyframes cardFadeIn {
   to {
@@ -1175,14 +1195,14 @@ button[kind="primary"],
 .ref-card-light {
   background: var(--surface-light);
   border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-soft);
+  box-shadow: var(--shadow-elevation);
 }
 
 .ref-card-light:hover,
 .ref-card:hover,
 .journey-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 18px 40px -8px rgba(54, 31, 45, 0.28), 0 0 24px var(--glow-accent);
+  box-shadow: 0 20px 48px -10px rgba(54, 31, 45, 0.32), 0 0 28px var(--glow-warm);
   border-color: rgba(233, 101, 130, 0.45);
 }
 
@@ -1419,38 +1439,102 @@ button[kind="primary"],
 }
 
 /* ==========================================================================
-   6. CHAPTER CONTENT PAGES (Section Arrival: 3D Slide & Focus-Pull Transition)
+   6. CHAPTER CONTENT PAGES (Global Page & Section Transitions)
    ========================================================================== */
+.view-exit {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  filter: blur(0px);
+  animation: viewExitSoft var(--dur-page-exit) var(--ease-subtle-in-out) forwards;
+  pointer-events: none;
+}
+
+@keyframes viewExitSoft {
+  to {
+    opacity: 0;
+    transform: scale(0.98) translateY(12px);
+    filter: blur(6px);
+  }
+}
+
+.view-enter,
 .section-enter-active,
 .feature-section-enter,
 .v2-chapter-container {
   max-width: 880px;
   margin: 0 auto;
   padding: 1.5rem 0 3rem 0;
-  perspective: 1000px;
-  animation: emotionalEntrance 1100ms var(--ease-cinematic) forwards;
+  perspective: 1200px;
   transform-origin: top center;
+  animation: viewEnterCinematic var(--dur-page-enter) var(--ease-emotional-out) forwards;
   will-change: transform, opacity, filter;
 }
 
-@keyframes emotionalEntrance {
+@keyframes viewEnterCinematic {
   0% {
     opacity: 0;
-    transform: translateY(-40px) scale(0.97) rotateX(4deg);
-    filter: blur(8px);
+    transform: translateY(-45px) rotateX(6deg) scale(0.97);
+    filter: blur(12px);
   }
-  40% {
-    opacity: 0.7;
-    filter: blur(3px);
+  35% {
+    opacity: 0.75;
+    filter: blur(4px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1) rotateX(0deg);
+    transform: translateY(0) rotateX(0deg) scale(1);
     filter: blur(0px);
   }
 }
 
-/* Interactive Highlights: Poetic Text & Sentiments Soft Shimmer */
+/* Interactive Keepsake Card Flip (Micro-Interaction) */
+.keepsake-card {
+  perspective: 1400px;
+  cursor: pointer;
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--dur-flip) var(--ease-emotional-out);
+  box-shadow: var(--shadow-elevation);
+  border-radius: 18px;
+}
+
+.keepsake-card:hover .card-inner,
+.keepsake-card:focus-visible .card-inner,
+.keepsake-card.flipped .card-inner {
+  transform: rotateY(180deg) translateY(-4px);
+  box-shadow: var(--shadow-hover-elevation);
+}
+
+.card-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-front {
+  background: radial-gradient(circle at 50% 0%, #201722 0%, #130f16 100%);
+}
+
+.card-back {
+  background: radial-gradient(circle at 50% 100%, #281a25 0%, #161118 100%);
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+/* Luminous Text & Ambient Heartbeat Shimmer */
+.ambient-glow-text,
 .poetic-quote,
 .chapter-handwritten-note,
 .chapter-highlight-quote-box,
@@ -1460,23 +1544,35 @@ button[kind="primary"],
   position: relative;
   font-style: italic;
   background: linear-gradient(
-    120deg, 
-    rgba(255, 255, 255, 0.85) 0%, 
-    rgba(255, 220, 230, 1) 35%, 
+    115deg,
+    rgba(255, 255, 255, 0.85) 0%,
+    rgba(250, 210, 225, 1) 45%,
     rgba(245, 177, 143, 1) 50%,
-    rgba(255, 220, 230, 1) 65%,
+    rgba(250, 210, 225, 1) 55%,
     rgba(255, 255, 255, 0.85) 100%
   );
-  background-size: 200% auto;
+  background-size: 220% 100%;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: softShimmer 8s ease infinite;
+  animation: gentlePulse 9s ease-in-out infinite;
 }
 
-@keyframes softShimmer {
+@keyframes gentlePulse {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
+}
+
+/* Subtle breathing animation for primary action buttons */
+.pulsing-cta,
+.hero-btn-primary {
+  transition: transform var(--dur-card-hover) var(--ease-drift), box-shadow var(--dur-card-hover) var(--ease-drift) !important;
+}
+
+.pulsing-cta:hover,
+.hero-btn-primary:hover {
+  transform: translateY(-2px) scale(1.02) !important;
+  box-shadow: 0 0 24px rgba(235, 130, 160, 0.45) !important;
 }
 
 .chapter-eyebrow-badge {

@@ -416,6 +416,8 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
         }}
 
         window.parent.__farewellStartJourney = function() {{
+            const container = pDoc.querySelector('.v2-main-wrap, .landing-page-wrap');
+            if (container) {{ container.classList.add('view-exit'); }}
             window.parent.__farewellResetScroll();
             clickStreamlitBridge('_bridge_menu', 'bridge_go_menu');
         }};
@@ -425,12 +427,16 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
         }};
 
         window.parent.__farewellGoToLanding = function() {{
+            const container = pDoc.querySelector('.v2-chapter-container, .v2-main-wrap');
+            if (container) {{ container.classList.add('view-exit'); }}
             window.parent.__farewellResetScroll();
             clickStreamlitBridge('_bridge_landing', 'bridge_go_landing');
         }};
 
         window.parent.__farewellNav = function(chapterId) {{
             if (!chapterId) return;
+            const container = pDoc.querySelector('.v2-chapter-container, .v2-main-wrap');
+            if (container) {{ container.classList.add('view-exit'); }}
             window.parent.__farewellResetScroll();
             clickStreamlitBridge(`_bridge_${{chapterId}}`, `bridge_go_${{chapterId}}`);
         }};
