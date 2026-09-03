@@ -603,9 +603,26 @@ def reset_scroll_to_top():
         if (p && 'scrollRestoration' in p.history) p.history.scrollRestoration = 'manual';
 
         function doScroll() {
-            try { p.scrollTo({ top: 0, left: 0, behavior: 'instant' }); } catch(e) { try { p.scrollTo(0, 0); } catch(e) {} }
-            try { if (pDoc.documentElement) pDoc.documentElement.scrollTop = 0; } catch(e) {}
-            try { if (pDoc.body) pDoc.body.scrollTop = 0; } catch(e) {}
+            const scrollTargets = [
+                window,
+                p,
+                document.documentElement,
+                document.body,
+                pDoc.documentElement,
+                pDoc.body,
+                pDoc.querySelector('[data-testid="stAppViewContainer"]'),
+                pDoc.querySelector('.main'),
+                pDoc.querySelector('[data-testid="stMain"]'),
+                pDoc.querySelector('.main .block-container')
+            ];
+            scrollTargets.forEach(target => {
+                if (target && typeof target.scrollTo === 'function') {
+                    try { target.scrollTo({ top: 0, left: 0, behavior: 'instant' }); } catch(e) { try { target.scrollTo(0, 0); } catch(e) {} }
+                }
+                if (target && 'scrollTop' in target) {
+                    try { target.scrollTop = 0; } catch(e) {}
+                }
+            });
             try {
                 const selectors = [
                     '[data-testid="stMain"]',
@@ -636,15 +653,11 @@ def reset_scroll_to_top():
 
 
 # -----------------------------------------------------------------------------
-# 8. Navigation Transitions: A) Journey Entry Loader & B) Section Loader
+# 8. Navigation Transitions: Journey Loader & Section Router
 # -----------------------------------------------------------------------------
-def render_journey_entry_loader():
-    """Render the full cinematic 'Journey Starting...' transition (rotating animation) when entering the Journey."""
-    if st.session_state.get("nav_status") == "loading":
-        return
-    st.session_state["nav_status"] = "loading"
+def render_journey_loader():
+    """Render the dedicated full-screen Journey Entry transition (rotating animation)."""
     reset_scroll_to_top()
-
     loader_box = st.empty()
     html = """
     <div class="journey-entry-loader-overlay">
@@ -664,82 +677,33 @@ def render_journey_entry_loader():
     """
     loader_box.markdown(html, unsafe_allow_html=True)
 
-    # Let the 1.1s rotating entry animation complete fully
-    time.sleep(1.15)
+    # Let the 0.95s rotating entry animation complete fully
+    time.sleep(0.95)
     loader_box.empty()
 
-    st.session_state["app_view"] = "journey_menu"
-    st.session_state["transition_type"] = None
-    st.session_state["pending_target"] = None
-    st.session_state["nav_status"] = "idle"
+    st.session_state.app_view = "journey_menu"
+    st.session_state.active_section = None
     reset_scroll_to_top()
     st.rerun()
 
 
-def render_section_loader(target_section: str):
-    """Render a short, smooth feature-specific loading animation when opening a section from Journey Menu."""
-    if st.session_state.get("nav_status") == "loading":
-        return
-    st.session_state["nav_status"] = "loading"
-    reset_scroll_to_top()
-
-    loader_box = st.empty()
-    loader_info = content.CHAPTER_LOADERS.get(
-        target_section or "welcome", {"title": (target_section or "welcome").title(), "message": "Safha khul raha hai..."}
-    )
-    title = loader_info.get("title", (target_section or "welcome").title())
-    message = loader_info.get("message", "Safha khul raha hai...")
-
-    html = f"""
-    <div class="nav-loader-overlay">
-        <div class="nav-loader-card">
-            <div class="nav-loader-spinner-icon">✦</div>
-            <div class="nav-loader-chapter-title">{title}</div>
-            <div class="nav-loader-message">{message}</div>
-            <div class="nav-loader-track">
-                <div class="nav-loader-fill"></div>
-            </div>
-        </div>
-    </div>
-    """
-    loader_box.markdown(html, unsafe_allow_html=True)
-
-    # Let the 0.70s section animation complete fully
-    time.sleep(0.75)
-    loader_box.empty()
-
-    st.session_state["app_view"] = "section"
-    st.session_state["selected_section"] = target_section or "welcome"
-    st.session_state["visited_chapters"].add(target_section or "welcome")
-    st.session_state["transition_type"] = None
-    st.session_state["pending_target"] = None
-    st.session_state["nav_status"] = "idle"
-    reset_scroll_to_top()
-    st.rerun()
-
-
-def render_nav_loader(target):
-    """Route to either the Journey Entry transition or the feature Section transition."""
-    if isinstance(target, dict):
-        trans = target.get("transition")
-        view = target.get("view")
-        section = target.get("section")
-        if trans == "journey_entry" or view in ["journey_menu", "menu"]:
-            render_journey_entry_loader()
-            return
-        elif trans == "section" or view == "section":
-            render_section_loader(section or "welcome")
-            return
-    elif isinstance(target, str):
-        if target in ["journey_menu", "menu"]:
-            render_journey_entry_loader()
-            return
-        else:
-            render_section_loader(target)
-            return
-
-    # Fallback
-    render_section_loader("welcome")
+def render_section(section_id: str):
+    """Render the requested section view with mutually exclusive layout."""
+    sec = section_id or "welcome"
+    if "visited_chapters" in st.session_state:
+        st.session_state.visited_chapters.add(sec)
+    router = {
+        "home": render_home_overview,
+        "welcome": render_welcome,
+        "memories": render_memories,
+        "words": render_words,
+        "respect": render_respect,
+        "intentions": render_intentions,
+        "dua": render_dua,
+        "goodbye": render_goodbye,
+    }
+    render_fn = router.get(sec, render_welcome)
+    render_fn()
 
 
 # -----------------------------------------------------------------------------
@@ -860,25 +824,30 @@ def render_chapter_footer(current_id: str):
     with bcol1:
         if prev_id and prev_label:
             if st.button(f"← Prev: {prev_label}", key=f"foot_prev_{current_id}", use_container_width=True):
-                st.session_state["pending_target"] = {"view": "section", "section": prev_id, "transition": "section"}
-                st.session_state["selected_memory"] = None
+                st.session_state.app_view = "section"
+                st.session_state.active_section = prev_id
+                st.session_state.selected_memory = None
+                if "visited_chapters" in st.session_state:
+                    st.session_state.visited_chapters.add(prev_id)
                 reset_scroll_to_top()
                 st.rerun()
 
     with bcol2:
         if st.button("← Back to Journey", key=f"foot_back_{current_id}", type="secondary", use_container_width=True):
-            st.session_state["app_view"] = "journey_menu"
-            st.session_state["selected_memory"] = None
-            st.session_state["pending_target"] = None
-            st.session_state["nav_status"] = "idle"
+            st.session_state.app_view = "journey_menu"
+            st.session_state.active_section = None
+            st.session_state.selected_memory = None
             reset_scroll_to_top()
             st.rerun()
 
     with bcol3:
         if next_id and next_label:
             if st.button(f"Next: {next_label} →", key=f"foot_next_{current_id}", type="primary", use_container_width=True):
-                st.session_state["pending_target"] = {"view": "section", "section": next_id, "transition": "section"}
-                st.session_state["selected_memory"] = None
+                st.session_state.app_view = "section"
+                st.session_state.active_section = next_id
+                st.session_state.selected_memory = None
+                if "visited_chapters" in st.session_state:
+                    st.session_state.visited_chapters.add(next_id)
                 reset_scroll_to_top()
                 st.rerun()
 
@@ -895,7 +864,8 @@ def render_hidden_bridge_dispatcher():
             .st-key-_bridge_landing, .st-key-_bridge_menu,
             [class*="st-key-_bridge_"],
             div[data-testid="stElementContainer"]:has([class*="st-key-_bridge_"]),
-            div[data-testid="stElementContainer"]:has(button[key*="_bridge_"]) {
+            div[data-testid="stElementContainer"]:has(button[key*="_bridge_"]),
+            div[data-testid="stElementContainer"]:has(button[title="bridge_hidden"]) {
                 display: none !important;
                 visibility: hidden !important;
                 position: absolute !important;
@@ -915,24 +885,26 @@ def render_hidden_bridge_dispatcher():
         c = st.columns(1)[0]
         with c:
             if st.button("bridge_go_landing", key="_bridge_landing", help="bridge_hidden"):
-                st.session_state["app_view"] = "landing"
-                st.session_state["selected_section"] = "home"
-                st.session_state["pending_target"] = None
-                st.session_state["nav_status"] = "idle"
-                st.session_state["selected_memory"] = None
+                st.session_state.app_view = "landing"
+                st.session_state.active_section = None
+                st.session_state.selected_memory = None
                 reset_scroll_to_top()
                 st.rerun()
 
             if st.button("bridge_go_menu", key="_bridge_menu", help="bridge_hidden"):
-                st.session_state["pending_target"] = {"view": "journey_menu", "transition": "journey_entry"}
-                st.session_state["selected_memory"] = None
+                st.session_state.app_view = "journey_transition"
+                st.session_state.active_section = None
+                st.session_state.selected_memory = None
                 reset_scroll_to_top()
                 st.rerun()
 
             for chap in config.CHAPTERS:
                 if st.button(f"bridge_go_{chap['id']}", key=f"_bridge_{chap['id']}", help="bridge_hidden"):
-                    st.session_state["pending_target"] = {"view": "section", "section": chap["id"], "transition": "section"}
-                    st.session_state["selected_memory"] = None
+                    st.session_state.app_view = "section"
+                    st.session_state.active_section = chap["id"]
+                    st.session_state.selected_memory = None
+                    if "visited_chapters" in st.session_state:
+                        st.session_state.visited_chapters.add(chap["id"])
                     reset_scroll_to_top()
                     st.rerun()
 
@@ -1536,87 +1508,66 @@ def render_goodbye():
 
 
 # -----------------------------------------------------------------------------
-# 12. Main Application Controller & Router (3 Distinct UI States)
+# 12. Main Application Controller & Router (4 Mutually Exclusive Views)
 # -----------------------------------------------------------------------------
 def main():
-    """Main state router and layout orchestrator with 3 distinct UI states."""
-    defaults = {
-        "startup_completed": False,
-        "app_view": "landing",          # "landing" | "journey_menu" | "section"
-        "selected_section": "home",     # active section if in "section" view
-        "transition_type": None,        # "journey_entry" | "section" | None
-        "pending_target": None,         # dict or None: {"view": "journey_menu", "transition": "journey_entry"} | {"view": "section", "section": "welcome", "transition": "section"}
-        "nav_status": "idle",           # "idle" | "loading" — centralized navigation lock
-        "show_final_words": False,
-        "selected_memory": None,
-        "visited_chapters": {"home"},
-    }
-    for k, v in defaults.items():
-        if k not in st.session_state:
-            st.session_state[k] = v
+    """Main state router and layout orchestrator with 4 mutually exclusive views."""
+    # 1. State initialization guarded once per session
+    if "app_view" not in st.session_state:
+        st.session_state.app_view = "landing"
+    if "active_section" not in st.session_state:
+        st.session_state.active_section = None
+    if "startup_completed" not in st.session_state:
+        st.session_state.startup_completed = False
+    if "show_final_words" not in st.session_state:
+        st.session_state.show_final_words = False
+    if "selected_memory" not in st.session_state:
+        st.session_state.selected_memory = None
+    if "visited_chapters" not in st.session_state:
+        st.session_state.visited_chapters = {"home"}
 
     # Support URL query parameter routing
     url_view = st.query_params.get("view")
-    if url_view in ["landing", "journey_menu", "menu", "section"]:
+    if url_view in ["landing", "journey_transition", "journey_menu", "menu", "section"]:
         mapped_view = "journey_menu" if url_view == "menu" else url_view
-        if st.session_state["app_view"] != mapped_view:
-            st.session_state["app_view"] = mapped_view
+        if st.session_state.app_view != mapped_view:
+            st.session_state.app_view = mapped_view
 
     url_chap = st.query_params.get("chapter")
     if url_chap and url_chap in [c["id"] for c in config.CHAPTERS]:
-        st.session_state["app_view"] = "section"
-        st.session_state["selected_section"] = url_chap
+        st.session_state.app_view = "section"
+        st.session_state.active_section = url_chap
 
-    # 1. Global Styles
+    # 2. Global Styles
     load_styles()
 
-    # 2. First-load Startup Screen (Display starting loader FIRST, prevent landing page from flashing)
+    # 3. First-load Startup Screen (Display starting loader FIRST, prevent landing page from flashing)
     if not st.session_state.get("startup_completed", False):
         render_startup_screen()
         return
 
-    # 3. Current Application View State
-    app_view = st.session_state.get("app_view", "landing")
-    selected_section = st.session_state.get("selected_section", "home")
-
-    # Only render Journey Sidebar when inside the Journey (not on Landing Screen)
-    if app_view != "landing":
-        render_sidebar()
-
-    # 4. Handle Pending Navigation Transition
-    if st.session_state.get("pending_target"):
-        target = st.session_state["pending_target"]
-        render_nav_loader(target)
-        return
-
-    # 5. Route between 3 Distinct UI States
-    # Render Chapter Ambient Atmosphere Layer
-    render_cinematic_atmosphere(selected_section if app_view == "section" else "home")
-
-    # Connect JavaScript Audio, 3D WebGL & Navigation Bridge
-    render_sidebar_and_navigation_bridge(app_view, selected_section)
-
-    # Mount Invisible Streamlit Bridge Button Dispatcher
+    # 4. Top-Level Bridge Navigation Dispatcher (Evaluated FIRST to prevent waterfall re-renders)
     render_hidden_bridge_dispatcher()
 
+    # 5. Connect JavaScript Audio, 3D WebGL & Navigation Bridge
+    app_view = st.session_state.app_view
+    active_section = st.session_state.get("active_section") or "home"
+    render_cinematic_atmosphere(active_section if app_view == "section" else "home")
+    render_sidebar_and_navigation_bridge(app_view, active_section)
+
+    # 6. Sidebar (Mounted ONLY inside the Journey — not on Landing or Journey Transition)
+    if app_view in ["journey_menu", "section"]:
+        render_sidebar()
+
+    # 7. Strict Mutually Exclusive View Hierarchy
     if app_view == "landing":
         render_landing()
+    elif app_view == "journey_transition":
+        render_journey_loader()
     elif app_view in ["journey_menu", "menu"]:
         render_journey_menu()
     elif app_view == "section":
-        st.session_state["visited_chapters"].add(selected_section)
-        router = {
-            "home": render_home_overview,
-            "welcome": render_welcome,
-            "memories": render_memories,
-            "words": render_words,
-            "respect": render_respect,
-            "intentions": render_intentions,
-            "dua": render_dua,
-            "goodbye": render_goodbye,
-        }
-        render_fn = router.get(selected_section, render_welcome)
-        render_fn()
+        render_section(st.session_state.get("active_section") or "welcome")
 
 
 if __name__ == "__main__":
