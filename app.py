@@ -1101,7 +1101,7 @@ def render_landing():
                 </p>
                 <div class="hero-action-buttons">
                     <button class="hero-btn-primary hero-cta-button pulsing-cta" id="heroStartJourneyBtn" onclick="window.parent.__farewellStartJourney && window.parent.__farewellStartJourney()">
-                        <span class="btn-heart-glyph">♡</span> Start the Journey
+                        <span class="btn-heart-glyph">♡</span> Start My Journey
                     </button>
                 </div>
             </div>

@@ -950,15 +950,18 @@ button[key="btn_start_journey"],
   color: #ffffff !important;
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   border-radius: 999px !important;
-  padding: 14px 32px !important;
+  padding: 13px 28px !important;
   font-family: var(--font-body) !important;
   font-weight: 600 !important;
-  font-size: 1.05rem !important;
+  font-size: 0.98rem !important;
+  letter-spacing: 0.2px !important;
   box-shadow: 0 8px 24px rgba(226, 85, 126, 0.45) !important;
   align-items: center !important;
-  gap: 0.55rem !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
   text-decoration: none !important;
   outline: none !important;
+  white-space: nowrap !important;
 }
 
 @keyframes landingBtnFloat {
@@ -3094,9 +3097,14 @@ div[data-testid="stColumn"] div.stButton > button:hover {
 
   .hero-btn-primary,
   .hero-btn-secondary {
-    width: 100% !important;
+    width: auto !important;
+    max-width: 100% !important;
     justify-content: center !important;
-    min-height: 48px !important;
+    min-height: 46px !important;
+    padding: 12px 24px !important;
+    font-size: 0.95rem !important;
+    margin: 0 auto !important;
+    white-space: nowrap !important;
   }
 
   .hero-floating-stats-card {
