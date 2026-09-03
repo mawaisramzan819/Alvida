@@ -1362,6 +1362,91 @@ def render_memories():
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
     """)
 
+    # Check if a memory switch transition loader is in progress
+    if st.session_state.get("memory_transition_target") is not None:
+        target_idx = st.session_state["memory_transition_target"]
+        st.markdown(
+            """
+        <style>
+        .memory-switch-loader-backdrop {
+            min-height: 280px !important;
+            background: rgba(24, 18, 26, 0.85) !important;
+            border: 1px solid rgba(233, 101, 130, 0.25) !important;
+            border-radius: 20px !important;
+            padding: 3.5rem 2rem !important;
+            margin-bottom: 2rem !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(233, 101, 130, 0.12) !important;
+            backdrop-filter: blur(14px) !important;
+            animation: fadeIn 0.25s ease-out !important;
+        }
+        .memory-switch-icon-orb {
+            width: 54px !important;
+            height: 54px !important;
+            border-radius: 50% !important;
+            background: radial-gradient(circle, rgba(244, 143, 177, 0.25) 0%, transparent 70%) !important;
+            border: 1.5px solid rgba(244, 143, 177, 0.6) !important;
+            box-shadow: 0 0 20px rgba(244, 143, 177, 0.45) !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            font-size: 24px !important;
+            animation: orbPulse 1.25s ease-in-out infinite alternate !important;
+            margin: 0 auto 16px auto !important;
+        }
+        .memory-switch-status {
+            color: #ffffff !important;
+            font-family: 'Lora', Georgia, serif !important;
+            font-size: 1.15rem !important;
+            font-style: italic !important;
+            letter-spacing: 0.3px !important;
+            margin-bottom: 16px !important;
+            text-shadow: 0 0 14px rgba(244, 143, 177, 0.4) !important;
+        }
+        .memory-switch-track {
+            width: 180px !important;
+            height: 3.5px !important;
+            background: rgba(255, 255, 255, 0.08) !important;
+            border-radius: 999px !important;
+            overflow: hidden !important;
+            position: relative !important;
+            margin: 0 auto !important;
+        }
+        .memory-switch-fill {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            height: 100% !important;
+            width: 100% !important;
+            background: linear-gradient(90deg, #e2557e, #f78da7, #ffffff) !important;
+            border-radius: 999px !important;
+            animation: memorySwitchBar 1.25s cubic-bezier(0.2, 0.8, 0.2, 1) infinite !important;
+        }
+        @keyframes memorySwitchBar {
+            0% { transform: translateX(-100%); }
+            60% { transform: translateX(0%); }
+            100% { transform: translateX(100%); }
+        }
+        </style>
+        <div class="memory-switch-loader-backdrop">
+            <div class="memory-switch-icon-orb">✨</div>
+            <div class="memory-switch-status">Moving to next memory...</div>
+            <div class="memory-switch-track">
+                <div class="memory-switch-fill"></div>
+            </div>
+        </div>
+        """,
+            unsafe_allow_html=True,
+        )
+        time.sleep(1.25)
+        st.session_state["selected_memory"] = target_idx
+        st.session_state["memory_transition_target"] = None
+        st.rerun()
+
     idx = st.session_state.get("selected_memory")
 
     # Mode A: Grid View (8 polaroid cards in 2 rows of 4)
@@ -1406,22 +1491,22 @@ def render_memories():
             f"""
         <style>
         .{anim_class} {{
-            animation: memorySlideFadeIn 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+            animation: memorySlideUpFadeIn 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
             will-change: transform, opacity, filter;
         }}
-        @keyframes memorySlideFadeIn {{
+        @keyframes memorySlideUpFadeIn {{
             0% {{
                 opacity: 0;
-                transform: translateX(26px) scale(0.98);
+                transform: translateY(16px) scale(0.985);
                 filter: blur(8px);
             }}
-            45% {{
+            50% {{
                 opacity: 0.85;
                 filter: blur(2px);
             }}
             100% {{
                 opacity: 1;
-                transform: translateX(0px) scale(1);
+                transform: translateY(0px) scale(1);
                 filter: blur(0px);
             }}
         }}
@@ -1447,16 +1532,17 @@ def render_memories():
         with mcol1:
             if idx > 0:
                 if st.button("← Previous Memory", key=f"mem_prev_{idx}", use_container_width=True):
-                    st.session_state["selected_memory"] = idx - 1
+                    st.session_state["memory_transition_target"] = idx - 1
                     st.rerun()
         with mcol2:
             if st.button("Close View ×", key=f"mem_close_{idx}", use_container_width=True):
                 st.session_state["selected_memory"] = None
+                st.session_state["memory_transition_target"] = None
                 st.rerun()
         with mcol3:
             if idx < len(c["cards"]) - 1:
                 if st.button("Next Memory →", key=f"mem_next_{idx}", type="primary", use_container_width=True):
-                    st.session_state["selected_memory"] = idx + 1
+                    st.session_state["memory_transition_target"] = idx + 1
                     st.rerun()
 
     ui("</div>")
@@ -1678,6 +1764,8 @@ def main():
         st.session_state.show_final_words = False
     if "selected_memory" not in st.session_state:
         st.session_state.selected_memory = None
+    if "memory_transition_target" not in st.session_state:
+        st.session_state.memory_transition_target = None
     if "visited_chapters" not in st.session_state:
         st.session_state.visited_chapters = {"home"}
 

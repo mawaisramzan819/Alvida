@@ -2017,31 +2017,117 @@ div[data-testid="stColumn"] div.stButton > button:hover {
 }
 
 /* ========================================================
-   MEMORY SWITCH CROSSFADE & SLIDE ANIMATION
+   MEMORY SWITCH CROSSFADE & SLIDE ANIMATION & MINI LOADER
    ======================================================== */
+
+.memory-switch-loader-backdrop {
+    min-height: 280px !important;
+    background: rgba(24, 18, 26, 0.85) !important;
+    border: 1px solid rgba(233, 101, 130, 0.25) !important;
+    border-radius: 20px !important;
+    padding: 3rem 2rem !important;
+    margin-bottom: 2rem !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(233, 101, 130, 0.12) !important;
+    backdrop-filter: blur(14px) !important;
+    animation: fadeIn 0.25s ease-out !important;
+}
+
+.memory-switch-icon-orb {
+    width: 54px !important;
+    height: 54px !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle, rgba(244, 143, 177, 0.25) 0%, transparent 70%) !important;
+    border: 1.5px solid rgba(244, 143, 177, 0.6) !important;
+    box-shadow: 0 0 20px rgba(244, 143, 177, 0.45) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 24px !important;
+    animation: orbPulse 1.25s ease-in-out infinite alternate !important;
+    margin: 0 auto 16px auto !important;
+}
+
+.memory-switch-status {
+    color: #ffffff !important;
+    font-family: var(--font-body), 'Lora', Georgia, serif !important;
+    font-size: 1.15rem !important;
+    font-style: italic !important;
+    letter-spacing: 0.3px !important;
+    margin-bottom: 16px !important;
+    text-shadow: 0 0 14px rgba(244, 143, 177, 0.4) !important;
+}
+
+.memory-switch-track {
+    width: 180px !important;
+    height: 3.5px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 999px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    margin: 0 auto !important;
+}
+
+.memory-switch-fill {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+    background: linear-gradient(90deg, #e2557e, #f78da7, #ffffff) !important;
+    border-radius: 999px !important;
+    animation: memorySwitchBar 1.25s cubic-bezier(0.2, 0.8, 0.2, 1) infinite !important;
+}
+
+@keyframes memorySwitchBar {
+    0% { transform: translateX(-100%); }
+    60% { transform: translateX(0%); }
+    100% { transform: translateX(100%); }
+}
 
 .memory-detail-wrapper,
 .memory-slide-container,
 .primary-card-entrance,
 .memory-content-fade {
-  animation: memorySlideFadeIn 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  animation: memorySlideUpFadeIn 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   will-change: transform, opacity, filter;
   width: 100%;
 }
 
-@keyframes memorySlideFadeIn {
+@keyframes memorySlideUpFadeIn {
   0% {
     opacity: 0;
-    transform: translateX(26px) scale(0.98);
+    transform: translateY(16px) scale(0.985);
     filter: blur(8px);
   }
-  45% {
+  50% {
     opacity: 0.85;
     filter: blur(2px);
   }
   100% {
     opacity: 1;
-    transform: translateX(0px) scale(1);
+    transform: translateY(0px) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes memorySlideFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.985);
+    filter: blur(8px);
+  }
+  50% {
+    opacity: 0.85;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
     filter: blur(0px);
   }
 }
