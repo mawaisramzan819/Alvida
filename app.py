@@ -2094,36 +2094,37 @@ def render_respect():
 # CHAPTER 5 — INTENTIONS
 # -----------------------------------------------------------------------------
 def render_intentions():
-    """Render Chapter 5: Intentions & Family Respect with dedicated card boxes and pause-on-hover."""
+    """Render Chapter 5: Intentions & Family Respect with locked keepsake design system."""
     reset_scroll_to_top()
     c = content.INTENTIONS_SECTION
     
     cards_html = f"""
     <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_intentions" id="sec_wrapper_intentions">
-        <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
-        <h2 class="chapter-main-title">{c['title']}</h2>
-        <p class="chapter-subtitle-italic">{c['subtitle']}</p>
+        <div class="keepsake-kicker">✦ {c['eyebrow']}</div>
+        <h2 class="keepsake-title">{c['title']}</h2>
+        <p class="keepsake-subtitle">{c['subtitle']}</p>
         
-        <div class="intentions-grid-container">
+        <div class="intentions-grid-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; max-width: 760px; margin: 0 auto 20px auto;">
     """
     
     for item in c["intentions"]:
         cards_html += f"""
-            <div class="intention-point-card intention-item-card">
-                <div class="intention-card-header">
-                    <span class="intention-icon">❤️</span>
-                    <h3 class="intention-card-title">{item["title"]}</h3>
+            <div class="keepsake-nested-box intention-point-card" style="margin: 0;">
+                <div class="intention-card-header" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                    <span class="intention-icon" style="font-size: 1.25rem;">❤️</span>
+                    <h3 class="keepsake-title" style="font-size: 1.2rem; margin: 0; text-align: left;">{item["title"]}</h3>
                 </div>
-                <p class="intention-card-body">{item["content"]}</p>
+                <p class="keepsake-body-text" style="font-size: 0.98rem; text-align: left; line-height: 1.75;">{item["content"]}</p>
             </div>
         """
         
     cards_html += f"""
         </div>
-        <div class="intentions-family-card floating-element">
-            <span class="family-card-icon">🏡</span>
-            <p class="chapter-paragraph-text" style="margin-bottom:0; font-style:italic;">
-                {c["family_note"]}
+        
+        <div class="keepsake-nested-box intentions-family-card floating-element" style="max-width: 760px; margin: 0 auto; text-align: center; border-color: rgba(251, 191, 36, 0.45);">
+            <span class="family-card-icon" style="font-size: 1.8rem; display: block; margin-bottom: 8px;">🏡</span>
+            <p class="keepsake-quote-text" style="margin-bottom: 0;">
+                “ {c["family_note"]} ”
             </p>
         </div>
     </div>
