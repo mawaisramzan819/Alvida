@@ -1142,68 +1142,59 @@ button[kind="primary"],
 }
 
 .ref-card,
-.journey-card {
+.journey-card,
+.journey-card-container,
+.card-body-box {
   position: relative;
-  border-radius: var(--radius-lg);
-  padding: 12px 16px;
+  border-radius: 16px !important;
+  padding: 14px 16px !important;
   min-height: 150px;
-  max-height: 180px;
   height: 100%;
   cursor: pointer;
   transition: 
     transform var(--duration-hover) var(--ease-gentle),
     box-shadow var(--duration-hover) var(--ease-gentle),
     border-color var(--duration-hover) var(--ease-gentle);
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 14px;
   user-select: none;
   box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: var(--shadow-soft);
-  opacity: 0;
-  transform: translateY(24px) scale(0.98);
-  animation: cascadeIn 900ms var(--ease-emotional-out) forwards;
-  will-change: transform, opacity;
+  background: #fdf5f2 !important;
+  border: 1px solid rgba(229, 101, 130, 0.25) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  will-change: transform, box-shadow;
 }
 
 /* Stagger delays across the 8 feature cards */
-.ref-cards-grid .ref-card:nth-child(1), .journey-card:nth-child(1) { animation-delay: 60ms; }
-.ref-cards-grid .ref-card:nth-child(2), .journey-card:nth-child(2) { animation-delay: 130ms; }
-.ref-cards-grid .ref-card:nth-child(3), .journey-card:nth-child(3) { animation-delay: 200ms; }
-.ref-cards-grid .ref-card:nth-child(4), .journey-card:nth-child(4) { animation-delay: 270ms; }
-.ref-cards-grid .ref-card:nth-child(5), .journey-card:nth-child(5) { animation-delay: 340ms; }
-.ref-cards-grid .ref-card:nth-child(6), .journey-card:nth-child(6) { animation-delay: 410ms; }
-.ref-cards-grid .ref-card:nth-child(7), .journey-card:nth-child(7) { animation-delay: 480ms; }
-.ref-cards-grid .ref-card:nth-child(8), .journey-card:nth-child(8) { animation-delay: 550ms; }
-
-@keyframes cascadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes cardFadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
+.ref-cards-grid .ref-card:nth-child(1), .journey-card:nth-child(1), .float-card-0 { animation-delay: 0.0s !important; }
+.ref-cards-grid .ref-card:nth-child(2), .journey-card:nth-child(2), .float-card-1 { animation-delay: 0.5s !important; }
+.ref-cards-grid .ref-card:nth-child(3), .journey-card:nth-child(3), .float-card-2 { animation-delay: 1.0s !important; }
+.ref-cards-grid .ref-card:nth-child(4), .journey-card:nth-child(4), .float-card-3 { animation-delay: 0.3s !important; }
+.ref-cards-grid .ref-card:nth-child(5), .journey-card:nth-child(5) { animation-delay: 0.6s !important; }
+.ref-cards-grid .ref-card:nth-child(6), .journey-card:nth-child(6) { animation-delay: 1.2s !important; }
+.ref-cards-grid .ref-card:nth-child(7), .journey-card:nth-child(7) { animation-delay: 0.2s !important; }
+.ref-cards-grid .ref-card:nth-child(8), .journey-card:nth-child(8) { animation-delay: 0.8s !important; }
 
 /* Cream Content Cards & Keepsake Hover */
 .ref-card-light {
-  background: var(--surface-light);
-  border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-elevation);
+  background: #fdf5f2 !important;
+  border: 1px solid rgba(229, 101, 130, 0.25) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .ref-card-light:hover,
 .ref-card:hover,
-.journey-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 20px 48px -10px rgba(54, 31, 45, 0.32), 0 0 28px var(--glow-warm);
-  border-color: rgba(233, 101, 130, 0.45);
+.journey-card:hover,
+.journey-card-container:hover {
+  transform: translateY(-8px) scale(1.015) !important;
+  box-shadow: 0 20px 48px -10px rgba(54, 31, 45, 0.42), 0 0 28px rgba(235, 140, 170, 0.35) !important;
+  border-color: rgba(233, 101, 130, 0.55) !important;
+  animation-play-state: paused !important;
 }
 
 .ref-card-thumb-wrap {
@@ -1236,17 +1227,20 @@ button[kind="primary"],
 .ref-card-title,
 .journey-card h3,
 .card-title,
+.card-title-text,
 .journey-card-heading,
 .ref-card-light .ref-card-title {
   font-family: var(--font-display) !important;
-  font-size: 1.15rem !important;
+  font-size: 1.12rem !important;
   font-weight: 700 !important;
-  color: #2b1b24 !important; /* Dark warm plum for crisp high contrast */
-  margin: 0 0 0.2rem 0 !important;
+  color: #24161f !important; /* Dark warm plum for crisp high contrast */
+  margin: 0 0 0.25rem 0 !important;
   line-height: 1.2 !important;
   white-space: normal !important;
   overflow: visible !important;
   text-overflow: unset !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 /* Card Description Text */
@@ -1254,16 +1248,19 @@ button[kind="primary"],
 .ref-card-desc,
 .journey-card p,
 .card-description,
+.card-desc-text,
 .ref-card-light .ref-card-desc {
   font-family: var(--font-body) !important;
   font-size: 0.85rem !important;
-  color: #5a4b52 !important; /* Muted dark rose/gray for readability */
+  color: #594751 !important; /* Muted dark rose/gray for readability */
   line-height: 1.35 !important;
   margin: 0 0 0.4rem 0 !important;
   display: -webkit-box !important;
   -webkit-line-clamp: 2 !important;
   -webkit-box-orient: vertical !important;
   overflow: hidden !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }
 
 .ref-card-btn-row {
@@ -1818,6 +1815,8 @@ button[key="start_journey_btn"],
 /* 2. Journey Menu Cards & Memory Feature Cards */
 .journey-card,
 .ref-card,
+.journey-card-container,
+.card-body-box,
 .memory-card-box,
 .feature-card-item,
 .memory-polaroid-card,
@@ -1827,6 +1826,8 @@ button[key="start_journey_btn"],
 .floating-element,
 div[data-testid="stHorizontalBlock"] > div > div:has(.card-title),
 div[data-testid="stHorizontalBlock"] > div > div:has(h3) {
+  visibility: visible !important;
+  opacity: 1 !important;
   animation: universalFloatPrimary 5.6s ease-in-out infinite alternate !important;
   will-change: transform, box-shadow !important;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
