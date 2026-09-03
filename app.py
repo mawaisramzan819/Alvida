@@ -1138,7 +1138,7 @@ def render_home_overview():
     reset_scroll_to_top()
     c = content.HOME_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
         <div class="chapter-eyebrow-badge">✦ HAMARI KAHANI KA SAFAR</div>
         <h2 class="chapter-main-title">A Farewell That Stays in the Heart</h2>
         <p class="chapter-subtitle-italic">Kuch alvida asal mein khatam nahi hotay — wo bas khoobsurat yaadon ki shuruat ban jatay hain.</p>
@@ -1166,7 +1166,7 @@ def render_welcome():
     reset_scroll_to_top()
     c = content.WELCOME_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1281,7 +1281,7 @@ def render_words():
     reset_scroll_to_top()
     c = content.WORDS_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1310,7 +1310,7 @@ def render_respect():
     reset_scroll_to_top()
     c = content.RESPECT_SECTION
     ui(f"""
-    <div class="v2-chapter-container respect-special-section feature-section-enter">
+    <div class="v2-chapter-container respect-special-section feature-section-enter chapter-page-enter">
         <div class="chapter-eyebrow-badge respect-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title respect-gold-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic respect-gold-sub">{c['subtitle']}</p>
@@ -1347,7 +1347,7 @@ def render_intentions():
     reset_scroll_to_top()
     c = content.INTENTIONS_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1388,7 +1388,7 @@ def render_dua():
     reset_scroll_to_top()
     c = content.DUA_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1418,7 +1418,7 @@ def render_goodbye():
     reset_scroll_to_top()
     c = content.GOODBYE_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>

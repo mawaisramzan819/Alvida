@@ -1643,7 +1643,12 @@ button[kind="primary"],
   margin-bottom: 1.8rem;
 }
 
-.chapter-letter-card {
+.chapter-letter-card,
+.respect-content-card,
+.dua-prayer-card,
+.finale-letter-card,
+.memory-opened-card,
+.finale-revealed-box {
   position: relative;
   background: var(--surface-dark);
   border: 1px solid var(--border-dark);
@@ -1651,6 +1656,9 @@ button[kind="primary"],
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 30px rgba(0, 0, 0, 0.25);
   padding: 2.4rem 2.8rem;
   margin-bottom: 2rem;
+  animation: gentleFloat 5.6s ease-in-out infinite alternate;
+  will-change: transform, box-shadow;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
 .chapter-paragraph-text {
@@ -1693,10 +1701,12 @@ button[kind="primary"],
 }
 
 /* ==========================================================================
-   7. MEMORIES POLAROID CARDS & FLOATING ANIMATIONS
+   7. MEMORIES POLAROID CARDS & UNIVERSAL FLOATING ANIMATIONS
    ========================================================================== */
-/* --- 1. Memories Section Page Entrance --- */
-.memories-page-enter {
+/* --- 1. Chapter & Memories Section Page Entrance --- */
+.chapter-page-enter,
+.memories-page-enter,
+.feature-section-enter {
   animation: memoriesEnter 950ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
   will-change: transform, opacity, filter;
 }
@@ -1718,19 +1728,24 @@ button[kind="primary"],
   }
 }
 
-/* --- 2. Floating / Drifting Cards --- */
+/* --- 2. Floating / Drifting Cards Across All Chapters --- */
 .memory-card-floating,
-.memory-polaroid-card {
+.memory-polaroid-card,
+.intention-item-card,
+.intentions-family-card {
   background: var(--surface-dark);
   border: 1px solid var(--border-dark);
   border-radius: var(--radius-lg);
-  padding: 1.3rem 1rem;
-  text-align: center;
   box-shadow: var(--shadow-card);
-  margin-bottom: 0.6rem;
   animation: gentleFloat 5.2s ease-in-out infinite alternate;
   will-change: transform, box-shadow;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.memory-polaroid-card {
+  padding: 1.3rem 1rem;
+  text-align: center;
+  margin-bottom: 0.6rem;
 }
 
 /* Base keyframe for smooth vertical drift */
@@ -1743,9 +1758,9 @@ button[kind="primary"],
   }
 }
 
-/* Stagger float timings so cards don't bob in unison */
-.memory-float-1, div[data-testid="stColumn"]:nth-child(1) .memory-polaroid-card { animation-duration: 5.0s !important; animation-delay: 0.0s !important; }
-.memory-float-2, div[data-testid="stColumn"]:nth-child(2) .memory-polaroid-card { animation-duration: 5.8s !important; animation-delay: 0.5s !important; }
+/* Stagger float timings across cards and chapters */
+.memory-float-1, div[data-testid="stColumn"]:nth-child(1) .memory-polaroid-card, div[data-testid="stColumn"]:nth-child(1) .intention-item-card { animation-duration: 5.0s !important; animation-delay: 0.0s !important; }
+.memory-float-2, div[data-testid="stColumn"]:nth-child(2) .memory-polaroid-card, div[data-testid="stColumn"]:nth-child(2) .intention-item-card { animation-duration: 5.8s !important; animation-delay: 0.5s !important; }
 .memory-float-3, div[data-testid="stColumn"]:nth-child(3) .memory-polaroid-card { animation-duration: 4.8s !important; animation-delay: 1.1s !important; }
 .memory-float-4, div[data-testid="stColumn"]:nth-child(4) .memory-polaroid-card { animation-duration: 6.2s !important; animation-delay: 0.3s !important; }
 .memory-float-5 { animation-duration: 5.4s !important; animation-delay: 0.8s !important; }
@@ -1753,11 +1768,19 @@ button[kind="primary"],
 .memory-float-7 { animation-duration: 4.9s !important; animation-delay: 0.2s !important; }
 .memory-float-8 { animation-duration: 5.6s !important; animation-delay: 0.9s !important; }
 
-/* Interactive Hover Lift */
+/* Interactive Hover Lift on Any Floating Card / Container */
+.chapter-letter-card:hover,
+.respect-content-card:hover,
+.dua-prayer-card:hover,
+.finale-letter-card:hover,
+.memory-opened-card:hover,
+.finale-revealed-box:hover,
+.intention-item-card:hover,
+.intentions-family-card:hover,
 .memory-card-floating:hover,
 .memory-polaroid-card:hover {
-  animation-play-state: paused !important; /* Hover par float pause ho jaye taake click karna asan ho */
-  transform: translateY(-8px) scale(1.02) !important;
+  animation-play-state: paused !important; /* Hover par float pause ho jaye */
+  transform: translateY(-8px) scale(1.015) !important;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 20px rgba(235, 140, 170, 0.22) !important;
   border-color: rgba(235, 140, 170, 0.45) !important;
 }
