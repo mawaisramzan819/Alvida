@@ -1748,62 +1748,89 @@ button[kind="primary"],
   }
 }
 
-/* --- B. Continuous Floating / Breathing on Cards & Main Boxes --- */
-.floating-element,
-.memory-card-floating,
-.memory-polaroid-card,
-.intention-item-card,
-.intentions-family-card {
-  animation: continuousFloat 5.6s ease-in-out infinite alternate;
-  will-change: transform, box-shadow;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+/* --- B. Continuous Organic Float Keyframe --- */
+@keyframes continuousOrganicFloat {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(0.3deg);
+  }
+  100% {
+    transform: translateY(-2px) rotate(-0.3deg);
+  }
 }
 
 @keyframes continuousFloat {
   0% {
-    transform: translateY(0px);
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(0.3deg);
   }
   100% {
-    transform: translateY(-7px);
+    transform: translateY(-2px) rotate(-0.3deg);
   }
 }
 
-/* Stagger timings so multiple cards don't bob in sync */
-.floating-element:nth-child(2n),
-div[data-testid="stColumn"]:nth-child(2) .floating-element,
-div[data-testid="stColumn"]:nth-child(2) .memory-polaroid-card {
+/* Base class for all cards and interactive containers */
+.memory-card-box,
+.journey-card,
+.feature-card-item,
+.memory-polaroid-card,
+.memory-card-floating,
+.intention-item-card,
+.intentions-family-card,
+.floating-element {
+  animation: continuousOrganicFloat 5.4s ease-in-out infinite alternate !important;
+  will-change: transform, box-shadow !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
+}
+
+/* Stagger floating speeds and delays so they drift independently */
+.memory-card-box:nth-child(1), .feature-card-item:nth-child(1), .memory-float-1, div[data-testid="stColumn"]:nth-child(1) .memory-polaroid-card { animation-duration: 5.2s !important; animation-delay: 0.0s !important; }
+.memory-card-box:nth-child(2), .feature-card-item:nth-child(2), .memory-float-2, div[data-testid="stColumn"]:nth-child(2) .memory-polaroid-card { animation-duration: 6.0s !important; animation-delay: 0.7s !important; }
+.memory-card-box:nth-child(3), .feature-card-item:nth-child(3), .memory-float-3, div[data-testid="stColumn"]:nth-child(3) .memory-polaroid-card { animation-duration: 4.8s !important; animation-delay: 1.3s !important; }
+.memory-card-box:nth-child(4), .feature-card-item:nth-child(4), .memory-float-4, div[data-testid="stColumn"]:nth-child(4) .memory-polaroid-card { animation-duration: 6.4s !important; animation-delay: 0.4s !important; }
+.memory-card-box:nth-child(5), .feature-card-item:nth-child(5), .memory-float-5 { animation-duration: 5.0s !important; animation-delay: 1.0s !important; }
+.memory-card-box:nth-child(6), .feature-card-item:nth-child(6), .memory-float-6 { animation-duration: 5.8s !important; animation-delay: 1.6s !important; }
+.memory-card-box:nth-child(7), .feature-card-item:nth-child(7), .memory-float-7 { animation-duration: 4.9s !important; animation-delay: 0.2s !important; }
+.memory-card-box:nth-child(8), .feature-card-item:nth-child(8), .memory-float-8 { animation-duration: 6.1s !important; animation-delay: 0.9s !important; }
+
+/* Also apply smooth float to memory open buttons */
+div[data-testid="stColumn"] div.stButton > button {
+  animation: continuousOrganicFloat 5.6s ease-in-out infinite alternate !important;
+  will-change: transform, box-shadow !important;
+}
+
+div[data-testid="stColumn"]:nth-child(1) div.stButton > button { animation-duration: 5.2s !important; animation-delay: 0.1s !important; }
+div[data-testid="stColumn"]:nth-child(2) div.stButton > button { animation-duration: 6.0s !important; animation-delay: 0.7s !important; }
+div[data-testid="stColumn"]:nth-child(3) div.stButton > button { animation-duration: 4.8s !important; animation-delay: 1.3s !important; }
+div[data-testid="stColumn"]:nth-child(4) div.stButton > button { animation-duration: 6.4s !important; animation-delay: 0.4s !important; }
+
+/* --- Continuous Float for Bottom Navigation Buttons --- */
+div[data-testid="stHorizontalBlock"] button,
+.nav-action-btn {
+  animation: continuousOrganicFloat 5.6s ease-in-out infinite alternate !important;
+  will-change: transform, box-shadow !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
+}
+
+/* Differentiate button float timing */
+div[data-testid="stHorizontalBlock"] > div:nth-child(1) button {
+  animation-duration: 5.5s !important;
+  animation-delay: 0.2s !important;
+}
+div[data-testid="stHorizontalBlock"] > div:nth-child(2) button {
   animation-duration: 6.2s !important;
-  animation-delay: 0.6s !important;
+  animation-delay: 0.8s !important;
 }
-
-.floating-element:nth-child(3n),
-div[data-testid="stColumn"]:nth-child(3) .floating-element,
-div[data-testid="stColumn"]:nth-child(3) .memory-polaroid-card {
+div[data-testid="stHorizontalBlock"] > div:nth-child(3) button {
   animation-duration: 5.0s !important;
-  animation-delay: 1.2s !important;
+  animation-delay: 0.4s !important;
 }
 
-/* Specific polaroid float classes */
-.memory-float-1 { animation-duration: 5.0s !important; animation-delay: 0.0s !important; }
-.memory-float-2 { animation-duration: 6.2s !important; animation-delay: 0.6s !important; }
-.memory-float-3 { animation-duration: 4.8s !important; animation-delay: 1.1s !important; }
-.memory-float-4 { animation-duration: 6.2s !important; animation-delay: 0.3s !important; }
-.memory-float-5 { animation-duration: 5.4s !important; animation-delay: 0.8s !important; }
-.memory-float-6 { animation-duration: 6.0s !important; animation-delay: 1.4s !important; }
-.memory-float-7 { animation-duration: 4.9s !important; animation-delay: 0.2s !important; }
-.memory-float-8 { animation-duration: 5.6s !important; animation-delay: 0.9s !important; }
-
-/* Base keyframe for smooth vertical drift */
-@keyframes gentleFloat {
-  0% {
-    transform: translateY(0px);
-  }
-  100% {
-    transform: translateY(-7px);
-  }
-}
-
-/* Interactive Hover Lift on Any Floating Card / Container */
+/* Hover State: Pause float and give elevated feedback */
 .chapter-letter-card:hover,
 .respect-content-card:hover,
 .dua-prayer-card:hover,
@@ -1814,9 +1841,13 @@ div[data-testid="stColumn"]:nth-child(3) .memory-polaroid-card {
 .intentions-family-card:hover,
 .memory-card-floating:hover,
 .memory-polaroid-card:hover,
-.floating-element:hover {
+.floating-element:hover,
+.memory-card-box:hover,
+.feature-card-item:hover,
+div[data-testid="stHorizontalBlock"] button:hover,
+div[data-testid="stColumn"] div.stButton > button:hover {
   animation-play-state: paused !important; /* Hover par float pause ho jaye */
-  transform: translateY(-9px) scale(1.015) !important;
+  transform: translateY(-8px) scale(1.015) !important;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(235, 140, 170, 0.25) !important;
   border-color: rgba(235, 140, 170, 0.45) !important;
 }
