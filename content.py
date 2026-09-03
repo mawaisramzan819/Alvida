@@ -223,41 +223,73 @@ WORDS_SECTION = {
 }
 
 # -----------------------------------------------------------------------------
-# CHAPTER 4 — WHY I RESPECT YOU (Special Visual Treatment)
+# CHAPTER 4 — WHY I RESPECT YOU (Crown-Jewel Hero Feature)
 # -----------------------------------------------------------------------------
 RESPECT_SECTION = {
-    "eyebrow": "WOH BAAT JO AP KO AUR KHOOBSURAT BANATI HAI",
-    "title": "Woh Baat Jis Ki Main Hamesha Izzat Karunga",
-    "subtitle": "Ye koi behas nahi, dil se nikli sachi tareef aur izzat hai.",
+    "eyebrow": "✧ MERI NAZAR MEIN AAP KA MAQAM ✧",
+    "title": "Why I Respect You",
+    "subtitle": "Ye koi behas ya shikwa nahi, balke dil ki gehraiyon se nikli sachi tareef aur be-inteha izzat hai.",
+    "plates": [
+        {
+            "tag": "✦ HONORED TRAIT #01",
+            "title": "Rab Ki Mohabbat & Khauf-e-Khuda",
+            "icon": "🕊️",
+            "summary": "Jab bhi maine rabtay ki koshish ki, aap ne mujhe yaad dilaya ke hum na-mehram hain aur aap Allah ko naraz nahi karna chahtin.",
+            "detail": (
+                "Aap ne ye baat logon ke darr ya dikhawe se nahi kahi thi. Ye baat aap ke dil mein apne Rab ki sachi mohabbat, haya aur khauf se nikli thi. "
+                "Is baat ne mujhe ruk kar sochne par majboor kiya ke ek pakiza aur ba-waqar shakhsiyat kaisi hoti hai."
+            ),
+            "quote": "“Aap ki is baat ne meri nazar mein aap ki izzat ko hamesha ke liye aasmaan par pohancha diya.”",
+        },
+        {
+            "tag": "✦ SACRED VIRTUE #02",
+            "title": "Haya, Pakeezgi & Khud-Daari",
+            "icon": "👑",
+            "summary": "Aap ne hamesha apne kirdaar, sharafat aur hudood ki aisi hifazat ki jis ki misaal bohot kam milti hai.",
+            "detail": (
+                "Is se meri izzat aap ke liye kabhi kam nahi hui, balke har guzarte din ke sath barhti gayi. "
+                "Aap ki pakeezgi ne mujhe sikhaya ke kisi ki sachhi qadar karna us ki hudood ka ehtaram karne se shuru hota hai."
+            ),
+            "quote": "“Ek ba-waqar shakhsiyat ka sab se bada gehna us ki haya aur us ka khud-aitemadi se bhara kirdaar hota hai.”",
+        },
+        {
+            "tag": "✦ GUIDING PRINCIPLE #03",
+            "title": "Sahih Raastay Ka Sabaq",
+            "icon": "✨",
+            "summary": "Aap ne mujhe samjhaya ke agar iraada sachcha ho to chhup kar baat karna nahi, balke izzat se saamne aana hota hai.",
+            "detail": (
+                "Aap ke is rawaiye ne mujhe ye samajh diya ke mera pehla maqsad chhupa kar raastay dhoondna nahi hona chahiye, "
+                "balke mujhe itna ba-kirdaar aur qabil banna chahiye ke main sahih tareeqay se, poori izzat ke sath aap ke liye khara ho sakun."
+            ),
+            "quote": "“Iraada sachcha ho to raastay bhi saaf aur pur-waqar hone chahiyein.”",
+        },
+        {
+            "tag": "✦ TIMELESS PLEDGE #04",
+            "title": "Aap Ke Imaan Aur Sukoon Ki Hifazat",
+            "icon": "🤍",
+            "summary": "Main aap ko kabhi aisi kashmakash mein nahi dekhna chahta jahan aap ko apne Rab aur jazbaat mein se kisi ko chunna paray.",
+            "detail": (
+                "Agar kabhi Allah ne hamari qismat mein bhalayi likhi, to meri hamesha ye dua rahegi ke woh aise ho jahan Allah raazi ho, "
+                "aap ka ghar aur dil sukoon mein ho, aap ki izzat mehfooz ho, aur koi chhupa hua raasta ya dabao na ho."
+            ),
+            "quote": "“Aap ki izzat aur sukoon meri har khwahish se pehle hai aur hamesha rahegi.”",
+        },
+    ],
     "main_content": [
-        (
-            "Jab bhi maine ap se contact karne ki koshish ki, ap ne ek baat kahi jo mujhe "
-            "ruk kar sochne par majboor kar deti thi."
-        ),
-        (
-            "Ap ne mujhe yaad dilaya ke hum na-mehram hain, aur ke ap Allah ko naraz nahi karna chahtin. "
-            "Ye baat ap ne logon ke darr se nahi kahi thi. Ye baat ap ne apne Rab ki mohabbat aur khauf se kahi thi."
-        ),
-        (
-            "Isse meri izzat ap k liye kam nahi hui—balke aur barh gayi."
-        ),
-        (
-            "Isse mujhe ye samajh aaya ke agar mera iraada sachcha hai, to mera pehla maqsad "
-            "chhup kar baat karne ke tareeqe dhoondna nahi hona chahiye. Mera pehla maqsad ye hona chahiye "
-            "ke main itna qabil banun ke ap k saamne sahih tareeqe se, izzat ke saath aa sakun."
-        ),
-        (
-            "Main ap ko kabhi us position mein nahi rakhna chahta jahan ap ko apne jazbaat "
-            "aur apne Rab ke rishte mein se kisi ek ko chunna pade."
-        ),
+        "Jab bhi maine ap se contact karne ki koshish ki, ap ne ek baat kahi jo mujhe ruk kar sochne par majboor kar deti thi.",
+        "Ap ne mujhe yaad dilaya ke hum na-mehram hain, aur ke ap Allah ko naraz nahi karna chahtin. Ye baat ap ne logon ke darr se nahi kahi thi. Ye baat ap ne apne Rab ki mohabbat aur khauf se kahi thi.",
+        "Isse meri izzat ap k liye kam nahi hui—balke aur barh gayi.",
+        "Isse mujhe ye samajh aaya ke agar mera iraada sachcha hai, to mera pehla maqsad chhup kar baat karne ke tareeqe dhoondna nahi hona chahiye. Mera pehla maqsad ye hona chahiye ke main itna qabil banun ke ap k saamne sahih tareeqe se, izzat ke saath aa sakun.",
+        "Main ap ko kabhi us position mein nahi rakhna chahta jahan ap ko apne jazbaat aur apne Rab ke rishte mein se kisi ek ko chunna pade."
     ],
     "golden_line": (
-        "Meri sab se bari koshish ye nahi honi chahiye ke ap ko ek aur message bhejun. "
-        "Meri sab se bari koshish ye honi chahiye ke main is qabil banun ke sahih raaste se ap k liye aa sakun."
+        "Meri sab se bari koshish ye nahi honi chahiye ke main chhupe raastay dhoondun... "
+        "meri koshish ye honi chahiye ke main itna qabil banun ke sahih raastay aur poori izzat ke sath aa sakun."
     ),
+    "signature_seal": "Izzat jo alfaaz se nahi, dil ki gehraiyon se di jaati hai.",
     "closing": (
-        "Agar kabhi Allah ne hamari kismet mein bhalayi likhi, to main chahta hoon ke woh aise ho "
-        "jahan Allah raazi ho, ap ka ghar sukoon mein ho, ap ki izzat salamat ho, "
+        "Agar kabhi Allah ne hamari qismat mein bhalayi likhi, to main chahta hoon ke woh aise ho "
+        "jahan Allah raazi ho, aap ka ghar sukoon mein ho, aap ki izzat salamat ho, "
         "aur koi chhupa hua raasta ya dabao na ho."
     ),
 }

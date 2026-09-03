@@ -2189,49 +2189,350 @@ div[data-testid="stColumn"] div.stButton > button:hover {
 }
 
 /* ==========================================================================
-   8. RESPECT, INTENTIONS & DUA SPECIAL CARDS
+   8. CROWN-JEWEL HERO FEATURE: WHY I RESPECT YOU
    ========================================================================== */
-.respect-content-card {
-  background: var(--surface-dark);
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-xl);
-  padding: 2.4rem 2.8rem;
-  box-shadow: var(--shadow-card);
+
+/* --- A. Ambient Golden-Rose Spotlight Backdrop --- */
+.respect-special-section {
+  position: relative;
+  background: radial-gradient(circle at 50% 20%, rgba(255, 215, 0, 0.08) 0%, rgba(226, 85, 126, 0.12) 42%, transparent 75%) !important;
+  border-radius: 28px !important;
+  padding: 2.2rem 1.4rem !important;
+  overflow: visible !important;
 }
 
-.respect-point-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 1rem;
+.respect-badge {
+  background: linear-gradient(135deg, rgba(234, 179, 120, 0.22) 0%, rgba(233, 101, 130, 0.22) 100%) !important;
+  border: 1px solid rgba(234, 179, 120, 0.5) !important;
+  color: #EAB378 !important;
+  letter-spacing: 0.16em !important;
+  box-shadow: 0 0 20px rgba(234, 179, 120, 0.25) !important;
+  padding: 6px 18px !important;
 }
 
-.respect-gold-bullet {
-  color: var(--accent-gold);
-  font-size: 1.15rem;
-  line-height: 1.7;
+.respect-gold-title {
+  font-size: clamp(34px, 4.2vw, 52px) !important;
+  background: linear-gradient(135deg, #ffffff 0%, #fff0f3 40%, #f7d6e0 70%, #eab378 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  text-shadow: 0 0 35px rgba(234, 179, 120, 0.35) !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.respect-gold-sub {
+  color: #F5B18F !important;
+  max-width: 620px !important;
+  margin: 0 auto 2.4rem auto !important;
+  font-size: 1.12rem !important;
+  line-height: 1.65 !important;
+}
+
+/* Floating Starlight Ember Particle Layer */
+.respect-starlight-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.starlight-ember {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #ffecd2;
+  box-shadow: 0 0 10px #fcb69f, 0 0 20px #e2557e;
+  animation: emberDrift 6s ease-in-out infinite alternate;
+  opacity: 0.6;
+}
+
+.starlight-ember:nth-child(1) { top: 15%; left: 12%; animation-duration: 7s; }
+.starlight-ember:nth-child(2) { top: 35%; right: 14%; animation-duration: 5.5s; width: 5px; height: 5px; }
+.starlight-ember:nth-child(3) { top: 65%; left: 18%; animation-duration: 8s; }
+.starlight-ember:nth-child(4) { top: 80%; right: 20%; animation-duration: 6.2s; width: 6px; height: 6px; }
+
+@keyframes emberDrift {
+  0% { transform: translateY(0px) scale(0.9); opacity: 0.3; }
+  50% { transform: translateY(-16px) scale(1.2); opacity: 0.8; }
+  100% { transform: translateY(-30px) scale(0.9); opacity: 0.3; }
+}
+
+/* --- B. Pledge / Honor Plates Grid --- */
+.respect-plates-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 22px !important;
+  width: 100% !important;
+  max-width: 820px !important;
+  margin: 0 auto 2.4rem auto !important;
+  z-index: 1 !important;
+  position: relative !important;
+}
+
+.respect-honor-plate {
+  position: relative !important;
+  background: rgba(22, 20, 36, 0.88) !important;
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.32) !important;
+  border-radius: 20px !important;
+  padding: 24px 24px !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease !important;
+  animation: gentleBreathingFloatAlt 4s ease-in-out infinite alternate !important;
+}
+
+.respect-honor-plate:hover {
+  transform: translateY(-8px) scale(1.018) !important;
+  border-color: rgba(244, 143, 177, 0.7) !important;
+  box-shadow: 0 20px 48px rgba(226, 85, 126, 0.3), 0 0 26px rgba(234, 179, 120, 0.22) !important;
+}
+
+.respect-plate-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 14px !important;
+}
+
+.respect-crystal-badge {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 12px !important;
+  background: radial-gradient(circle, rgba(233, 101, 130, 0.28) 0%, rgba(234, 179, 120, 0.15) 100%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.45) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 22px !important;
+  box-shadow: 0 0 16px rgba(233, 101, 130, 0.3) !important;
+  flex-shrink: 0 !important;
+}
+
+.respect-plate-tag {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  color: #EAB378 !important;
+}
+
+.respect-plate-title {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f7d6e0 50%, #f78da7 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  margin: 0 0 10px 0 !important;
+  line-height: 1.25 !important;
+}
+
+.respect-plate-summary {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 15.5px !important;
+  line-height: 1.72 !important;
+  color: #F5E8E2 !important;
+  margin: 0 0 14px 0 !important;
+  flex-grow: 1 !important;
+}
+
+.respect-plate-action {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  color: #E96582 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  margin-top: auto !important;
+}
+
+/* --- C. Deep Reflection Spotlight Modal (Certificate / Keepsake) --- */
+.respect-spotlight-modal-overlay {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(8, 7, 14, 0.86) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  z-index: 9999999 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  padding: 1.5rem !important;
+  animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+.respect-spotlight-card {
+  position: relative !important;
+  background: radial-gradient(circle at 50% 0%, #291b2c 0%, #15111f 100%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.5) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), 0 0 45px rgba(233, 101, 130, 0.3) !important;
+  padding: 2.4rem 2.2rem !important;
+  max-width: 580px !important;
+  width: 100% !important;
+  text-align: center !important;
+  animation: modalCardPop 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+.respect-spotlight-lantern {
+  font-size: 38px !important;
+  margin-bottom: 8px !important;
+  filter: drop-shadow(0 0 16px rgba(234, 179, 120, 0.6)) !important;
+}
+
+.respect-spotlight-badge {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase !important;
+  color: #EAB378 !important;
+  margin-bottom: 6px !important;
+}
+
+.respect-spotlight-title {
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 1.85rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  margin: 0 0 14px 0 !important;
+  text-shadow: 0 0 24px rgba(244, 143, 177, 0.35) !important;
+}
+
+.respect-spotlight-divider {
+  width: 60px !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, #E96582, transparent) !important;
+  margin: 0 auto 18px auto !important;
+}
+
+.respect-spotlight-body {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 16.5px !important;
+  line-height: 1.8 !important;
+  color: #F5E8E2 !important;
+  text-align: left !important;
+  margin-bottom: 20px !important;
+}
+
+.respect-spotlight-quote-box {
+  background: rgba(233, 101, 130, 0.08) !important;
+  border-left: 3px solid #E96582 !important;
+  border-radius: 0 12px 12px 0 !important;
+  padding: 14px 18px !important;
+  text-align: left !important;
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 16.5px !important;
+  font-style: italic !important;
+  color: #ffccd8 !important;
+  line-height: 1.65 !important;
+  margin-bottom: 22px !important;
+}
+
+.respect-spotlight-close-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(244, 143, 177, 0.4) !important;
+  border-radius: 999px !important;
+  color: #F5E8E2 !important;
+  padding: 9px 24px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.88rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+}
+
+.respect-spotlight-close-btn:hover {
+  background: rgba(233, 101, 130, 0.25) !important;
+  border-color: #E96582 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 18px rgba(233, 101, 130, 0.4) !important;
+}
+
+/* --- D. Soulful Signature Affirmation & Wax Seal --- */
+.respect-seal-container {
+  max-width: 680px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
 }
 
 .respect-golden-banner {
-  background: rgba(234, 179, 120, 0.1);
-  border: 1px solid rgba(234, 179, 120, 0.3);
-  border-radius: var(--radius-md);
-  padding: 1.4rem 2rem;
-  margin: 2rem 0;
-  text-align: center;
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  font-style: italic;
-  color: var(--accent-gold);
+  background: radial-gradient(circle at 50% 50%, rgba(234, 179, 120, 0.14) 0%, rgba(233, 101, 130, 0.08) 100%) !important;
+  border: 1.5px solid rgba(234, 179, 120, 0.4) !important;
+  border-radius: 18px !important;
+  padding: 1.6rem 2.2rem !important;
+  margin: 1.8rem auto !important;
+  text-align: center !important;
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 18px !important;
+  font-style: italic !important;
+  line-height: 1.75 !important;
+  color: #ffecd2 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28), 0 0 20px rgba(234, 179, 120, 0.15) !important;
 }
 
-.intention-item-card {
-  background: var(--surface-dark);
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  margin-bottom: 1.2rem;
-  box-shadow: var(--shadow-card);
+.respect-wax-seal-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  background: rgba(24, 18, 28, 0.9) !important;
+  border: 1.5px solid rgba(234, 179, 120, 0.5) !important;
+  border-radius: 999px !important;
+  padding: 10px 24px !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 16px rgba(234, 179, 120, 0.25) !important;
+  margin: 1rem auto 1.4rem auto !important;
+}
+
+.respect-wax-seal-icon {
+  font-size: 20px !important;
+  color: #EAB378 !important;
+}
+
+.respect-wax-seal-text {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 15.5px !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  color: #ffeedd !important;
+}
+
+.respect-closing-text {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 16.5px !important;
+  line-height: 1.8 !important;
+  font-style: italic !important;
+  color: #D8C6C3 !important;
+  max-width: 640px !important;
+  margin: 0 auto !important;
+}
+
+@media (max-width: 768px) {
+  .respect-plates-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .respect-honor-plate {
+    padding: 20px 18px !important;
+  }
+  .respect-spotlight-card {
+    padding: 1.8rem 1.4rem !important;
+  }
 }
 
 /* ========================================================

@@ -564,6 +564,11 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             clickStreamlitBridge('_bridge_close_final_modal', 'bridge_close_final_modal');
         }};
 
+        window.parent.__farewellCloseRespectModal = function() {{
+            window.parent.__farewellResetScroll();
+            clickStreamlitBridge('_bridge_close_respect_modal', 'bridge_close_respect_modal');
+        }};
+
         // 7. Global Event Delegation on Parent Document (Intercepts clicks regardless of Streamlit DOM updates)
         if (window.parent.__farewellClickDelegation) {{
             pDoc.removeEventListener('click', window.parent.__farewellClickDelegation, true);
@@ -573,11 +578,19 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             const target = e.target;
             if (!target) return;
 
-            const closeModalTrigger = target.closest('.final-spotlight-close-btn, #finalSpotlightModalOverlay');
-            if (closeModalTrigger && (target.id === 'finalSpotlightModalOverlay' || target.closest('.final-spotlight-close-btn'))) {{
+            const closeFinalModalTrigger = target.closest('.final-spotlight-close-btn, #finalSpotlightModalOverlay');
+            if (closeFinalModalTrigger && (target.id === 'finalSpotlightModalOverlay' || target.closest('.final-spotlight-close-btn'))) {{
                 e.preventDefault();
                 e.stopPropagation();
                 window.parent.__farewellCloseFinalModal();
+                return;
+            }}
+
+            const closeRespectTrigger = target.closest('.respect-spotlight-close-btn, #respectSpotlightModalOverlay');
+            if (closeRespectTrigger && (target.id === 'respectSpotlightModalOverlay' || target.closest('.respect-spotlight-close-btn'))) {{
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.__farewellCloseRespectModal();
                 return;
             }}
 
@@ -1185,6 +1198,11 @@ def on_close_final_words():
     st.session_state["show_final_words"] = False
 
 
+def on_close_respect_plate():
+    """Callback to close centered spotlight respect modal."""
+    st.session_state["selected_respect_plate"] = None
+
+
 # -----------------------------------------------------------------------------
 # 11. Bottom Navigation Bar (Back to Journey + Next/Prev Chapter)
 # -----------------------------------------------------------------------------
@@ -1246,7 +1264,7 @@ def render_hidden_bridge_dispatcher():
         st.markdown(
             """
             <style>
-            .st-key-_bridge_landing, .st-key-_bridge_menu, .st-key-_bridge_back_to_menu, .st-key-_bridge_close_final_modal,
+            .st-key-_bridge_landing, .st-key-_bridge_menu, .st-key-_bridge_back_to_menu, .st-key-_bridge_close_final_modal, .st-key-_bridge_close_respect_modal,
             [class*="st-key-_bridge_"],
             div[data-testid="stElementContainer"]:has([class*="st-key-_bridge_"]),
             div[data-testid="stElementContainer"]:has(button[key*="_bridge_"]),
@@ -1278,6 +1296,7 @@ def render_hidden_bridge_dispatcher():
             st.button("bridge_go_menu", key="_bridge_menu", help="bridge_hidden", on_click=on_navigate_start_journey)
             st.button("bridge_back_to_menu", key="_bridge_back_to_menu", help="bridge_hidden", on_click=on_navigate_back_to_menu)
             st.button("bridge_close_final_modal", key="_bridge_close_final_modal", help="bridge_hidden", on_click=on_close_final_words)
+            st.button("bridge_close_respect_modal", key="_bridge_close_respect_modal", help="bridge_hidden", on_click=on_close_respect_plate)
 
             for chap in config.CHAPTERS:
                 st.button(
@@ -1850,34 +1869,123 @@ def render_words():
 
 
 # -----------------------------------------------------------------------------
-# CHAPTER 4 — WHY I RESPECT YOU (Special Golden Visual Section)
+# CHAPTER 4 — WHY I RESPECT YOU (Crown-Jewel Hero Feature)
 # -----------------------------------------------------------------------------
 def render_respect():
-    """Render Chapter 4: Respect & Na-mehram boundary admiration with smooth 3D slide-down."""
+    """Render Chapter 4: Crown-Jewel Hero Feature with ambient gold/rose glow and Honor Plates."""
     reset_scroll_to_top()
     c = content.RESPECT_SECTION
+    plates = c.get("plates", [])
+
     ui(f"""
     <div class="v2-chapter-container respect-special-section feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_respect" id="sec_wrapper_respect">
+        <!-- Ambient Starlight Ember Particles -->
+        <div class="respect-starlight-layer">
+            <div class="starlight-ember"></div>
+            <div class="starlight-ember"></div>
+            <div class="starlight-ember"></div>
+            <div class="starlight-ember"></div>
+        </div>
+
         <div class="chapter-eyebrow-badge respect-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title respect-gold-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic respect-gold-sub">{c['subtitle']}</p>
-        
-        <div class="respect-content-card floating-element">
     """)
-    for point in c["main_content"]:
+
+    # 1. Pledge / Honor Plates Grid (Interactive Keepsake Cards)
+    if plates:
+        cols_row1 = st.columns(2, gap="medium")
+        for i in range(min(2, len(plates))):
+            plate = plates[i]
+            with cols_row1[i]:
+                ui(f"""
+                <div class="respect-honor-plate floating-element" id="plate_{i}">
+                    <div class="respect-plate-header">
+                        <span class="respect-plate-tag">{plate['tag']}</span>
+                        <div class="respect-crystal-badge">{plate['icon']}</div>
+                    </div>
+                    <h3 class="respect-plate-title">{plate['title']}</h3>
+                    <p class="respect-plate-summary">{plate['summary']}</p>
+                    <div class="respect-plate-action">
+                        <span>Read Deep Reflection</span> <span>✦</span>
+                    </div>
+                </div>
+                """)
+                if st.button(f"Deep Reflection #{i+1} ✦", key=f"respect_btn_{i}", use_container_width=True):
+                    st.session_state["selected_respect_plate"] = i
+                    st.rerun()
+
+        if len(plates) > 2:
+            cols_row2 = st.columns(2, gap="medium")
+            for i in range(2, min(4, len(plates))):
+                plate = plates[i]
+                col_idx = i - 2
+                with cols_row2[col_idx]:
+                    ui(f"""
+                    <div class="respect-honor-plate floating-element" id="plate_{i}">
+                        <div class="respect-plate-header">
+                            <span class="respect-plate-tag">{plate['tag']}</span>
+                            <div class="respect-crystal-badge">{plate['icon']}</div>
+                        </div>
+                        <h3 class="respect-plate-title">{plate['title']}</h3>
+                        <p class="respect-plate-summary">{plate['summary']}</p>
+                        <div class="respect-plate-action">
+                            <span>Read Deep Reflection</span> <span>✦</span>
+                        </div>
+                    </div>
+                    """)
+                    if st.button(f"Deep Reflection #{i+1} ✦", key=f"respect_btn_{i}", use_container_width=True):
+                        st.session_state["selected_respect_plate"] = i
+                        st.rerun()
+
+    # 2. Deep Reflection Spotlight Modal (Certificate / Keepsake)
+    selected_idx = st.session_state.get("selected_respect_plate")
+    if selected_idx is not None and 0 <= selected_idx < len(plates):
+        plate = plates[selected_idx]
         ui(f"""
-        <div class="respect-point-item">
-            <span class="respect-gold-bullet">✦</span>
-            <span class="chapter-paragraph-text">{point}</span>
+        <div class="respect-spotlight-modal-overlay" id="respectSpotlightModalOverlay">
+            <div class="respect-spotlight-card finale-modal-floating">
+                <div class="respect-spotlight-lantern">{plate['icon']}</div>
+                <div class="respect-spotlight-badge">{plate['tag']}</div>
+                <h3 class="respect-spotlight-title">{plate['title']}</h3>
+                <div class="respect-spotlight-divider"></div>
+                <div class="respect-spotlight-body">
+                    {plate['detail']}
+                </div>
+                <div class="respect-spotlight-quote-box">
+                    {plate['quote']}
+                </div>
+                <div style="margin-top: 1.4rem; text-align: center;">
+                    <button class="respect-spotlight-close-btn" onclick="window.parent.__farewellCloseRespectModal && window.parent.__farewellCloseRespectModal()">
+                        Close Reflection ×
+                    </button>
+                </div>
+            </div>
         </div>
         """)
 
+        # Fallback button for native Streamlit interaction
+        rcol1, rcol2, rcol3 = st.columns([1, 1.6, 1])
+        with rcol2:
+            st.button(
+                "Close Reflection ×",
+                key="close_respect_plate_btn",
+                type="secondary",
+                use_container_width=True,
+                on_click=on_close_respect_plate,
+            )
+
+    # 3. Soulful Signature Affirmation & Wax Seal
     ui(f"""
+        <div class="respect-seal-container">
             <div class="respect-golden-banner floating-element">
                 “ {c["golden_line"]} ”
             </div>
-            
-            <p class="chapter-paragraph-text" style="text-align:center; font-style:italic; margin-top:2rem;">
+            <div class="respect-wax-seal-badge floating-element">
+                <span class="respect-wax-seal-icon">👑</span>
+                <span class="respect-wax-seal-text">{c.get("signature_seal", "Izzat jo alfaaz se nahi, dil ki gehraiyon se di jaati hai.")}</span>
+            </div>
+            <p class="respect-closing-text">
                 {c["closing"]}
             </p>
         </div>
@@ -2063,6 +2171,8 @@ def main():
         st.session_state.show_final_words = False
     if "selected_memory" not in st.session_state:
         st.session_state.selected_memory = None
+    if "selected_respect_plate" not in st.session_state:
+        st.session_state.selected_respect_plate = None
     if "memory_transition_target" not in st.session_state:
         st.session_state.memory_transition_target = None
     if "pending_section" not in st.session_state:
