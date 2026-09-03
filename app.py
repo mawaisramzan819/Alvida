@@ -167,76 +167,22 @@ def render_cinematic_atmosphere(active_section: str):
 
 
 # -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # 5. Startup State Machine & Audio Engine (DOM Persistent Injection)
 # -----------------------------------------------------------------------------
 def render_initial_splash_loader():
-    """Initial App Launch Splash (Refresh Par)"""
-    audio_b64 = get_audio_base64()
-    audio_src = f"data:audio/mp3;base64,{audio_b64}" if audio_b64 else "/app/static/farewell.mp3"
-
-    # 1. Initialize persistent audio element on parent DOM
-    components.html(
-        f"""
-    <script>
-    (function() {{
-        const pDoc = window.parent.document;
-
-        // Persistent Audio Element on parent body
-        let audio = pDoc.getElementById('farewellBgAudioMain');
-        if (!audio) {{
-            audio = pDoc.createElement('audio');
-            audio.id = 'farewellBgAudioMain';
-            audio.loop = true;
-            audio.preload = 'auto';
-            audio.src = '{audio_src}';
-            pDoc.body.appendChild(audio);
-            window.parent.__farewell_audio = audio;
-        }}
-
-        // Trigger autoplay only if user hasn't paused previously
-        const isMutedByUser = (localStorage.getItem('farewell_music_paused') === 'true');
-        if (audio && audio.paused && !isMutedByUser) {{
-            audio.volume = 0;
-            let playPromise = audio.play();
-            if (playPromise !== undefined) {{
-                playPromise.then(() => {{
-                    let start = performance.now();
-                    function fadeIn() {{
-                        let el = performance.now() - start;
-                        let frac = Math.min(el / 1500, 1);
-                        audio.volume = frac * 0.22;
-                        if (frac < 1) requestAnimationFrame(fadeIn);
-                    }}
-                    requestAnimationFrame(fadeIn);
-                }}).catch(() => {{
-                    const unlockAction = () => {{
-                        if (localStorage.getItem('farewell_music_paused') !== 'true') {{
-                            audio.play().then(() => {{
-                                audio.volume = 0.22;
-                            }}).catch(() => {{}});
-                        }}
-                        pDoc.removeEventListener('click', unlockAction);
-                        pDoc.removeEventListener('touchstart', unlockAction);
-                        pDoc.removeEventListener('pointerdown', unlockAction);
-                    }};
-                    pDoc.addEventListener('click', unlockAction, {{ passive: true }});
-                    pDoc.addEventListener('touchstart', unlockAction, {{ passive: true }});
-                    pDoc.addEventListener('pointerdown', unlockAction, {{ passive: true }});
-                }});
-            }}
-        }}
-    }})();
-    </script>
-    """,
-        height=0,
-        width=0,
-    )
-
-    # 2. Render Full-Screen Centered Glowing Initial Splash Loader with Atomic Inline Style
+    """Initial App Launch Splash with 2.5s Sweeping Analyzer & Universal Audio Engine."""
     st.markdown(
         """
+    <!-- Native Persistent Audio Tag with Multi-Source Fallback (Zero-latency Streaming) -->
+    <audio id="farewellBgAudioMain" loop preload="auto" style="display:none;">
+        <source src="app/static/farewell.mp3" type="audio/mp3">
+        <source src="static/farewell.mp3" type="audio/mp3">
+        <source src="/app/static/farewell.mp3" type="audio/mp3">
+    </audio>
+
     <style>
-    .cinematic-loader-backdrop {
+    .cinematic-splash-overlay {
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
@@ -250,6 +196,14 @@ def render_initial_splash_loader():
         z-index: 99999999 !important;
         text-align: center !important;
         padding: 2rem !important;
+        animation: splashFadeOut 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+        pointer-events: none !important;
+    }
+    @keyframes splashFadeOut {
+        0% { opacity: 1; visibility: visible; pointer-events: auto; }
+        72% { opacity: 1; visibility: visible; pointer-events: auto; }
+        98% { opacity: 0; visibility: visible; pointer-events: none; }
+        100% { opacity: 0; visibility: hidden; pointer-events: none; display: none; }
     }
     .loader-heart-orb {
         width: 70px !important;
@@ -286,7 +240,7 @@ def render_initial_splash_loader():
         width: 100% !important;
         background: linear-gradient(90deg, #e2557e, #f78da7, #ffffff) !important;
         border-radius: 999px !important;
-        animation: analyzerFill 2.0s cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
+        animation: analyzerFill 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
     }
     @keyframes analyzerFill {
         0% { transform: translateX(-100%); }
@@ -319,13 +273,72 @@ def render_initial_splash_loader():
         margin: 0 auto !important;
     }
     </style>
-    <div class="cinematic-loader-backdrop">
+    <div class="cinematic-splash-overlay" id="cinematicInitialSplashOverlay">
         <div class="loader-heart-orb">❤️</div>
         <div class="loader-title-glow">A Farewell That Stays</div>
         <div class="loader-sub-glow">Opening a story that was never forgotten...</div>
         <div class="analyzer-track"><div class="analyzer-glow-fill"></div></div>
         <div class="loader-quote-glow">“Some goodbyes stay in the heart forever.”</div>
     </div>
+    <script>
+    (function() {
+        // Universal Audio Initializer & Multi-Trigger Gesture Unlocker
+        function setupAudio() {
+            let pDoc;
+            try { pDoc = window.parent && window.parent.document ? window.parent.document : document; } catch(e) { pDoc = document; }
+            let audio = pDoc.getElementById('farewellBgAudioMain') || document.getElementById('farewellBgAudioMain');
+            if (!audio) {
+                audio = document.createElement('audio');
+                audio.id = 'farewellBgAudioMain';
+                audio.loop = true;
+                audio.preload = 'auto';
+                audio.innerHTML = '<source src="app/static/farewell.mp3" type="audio/mp3"><source src="static/farewell.mp3" type="audio/mp3"><source src="/app/static/farewell.mp3" type="audio/mp3">';
+                document.body.appendChild(audio);
+                try { if (pDoc && pDoc.body && pDoc !== document) pDoc.body.appendChild(audio.cloneNode(true)); } catch(e) {}
+            }
+            if (window.parent) window.parent.__farewell_audio = audio;
+
+            const isMuted = (localStorage.getItem('farewell_music_paused') === 'true');
+            if (audio && !isMuted) {
+                audio.volume = 0.22;
+                let playProm = audio.play();
+                if (playProm !== undefined) {
+                    playProm.then(function() {
+                        if (window.parent && window.parent.__farewellUpdateMusicUI) {
+                            window.parent.__farewellUpdateMusicUI();
+                        }
+                    }).catch(function() {
+                        function unlockAudio() {
+                            if (localStorage.getItem('farewell_music_paused') !== 'true') {
+                                audio.play().then(function() {
+                                    audio.volume = 0.22;
+                                    if (window.parent && window.parent.__farewellUpdateMusicUI) {
+                                        window.parent.__farewellUpdateMusicUI();
+                                    }
+                                }).catch(function() {});
+                            }
+                            ['click', 'touchstart', 'pointerdown', 'keydown'].forEach(function(evt) {
+                                document.removeEventListener(evt, unlockAudio);
+                                try { if (pDoc) pDoc.removeEventListener(evt, unlockAudio); } catch(e) {}
+                            });
+                        }
+                        ['click', 'touchstart', 'pointerdown', 'keydown'].forEach(function(evt) {
+                            document.addEventListener(evt, unlockAudio, { passive: true, once: true });
+                            try { if (pDoc) pDoc.addEventListener(evt, unlockAudio, { passive: true, once: true }); } catch(e) {}
+                        });
+                    });
+                }
+            }
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', setupAudio);
+        } else {
+            setupAudio();
+        }
+        setTimeout(setupAudio, 300);
+        setTimeout(setupAudio, 1000);
+    })();
+    </script>
     """,
         unsafe_allow_html=True,
     )
@@ -1212,6 +1225,21 @@ def render_landing():
     c = content.HOME_SECTION
     banner_b64 = get_hero_panorama_b64()
 
+    # 1. Initial Splash Overlay & Audio Engine (Zero-latency 2.5s dissolve on first load / refresh)
+    if not st.session_state.get("initial_splash_done", False):
+        render_initial_splash_loader()
+        st.session_state["initial_splash_done"] = True
+        st.session_state["startup_completed"] = True
+    else:
+        # Guarantee Audio Engine is active on subsequent landings
+        ui("""
+        <audio id="farewellBgAudioMain" loop preload="auto" style="display:none;">
+            <source src="app/static/farewell.mp3" type="audio/mp3">
+            <source src="static/farewell.mp3" type="audio/mp3">
+            <source src="/app/static/farewell.mp3" type="audio/mp3">
+        </audio>
+        """)
+
     visited_set = st.session_state.get("visited_chapters", set())
     visited_pct = int((len(visited_set) / len(config.CHAPTERS)) * 100)
     hero_pct = max(12, visited_pct)
@@ -1955,16 +1983,7 @@ def main():
     # 2. Global Styles
     load_styles()
 
-    # 3. PHASE 1: Initial App Launch Splash Loader (~1.8s)
-    if not st.session_state.initial_splash_done:
-        render_full_screen_initial_loader()
-        time.sleep(1.8)
-        st.session_state.initial_splash_done = True
-        st.session_state.startup_completed = True
-        st.session_state.app_view = "landing"
-        st.rerun()
-
-    # 4. TRANSITION ANALYZER GUARDS (Strictly executed BEFORE any view, sidebar, or atmospheric rendering)
+    # 3. TRANSITION ANALYZER GUARDS (Strictly executed BEFORE any view, sidebar, or atmospheric rendering)
     if st.session_state.app_view == "journey_transition":
         reset_scroll_to_top()
         render_journey_analyzer_loader()
