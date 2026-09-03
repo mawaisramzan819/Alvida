@@ -3390,6 +3390,32 @@ div[data-testid="stColumn"] div.stButton > button:hover {
   }
 }
 
+/* ==========================================================================
+   SYNCHRONIZED LANDING STAGE ATOMIC MOUNT
+   ========================================================================== */
+.landing-unified-stage,
+.landing-mount-enter {
+  animation: landingStageEnter 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  will-change: opacity, transform, filter !important;
+}
+
+@keyframes landingStageEnter {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.985);
+    filter: blur(10px);
+  }
+  35% {
+    opacity: 0.8;
+    filter: blur(3px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0px) scale(1);
+    filter: blur(0px);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -3399,3 +3425,4 @@ div[data-testid="stColumn"] div.stButton > button:hover {
     transform: none !important;
   }
 }
+

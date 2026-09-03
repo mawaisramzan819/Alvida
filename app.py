@@ -491,7 +491,74 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             }}
         }};
 
-        // 6. Global Navigation Triggers (Reliable, fast, and no page reload!)
+        // 6. Global Navigation Triggers (Reliable, fast, and instant 0.0ms analyzer overlay)
+        window.parent.__farewellShowInstantAnalyzer = function(chapterId, mode) {{
+            try {{
+                let overlay = pDoc.getElementById('instantNavAnalyzerOverlay');
+                if (!overlay) {{
+                    overlay = pDoc.createElement('div');
+                    overlay.id = 'instantNavAnalyzerOverlay';
+                    overlay.className = 'section-analyzer-backdrop';
+                    overlay.style.cssText = 'position:fixed!important;top:0!important;left:0!important;width:100vw!important;height:100vh!important;z-index:99999999!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;background:radial-gradient(circle at center, #1e131d 0%, #0a070a 100%)!important;';
+                    pDoc.body.appendChild(overlay);
+                }}
+
+                let title = "Opening Chapter...";
+                let sub = "Agla safha khul raha hai...";
+                let icon = "✦";
+                let quote = "“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”";
+
+                const chapMap = {{
+                    'home': {{ label: 'Story Overview', icon: '🏠' }},
+                    'welcome': {{ label: 'Welcome', icon: '♡' }},
+                    'memories': {{ label: 'Memories', icon: '🖼️' }},
+                    'words': {{ label: 'Words From My Heart', icon: '🪶' }},
+                    'respect': {{ label: 'Why I Respect You', icon: '⭐' }},
+                    'intentions': {{ label: 'Intentions', icon: '💝' }},
+                    'dua': {{ label: 'Dua', icon: '🤲' }},
+                    'goodbye': {{ label: 'Final Note', icon: '✉️' }}
+                }};
+
+                if (mode === 'journey_start') {{
+                    icon = '✦';
+                    title = '✦ Journey Starting...';
+                    sub = 'Hamara safar shuru ho raha hai...';
+                    quote = '“Kuch alvida asal mein khatam nahi hotay, wo bas khoobsurat yaadon ki shuruat ban jatay hain.”';
+                }} else if (mode === 'back_to_menu') {{
+                    icon = '✦';
+                    title = 'Going back to journey...';
+                    sub = 'Returning to chapters overview...';
+                    quote = '“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”';
+                }} else if (mode === 'prev') {{
+                    const item = chapMap[chapterId] || {{ label: 'Previous Chapter', icon: '✦' }};
+                    icon = item.icon;
+                    title = `Back to ${{item.label}}...`;
+                    sub = 'Opening previous chapter...';
+                }} else {{
+                    const item = chapMap[chapterId] || {{ label: 'Next Chapter', icon: '✦' }};
+                    icon = item.icon;
+                    title = `Opening: ${{item.label}}...`;
+                    sub = 'Agla safha khul raha hai...';
+                }}
+
+                overlay.innerHTML = `
+                    <div class="section-analyzer-orb">${{icon}}</div>
+                    <div class="section-analyzer-title">${{title}}</div>
+                    <div class="section-analyzer-sub">${{sub}}</div>
+                    <div class="section-analyzer-track"><div class="section-analyzer-fill"></div></div>
+                    <div class="section-analyzer-quote">${{quote}}</div>
+                `;
+                overlay.style.display = 'flex';
+            }} catch(e) {{}}
+        }};
+
+        try {{
+            const curInstant = pDoc.getElementById('instantNavAnalyzerOverlay');
+            if (curInstant) {{
+                curInstant.remove();
+            }}
+        }} catch(e) {{}}
+
         window.parent.__farewellResetScroll = function() {{
             try {{ window.parent.scrollTo({{ top: 0, left: 0, behavior: 'instant' }}); }} catch(e) {{ try {{ window.parent.scrollTo(0, 0); }} catch(e) {{}} }}
             try {{ if (pDoc.documentElement) pDoc.documentElement.scrollTop = 0; }} catch(e) {{}}
@@ -524,6 +591,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
         }}
 
         window.parent.__farewellStartJourney = function() {{
+            window.parent.__farewellShowInstantAnalyzer(null, 'journey_start');
             const container = pDoc.querySelector('.v2-main-wrap, .landing-page-wrap');
             if (container) {{ container.classList.add('view-exit'); }}
             window.parent.__farewellResetScroll();
@@ -531,7 +599,11 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
         }};
 
         window.parent.__farewellGoToMenu = function() {{
-            window.parent.__farewellStartJourney();
+            window.parent.__farewellShowInstantAnalyzer(null, 'back_to_menu');
+            const container = pDoc.querySelector('.v2-chapter-container, .v2-main-wrap');
+            if (container) {{ container.classList.add('view-exit'); }}
+            window.parent.__farewellResetScroll();
+            clickStreamlitBridge('_bridge_back_to_menu', 'bridge_back_to_menu');
         }};
 
         window.parent.__farewellGoToLanding = function() {{
@@ -543,6 +615,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
 
         window.parent.__farewellNav = function(chapterId) {{
             if (!chapterId) return;
+            window.parent.__farewellShowInstantAnalyzer(chapterId, 'next');
             const container = pDoc.querySelector('.v2-chapter-container, .v2-main-wrap');
             if (container) {{ container.classList.add('view-exit'); }}
             window.parent.__farewellResetScroll();
@@ -904,16 +977,48 @@ def render_journey_loader():
     render_journey_analyzer_loader()
 
 
-def render_dynamic_section_analyzer(target_id: str):
-    """Render 1.0s dedicated dynamic Section Transition Analyzer."""
+# -----------------------------------------------------------------------------
+# 8. Dedicated Dynamic Transition Analyzers (All Navigation Directions)
+# -----------------------------------------------------------------------------
+def render_dynamic_transition_analyzer(target_id: str = None, mode: str = "next"):
+    """
+    Render dedicated 1.0s dynamic Transition Analyzer for any navigation flow:
+    - mode="next": "Opening: [Chapter Title]..." / "Agla safha khul raha hai..."
+    - mode="prev": "Back to [Chapter Title]..." / "Opening previous chapter..."
+    - mode="back_to_menu": "Going back to journey..." / "Returning to chapters overview..."
+    - mode="journey_start": "✦ Journey Starting..." / "Hamara safar shuru ho raha hai..."
+    """
     reset_scroll_to_top()
-    target_label = "Next Chapter"
+    target_label = "Chapter"
     target_icon = "✦"
-    for c in config.CHAPTERS:
-        if c["id"] == target_id:
-            target_label = c["label"]
-            target_icon = c.get("icon", "✦")
-            break
+    subtitle = "Agla safha khul raha hai..."
+    quote = "“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”"
+
+    if target_id:
+        for c in config.CHAPTERS:
+            if c["id"] == target_id:
+                target_label = c["label"]
+                target_icon = c.get("icon", "✦")
+                break
+
+    if mode == "journey_start":
+        target_icon = "✦"
+        title = "✦ Journey Starting..."
+        subtitle = "Hamara safar shuru ho raha hai..."
+        quote = "“Kuch alvida asal mein khatam nahi hotay, wo bas khoobsurat yaadon ki shuruat ban jatay hain.”"
+    elif mode == "back_to_menu":
+        target_icon = "✦"
+        title = "Going back to journey..."
+        subtitle = "Returning to chapters overview..."
+        quote = "“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”"
+    elif mode == "prev":
+        title = f"Back to {target_label}..."
+        subtitle = "Opening previous chapter..."
+        quote = "“Pichhli yaadein aur khoobsurat lamhe...”"
+    else:
+        title = f"Opening: {target_label}..."
+        subtitle = "Agla safha khul raha hai..."
+        quote = "“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”"
 
     st.markdown(
         f"""
@@ -999,16 +1104,21 @@ def render_dynamic_section_analyzer(target_id: str):
     </style>
     <div class="section-analyzer-backdrop">
         <div class="section-analyzer-orb">{target_icon}</div>
-        <div class="section-analyzer-title">Opening: {target_label}...</div>
-        <div class="section-analyzer-sub">Agla safha khul raha hai...</div>
+        <div class="section-analyzer-title">{title}</div>
+        <div class="section-analyzer-sub">{subtitle}</div>
         <div class="section-analyzer-track">
             <div class="section-analyzer-fill"></div>
         </div>
-        <div class="section-analyzer-quote">“Har safha dil se likhi yaadon aur sachche jazbaat se sajjaya gaya hai.”</div>
+        <div class="section-analyzer-quote">{quote}</div>
     </div>
     """,
         unsafe_allow_html=True,
     )
+
+
+def render_dynamic_section_analyzer(target_id: str):
+    """Alias for render_dynamic_transition_analyzer with mode='next'."""
+    render_dynamic_transition_analyzer(target_id=target_id, mode="next")
 
 
 def render_section(section_id: str):
@@ -1053,18 +1163,46 @@ def render_sidebar():
 # -----------------------------------------------------------------------------
 # Navigation State Callbacks (Executed BEFORE script execution phase)
 # -----------------------------------------------------------------------------
-def on_navigate_section(target_id: str):
-    """Callback to queue target section and trigger 1.0s transition analyzer."""
+def on_navigate_next(target_id: str):
+    """Callback to queue target section and trigger 1.0s forward transition analyzer."""
     st.session_state.pending_section = target_id
-    st.session_state.app_view = "section_transition"
+    st.session_state.nav_mode = "next"
+    st.session_state.app_view = "transition"
     st.session_state.selected_memory = None
+
+
+def on_navigate_prev(target_id: str):
+    """Callback for previous chapter transition with 1.0s reverse analyzer."""
+    st.session_state.pending_section = target_id
+    st.session_state.nav_mode = "prev"
+    st.session_state.app_view = "transition"
+    st.session_state.selected_memory = None
+
+
+def on_navigate_back_to_menu():
+    """Callback to trigger 1.0s dedicated analyzer going back to Journey Menu."""
+    st.session_state.pending_section = None
+    st.session_state.nav_mode = "back_to_menu"
+    st.session_state.app_view = "transition"
+    st.session_state.selected_memory = None
+
+
+def on_navigate_start_journey():
+    """Callback to trigger 1.5s journey entry analyzer to Journey Menu."""
+    st.session_state.pending_section = None
+    st.session_state.nav_mode = "journey_start"
+    st.session_state.app_view = "transition"
+    st.session_state.selected_memory = None
+
+
+def on_navigate_section(target_id: str):
+    """Alias for forward navigation."""
+    on_navigate_next(target_id)
 
 
 def on_navigate_menu():
-    """Callback to trigger 2.0s journey entry analyzer to Journey Menu."""
-    st.session_state.app_view = "journey_transition"
-    st.session_state.active_section = None
-    st.session_state.selected_memory = None
+    """Alias for returning to journey menu."""
+    on_navigate_back_to_menu()
 
 
 def on_navigate_landing():
@@ -1111,7 +1249,7 @@ def render_chapter_footer(current_id: str):
                 f"← Prev: {prev_label}",
                 key=f"foot_prev_{current_id}",
                 use_container_width=True,
-                on_click=on_navigate_section,
+                on_click=on_navigate_prev,
                 args=(prev_id,),
             )
 
@@ -1121,7 +1259,7 @@ def render_chapter_footer(current_id: str):
             key=f"foot_back_{current_id}",
             type="secondary",
             use_container_width=True,
-            on_click=on_navigate_menu,
+            on_click=on_navigate_back_to_menu,
         )
 
     with bcol3:
@@ -1131,7 +1269,7 @@ def render_chapter_footer(current_id: str):
                 key=f"foot_next_{current_id}",
                 type="primary",
                 use_container_width=True,
-                on_click=on_navigate_section,
+                on_click=on_navigate_next,
                 args=(next_id,),
             )
 
@@ -1145,7 +1283,7 @@ def render_hidden_bridge_dispatcher():
         st.markdown(
             """
             <style>
-            .st-key-_bridge_landing, .st-key-_bridge_menu, .st-key-_bridge_close_final_modal,
+            .st-key-_bridge_landing, .st-key-_bridge_menu, .st-key-_bridge_back_to_menu, .st-key-_bridge_close_final_modal,
             [class*="st-key-_bridge_"],
             div[data-testid="stElementContainer"]:has([class*="st-key-_bridge_"]),
             div[data-testid="stElementContainer"]:has(button[key*="_bridge_"]),
@@ -1174,7 +1312,8 @@ def render_hidden_bridge_dispatcher():
         c = st.columns(1)[0]
         with c:
             st.button("bridge_go_landing", key="_bridge_landing", help="bridge_hidden", on_click=on_navigate_landing)
-            st.button("bridge_go_menu", key="_bridge_menu", help="bridge_hidden", on_click=on_navigate_menu)
+            st.button("bridge_go_menu", key="_bridge_menu", help="bridge_hidden", on_click=on_navigate_start_journey)
+            st.button("bridge_back_to_menu", key="_bridge_back_to_menu", help="bridge_hidden", on_click=on_navigate_back_to_menu)
             st.button("bridge_close_final_modal", key="_bridge_close_final_modal", help="bridge_hidden", on_click=on_close_final_words)
 
             for chap in config.CHAPTERS:
@@ -1182,7 +1321,7 @@ def render_hidden_bridge_dispatcher():
                     f"bridge_go_{chap['id']}",
                     key=f"_bridge_{chap['id']}",
                     help="bridge_hidden",
-                    on_click=on_navigate_section,
+                    on_click=on_navigate_next,
                     args=(chap["id"],),
                 )
 
@@ -1227,7 +1366,7 @@ def render_top_center_music_player():
 # STATE 1 — LANDING / INTRO SCREEN
 # -----------------------------------------------------------------------------
 def render_landing():
-    """Render STATE 1: Pure Cinematic Hero Intro Screen with Top-Center Music Player."""
+    """Render STATE 1: Pure Cinematic Hero Intro Screen with Synchronized Music Player & Hero Card."""
     reset_scroll_to_top()
     c = content.HOME_SECTION
     banner_b64 = get_hero_panorama_b64()
@@ -1251,51 +1390,78 @@ def render_landing():
     visited_pct = int((len(visited_set) / len(config.CHAPTERS)) * 100)
     hero_pct = max(12, visited_pct)
 
-    # 1. Top-Center Full Music Player
-    render_top_center_music_player()
-
-    # 2. Cinematic Hero Card
+    # 2. Unified Synchronized Landing Stage (Music Player + Panoramic Hero Card mount together)
     ui(f"""
-    <div class="v2-main-wrap landing-page-wrap">
-        <div class="hero-panoramic-card">
-            <img src="data:image/jpeg;base64,{banner_b64}" class="hero-panoramic-bg-img" alt="A Farewell That Stays">
-            
-            <!-- Atmospheric Layers -->
-            <div class="hero-panoramic-gradient-overlay"></div>
-            <div class="hero-atmospheric-haze"></div>
-            <div class="hero-horizon-sweep"></div>
-            
-            <!-- Left Typography Overlay -->
-            <div class="hero-left-overlay">
-                <div class="hero-heart-doodle">♡</div>
-                <h1 class="hero-headline">
-                    A Farewell<br>
-                    <span class="hero-cursive">That Stays</span><br>
-                    in the Heart
-                </h1>
-                <p class="hero-subtitle">
-                    Kuch alvida asal mein khatam nahi hotay,<br>
-                    wo bas khoobsurat yaadon ki shuruat ban jatay hain.
-                </p>
-                <div class="hero-action-buttons">
-                    <button class="hero-btn-primary hero-cta-button pulsing-cta" id="heroStartJourneyBtn" onclick="window.parent.__farewellStartJourney && window.parent.__farewellStartJourney()">
-                        <span class="btn-heart-glyph">♡</span> Start My Journey
-                    </button>
+    <div class="landing-unified-stage landing-mount-enter">
+        <div class="top-center-music-container">
+            <div class="top-center-music-player" id="topCenterMusicPlayer">
+                <div class="tc-music-header">
+                    <div class="tc-music-info">
+                        <span class="tc-music-note">🎵</span>
+                        <div class="tc-music-titles">
+                            <span class="tc-music-title">{config.AUDIO_CONFIG["song_title"]}</span>
+                            <span class="tc-music-artist">{config.AUDIO_CONFIG["song_artist"]}</span>
+                        </div>
+                    </div>
+                    <span class="tc-music-heart" id="tcMusicHeart" title="Favorite">♡</span>
+                </div>
+                <div class="tc-music-timeline">
+                    <span class="tc-music-time" id="musicTimeCurrent">00:00</span>
+                    <div class="tc-music-track" id="musicProgressTrack" title="Click to seek track">
+                        <div class="tc-music-fill" id="musicProgressFill"></div>
+                        <span class="tc-music-dot" id="musicProgressDot"></span>
+                    </div>
+                    <span class="tc-music-time" id="musicTimeTotal">04:58</span>
+                </div>
+                <div class="tc-music-controls">
+                    <button class="tc-music-btn" id="musicBtnPrev" title="Rewind 10s">⏮</button>
+                    <button class="tc-music-playpause" id="musicBtnPlayPause" title="Play / Pause">❚❚</button>
+                    <button class="tc-music-btn" id="musicBtnNext" title="Forward 10s">⏭</button>
                 </div>
             </div>
+        </div>
 
-            <!-- Right Floating Memories Collected Stats Card -->
-            <div class="hero-floating-stats-card floating-element">
-                <div class="stats-card-heart-circle">
-                    <span class="stats-card-heart">♡</span>
+        <div class="v2-main-wrap landing-page-wrap">
+            <div class="hero-panoramic-card">
+                <img src="data:image/jpeg;base64,{banner_b64}" class="hero-panoramic-bg-img" alt="A Farewell That Stays">
+                
+                <!-- Atmospheric Layers -->
+                <div class="hero-panoramic-gradient-overlay"></div>
+                <div class="hero-atmospheric-haze"></div>
+                <div class="hero-horizon-sweep"></div>
+                
+                <!-- Left Typography Overlay -->
+                <div class="hero-left-overlay">
+                    <div class="hero-heart-doodle">♡</div>
+                    <h1 class="hero-headline">
+                        A Farewell<br>
+                        <span class="hero-cursive">That Stays</span><br>
+                        in the Heart
+                    </h1>
+                    <p class="hero-subtitle">
+                        Kuch alvida asal mein khatam nahi hotay,<br>
+                        wo bas khoobsurat yaadon ki shuruat ban jatay hain.
+                    </p>
+                    <div class="hero-action-buttons">
+                        <button class="hero-btn-primary hero-cta-button pulsing-cta" id="heroStartJourneyBtn" onclick="window.parent.__farewellStartJourney && window.parent.__farewellStartJourney()">
+                            <span class="btn-heart-glyph">♡</span> Start My Journey
+                        </button>
+                    </div>
                 </div>
-                <div class="stats-card-title">Yaadein Mehfooz</div>
-                <div class="stats-card-pct">{hero_pct}% Mukammal</div>
-                <div class="stats-card-track">
-                    <div class="stats-card-fill" style="width: {hero_pct}%;"></div>
+
+                <!-- Right Floating Memories Collected Stats Card -->
+                <div class="hero-floating-stats-card floating-element">
+                    <div class="stats-card-heart-circle">
+                        <span class="stats-card-heart">♡</span>
+                    </div>
+                    <div class="stats-card-title">Yaadein Mehfooz</div>
+                    <div class="stats-card-pct">{hero_pct}% Mukammal</div>
+                    <div class="stats-card-track">
+                        <div class="stats-card-fill" style="width: {hero_pct}%;"></div>
+                    </div>
+                    <div class="stats-card-caption">Aage barhein... kuch khoobsurat yaadein ap ki muntazir hain.</div>
+                    <div class="stats-card-flower">🌸</div>
                 </div>
-                <div class="stats-card-caption">Aage barhein... kuch khoobsurat yaadein ap ki muntazir hain.</div>
-                <div class="stats-card-flower">🌸</div>
             </div>
         </div>
     </div>
@@ -1962,6 +2128,8 @@ def main():
         st.session_state.startup_completed = False
     if "app_view" not in st.session_state:
         st.session_state.app_view = "landing"
+    if "nav_mode" not in st.session_state:
+        st.session_state.nav_mode = "next"
     if "active_section" not in st.session_state:
         st.session_state.active_section = None
     if "show_final_words" not in st.session_state:
@@ -1977,7 +2145,7 @@ def main():
 
     # Support URL query parameter routing
     url_view = st.query_params.get("view")
-    if url_view in ["landing", "journey_transition", "section_transition", "journey_menu", "menu", "section"]:
+    if url_view in ["landing", "transition", "journey_transition", "section_transition", "journey_menu", "menu", "section"]:
         mapped_view = "journey_menu" if url_view == "menu" else url_view
         if st.session_state.app_view != mapped_view:
             st.session_state.app_view = mapped_view
@@ -1991,25 +2159,29 @@ def main():
     load_styles()
 
     # 3. TRANSITION ANALYZER GUARDS (Strictly executed BEFORE any view, sidebar, or atmospheric rendering)
-    if st.session_state.app_view == "journey_transition":
+    if st.session_state.app_view in ["transition", "section_transition", "journey_transition"]:
         reset_scroll_to_top()
-        render_journey_analyzer_loader()
-        time.sleep(2.0)
-        st.session_state.app_view = "journey_menu"
-        st.session_state.active_section = None
-        reset_scroll_to_top()
-        st.rerun()
+        nav_mode = st.session_state.get("nav_mode", "next")
+        if st.session_state.app_view == "journey_transition" and nav_mode == "next":
+            nav_mode = "journey_start"
 
-    if st.session_state.app_view == "section_transition":
-        reset_scroll_to_top()
-        target_sec = st.session_state.get("pending_section") or "welcome"
-        render_dynamic_section_analyzer(target_sec)
-        time.sleep(1.0)
-        st.session_state.app_view = "section"
-        st.session_state.active_section = target_sec
+        target_sec = st.session_state.get("pending_section")
+        render_dynamic_transition_analyzer(target_id=target_sec, mode=nav_mode)
+
+        duration = 1.5 if nav_mode == "journey_start" else 1.0
+        time.sleep(duration)
+
+        if nav_mode in ["back_to_menu", "journey_start"]:
+            st.session_state.app_view = "journey_menu"
+            st.session_state.active_section = None
+        else:
+            st.session_state.app_view = "section"
+            st.session_state.active_section = target_sec or "welcome"
+            if "visited_chapters" in st.session_state and target_sec:
+                st.session_state.visited_chapters.add(target_sec)
+
         st.session_state.pending_section = None
-        if "visited_chapters" in st.session_state:
-            st.session_state.visited_chapters.add(target_sec)
+        st.session_state.nav_mode = "next"
         reset_scroll_to_top()
         st.rerun()
 
