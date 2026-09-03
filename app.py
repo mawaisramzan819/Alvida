@@ -1880,7 +1880,7 @@ def render_memories():
                     st.rerun()
         ui('</div>')
 
-    # Mode B: Opened Memory View (High-End Glassmorphism Keepsake UI)
+    # Mode B: Opened Memory View (High-End Glassmorphism Keepsake UI matching media_1788467182804.png)
     else:
         mem = c["cards"][idx]
         ts_id = int(time.time() * 1000)
@@ -1893,31 +1893,37 @@ def render_memories():
         }}
         </style>
         <div class="memory-detail-wrapper {anim_class}" id="wrap_mem_{idx}">
-            <div class="memory-keepsake-card" style="border-left: 4px solid {mem['accent_color']} !important;">
-                <div class="memory-watermark-decor">✦</div>
+            <div class="memory-keepsake-card">
+                <div class="memory-starlight-bg">
+                    <span class="memory-starlight-diamond">✦</span>
+                </div>
                 
                 <div class="memory-keepsake-header">
-                    <div class="memory-icon-ambient-badge" style="border-color: {mem['accent_color']}66;">{mem['icon']}</div>
+                    <div class="memory-icon-ambient-badge">
+                        <span style="line-height: 1;">{mem['icon']}</span>
+                    </div>
                     <div class="memory-keepsake-meta">
-                        <div class="memory-counter-badge">✦ MEMORY #{idx + 1} OF {len(c['cards'])}</div>
+                        <div class="memory-counter-badge">✦ &nbsp; MEMORY #{idx + 1} OF {len(c['cards'])}</div>
                         <h3 class="memory-keepsake-title">{mem['title']}</h3>
                     </div>
                 </div>
                 
-                <div class="memory-luminous-divider"></div>
+                <div class="memory-luminous-divider">
+                    <span class="memory-divider-flourish">🪷</span>
+                </div>
                 <p class="memory-story-text">{mem['full_text']}</p>
             </div>
         </div>
         """)
 
-        mcol1, mcol2, mcol3 = st.columns([1, 1.3, 1])
+        mcol1, mcol2, mcol3 = st.columns([1, 1.4, 1])
         with mcol1:
             if idx > 0:
                 if st.button("← Previous Memory", key=f"mem_prev_{idx}", use_container_width=True):
                     st.session_state["memory_transition_target"] = idx - 1
                     st.rerun()
         with mcol2:
-            if st.button("Back to Memories ↺", key=f"mem_close_{idx}", use_container_width=True):
+            if st.button("Close View ×", key=f"mem_close_{idx}", use_container_width=True):
                 st.session_state["selected_memory"] = None
                 st.session_state["memory_transition_target"] = None
                 st.rerun()

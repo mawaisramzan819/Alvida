@@ -2621,7 +2621,7 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
 }
 
 /* ========================================================
-   HIGH-END GLASSMORPHISM MEMORY KEEPSAKE CARD
+   HIGH-END GLASSMORPHISM MEMORY KEEPSAKE CARD (media_1788467182804.png)
    ======================================================== */
 @keyframes keepsakeEntrance {
   0% {
@@ -2638,20 +2638,42 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
 .memory-opened-card,
 .active-memory-card {
   position: relative !important;
-  background: var(--surface-glass-outer) !important;
-  backdrop-filter: blur(20px) saturate(150%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(150%) !important;
-  border: 1.5px solid var(--border-luminous-rose) !important;
-  border-radius: 26px !important;
-  padding: 38px 32px !important;
-  margin: 20px auto 24px auto !important;
-  max-width: 760px !important;
-  box-shadow: var(--glow-outer), var(--glow-inner-bevel) !important;
+  background: radial-gradient(circle at 82% 30%, rgba(68, 22, 48, 0.88) 0%, rgba(20, 10, 22, 0.96) 65%) !important;
+  backdrop-filter: blur(20px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(160%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.55) !important;
+  border-radius: 28px !important;
+  padding: 38px 42px 42px 42px !important;
+  margin: 16px auto 18px auto !important;
+  max-width: 860px !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(244, 143, 177, 0.22), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
   overflow: hidden !important;
   display: flex !important;
   flex-direction: column !important;
   text-align: left !important;
   animation: keepsakeEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+.memory-starlight-bg {
+  position: absolute !important;
+  top: 10px !important;
+  right: -20px !important;
+  width: 320px !important;
+  height: 320px !important;
+  pointer-events: none !important;
+  user-select: none !important;
+  z-index: 0 !important;
+  opacity: 0.35 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.memory-starlight-diamond {
+  font-size: 160px !important;
+  color: rgba(244, 143, 177, 0.45) !important;
+  filter: drop-shadow(0 0 35px rgba(233, 101, 130, 0.6)) !important;
+  line-height: 1 !important;
 }
 
 .memory-watermark-decor {
@@ -2670,24 +2692,24 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
 .memory-keepsake-header {
   display: flex !important;
   align-items: center !important;
-  gap: 16px !important;
-  margin-bottom: 12px !important;
+  gap: 20px !important;
+  margin-bottom: 8px !important;
   position: relative !important;
   z-index: 1 !important;
 }
 
 .memory-icon-ambient-badge {
-  width: 58px !important;
-  height: 58px !important;
-  min-width: 58px !important;
-  border-radius: 16px !important;
-  background: radial-gradient(circle, rgba(244, 143, 177, 0.22) 0%, rgba(234, 179, 120, 0.1) 100%) !important;
-  border: 1.5px solid rgba(244, 143, 177, 0.4) !important;
+  width: 66px !important;
+  height: 66px !important;
+  min-width: 66px !important;
+  border-radius: 18px !important;
+  background: rgba(36, 18, 32, 0.75) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.5) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  font-size: 28px !important;
-  box-shadow: 0 0 22px rgba(233, 101, 130, 0.28) !important;
+  font-size: 32px !important;
+  box-shadow: 0 0 24px rgba(233, 101, 130, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
 }
 
 .memory-keepsake-meta {
@@ -2701,50 +2723,90 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
   align-items: center !important;
   width: fit-content !important;
   background: rgba(244, 143, 177, 0.12) !important;
-  border: 1px solid rgba(244, 143, 177, 0.35) !important;
+  border: 1px solid rgba(244, 143, 177, 0.45) !important;
   border-radius: 999px !important;
   font-family: 'Inter', -apple-system, sans-serif !important;
-  font-size: 0.72rem !important;
-  letter-spacing: 0.14em !important;
+  font-size: 0.74rem !important;
+  letter-spacing: 0.16em !important;
   text-transform: uppercase !important;
   font-weight: 700 !important;
   color: #f7a8b8 !important;
-  padding: 4px 14px !important;
-  box-shadow: 0 0 12px rgba(244, 143, 177, 0.15) !important;
+  padding: 4px 18px !important;
+  box-shadow: 0 0 14px rgba(244, 143, 177, 0.2) !important;
+  margin-bottom: 2px !important;
 }
 
 .memory-keepsake-title {
-  font-family: 'Cormorant Garamond', Georgia, serif !important;
-  font-size: 2.15rem !important;
+  font-family: 'Playfair Display', Georgia, serif !important;
+  font-size: 2.35rem !important;
   font-weight: 700 !important;
   line-height: 1.2 !important;
-  background: linear-gradient(135deg, #ffffff 20%, #fde2e4 70%, #f48fb1 100%) !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
+  color: #ffffff !important;
   margin: 0 !important;
-  text-shadow: 0 0 20px rgba(244, 143, 177, 0.2) !important;
+  text-shadow: 0 0 24px rgba(244, 143, 177, 0.28) !important;
 }
 
 .memory-luminous-divider {
-  height: 1px !important;
-  width: 100% !important;
-  margin: 18px 0 22px 0 !important;
-  background: linear-gradient(90deg, rgba(244, 143, 177, 0.5) 0%, rgba(244, 143, 177, 0.15) 60%, transparent 100%) !important;
   position: relative !important;
+  width: 100% !important;
+  height: 1px !important;
+  margin: 20px 0 24px 0 !important;
+  background: linear-gradient(90deg, rgba(244, 143, 177, 0.1) 0%, rgba(244, 143, 177, 0.55) 50%, rgba(244, 143, 177, 0.1) 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   z-index: 1 !important;
 }
 
+.memory-divider-flourish {
+  background: rgba(22, 12, 22, 0.95) !important;
+  padding: 0 12px !important;
+  font-size: 15px !important;
+  color: #f48fb1 !important;
+  filter: drop-shadow(0 0 8px rgba(244, 143, 177, 0.6)) !important;
+}
+
 .memory-story-text {
-  font-family: 'Plus Jakarta Sans', 'Lora', Georgia, sans-serif !important;
-  font-size: 1.05rem !important;
+  font-family: 'Lora', 'Playfair Display', Georgia, serif !important;
+  font-size: 1.12rem !important;
   font-weight: 400 !important;
-  color: #f1f5f9 !important;
-  line-height: 1.85 !important;
+  color: #f5edf0 !important;
+  line-height: 1.95 !important;
   letter-spacing: 0.015em !important;
   text-align: left !important;
   margin: 0 !important;
   position: relative !important;
   z-index: 1 !important;
+  max-width: 720px !important;
+}
+
+.memory-close-pill-btn {
+  width: 100% !important;
+  max-width: 860px !important;
+  background: rgba(18, 10, 22, 0.88) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.4) !important;
+  border-radius: 999px !important;
+  padding: 12px 28px !important;
+  color: #fce8ee !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.95rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.03em !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  margin: 0 auto 1.5rem auto !important;
+  cursor: pointer !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(233, 101, 130, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.memory-close-pill-btn:hover {
+  background: rgba(233, 101, 130, 0.25) !important;
+  border-color: rgba(244, 143, 177, 0.85) !important;
+  box-shadow: 0 0 28px rgba(233, 101, 130, 0.45) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* ==========================================================================
