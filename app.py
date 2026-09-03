@@ -1790,77 +1790,18 @@ def render_memories():
     # Check if a memory switch transition loader is in progress
     if st.session_state.get("memory_transition_target") is not None:
         target_idx = st.session_state["memory_transition_target"]
-        ui("""
-        <style>
-        .memory-switch-loader-backdrop {
-            min-height: 280px !important;
-            background: rgba(24, 18, 26, 0.85) !important;
-            border: 1px solid rgba(233, 101, 130, 0.25) !important;
-            border-radius: 20px !important;
-            padding: 3.5rem 2rem !important;
-            margin-bottom: 2rem !important;
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: center !important;
-            justify-content: center !important;
-            text-align: center !important;
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(233, 101, 130, 0.12) !important;
-            backdrop-filter: blur(14px) !important;
-            animation: fadeIn 0.25s ease-out !important;
-        }
-        .memory-switch-icon-orb {
-            width: 54px !important;
-            height: 54px !important;
-            border-radius: 50% !important;
-            background: radial-gradient(circle, rgba(244, 143, 177, 0.25) 0%, transparent 70%) !important;
-            border: 1.5px solid rgba(244, 143, 177, 0.6) !important;
-            box-shadow: 0 0 20px rgba(244, 143, 177, 0.45) !important;
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
-            font-size: 24px !important;
-            animation: orbPulse 1.25s ease-in-out infinite alternate !important;
-            margin: 0 auto 16px auto !important;
-        }
-        .memory-switch-status {
-            color: #ffffff !important;
-            font-family: 'Lora', Georgia, serif !important;
-            font-size: 1.15rem !important;
-            font-style: italic !important;
-            letter-spacing: 0.3px !important;
-            margin-bottom: 16px !important;
-            text-shadow: 0 0 14px rgba(244, 143, 177, 0.4) !important;
-        }
-        .memory-switch-track {
-            width: 180px !important;
-            height: 3.5px !important;
-            background: rgba(255, 255, 255, 0.08) !important;
-            border-radius: 999px !important;
-            overflow: hidden !important;
-            position: relative !important;
-            margin: 0 auto !important;
-        }
-        .memory-switch-fill {
-            position: absolute !important;
-            top: 0 !important;
-            left: 0 !important;
-            height: 100% !important;
-            width: 100% !important;
-            background: linear-gradient(90deg, #e2557e, #f78da7, #ffffff) !important;
-            border-radius: 999px !important;
-            animation: memorySwitchBar 1.25s cubic-bezier(0.2, 0.8, 0.2, 1) infinite !important;
-        }
-        @keyframes memorySwitchBar {
-            0% { transform: translateX(-100%); }
-            60% { transform: translateX(0%); }
-            100% { transform: translateX(100%); }
-        }
-        </style>
-        <div class="memory-switch-loader-backdrop">
-            <div class="memory-switch-icon-orb">✨</div>
-            <div class="memory-switch-status">Moving to next memory...</div>
-            <div class="memory-switch-track">
-                <div class="memory-switch-fill"></div>
+        current_idx = st.session_state.get("selected_memory", 0)
+        status_msg = "Moving to next memory..." if target_idx > current_idx else "Moving to previous memory..."
+        target_title = c["cards"][target_idx]["category"]
+        ui(f"""
+        <div class="memory-transition-overlay" id="memoryTransitionOverlay">
+            <div class="memory-switch-modal-card">
+                <div class="memory-switch-icon-orb">✨</div>
+                <div class="memory-switch-status">{status_msg}</div>
+                <div class="memory-switch-sub">Opening “{target_title}”...</div>
+                <div class="memory-switch-track">
+                    <div class="memory-switch-fill"></div>
+                </div>
             </div>
         </div>
         """)
