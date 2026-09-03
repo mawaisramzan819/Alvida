@@ -936,14 +936,14 @@ def render_landing():
                     wo bas khoobsurat yaadon ki shuruat ban jatay hain.
                 </p>
                 <div class="hero-action-buttons">
-                    <button class="hero-btn-primary" id="heroStartJourneyBtn" onclick="window.parent.__farewellStartJourney && window.parent.__farewellStartJourney()">
+                    <button class="hero-btn-primary hero-cta-button pulsing-cta" id="heroStartJourneyBtn" onclick="window.parent.__farewellStartJourney && window.parent.__farewellStartJourney()">
                         <span class="btn-heart-glyph">♡</span> Start the Journey
                     </button>
                 </div>
             </div>
 
             <!-- Right Floating Memories Collected Stats Card -->
-            <div class="hero-floating-stats-card">
+            <div class="hero-floating-stats-card floating-element">
                 <div class="stats-card-heart-circle">
                     <span class="stats-card-heart">♡</span>
                 </div>
@@ -983,7 +983,7 @@ def render_journey_menu():
 
     # 2. Quotation Bar (Horizontal Glowing Dark Glass Strip)
     ui(f"""
-        <div class="v2-quote-banner">
+        <div class="v2-quote-banner quote-box floating-element">
             <span class="v2-quote-mark">“</span>
             <span class="v2-quote-text">{c['quote_bar']}</span>
             <span class="v2-quote-heart-doodle">♡</span>
@@ -1003,7 +1003,7 @@ def render_journey_menu():
     ui(f"""
         <div class="ref-cards-grid">
             <!-- Card 1: Story Overview -->
-            <div class="ref-card ref-card-light" data-chapter="home" onclick="window.parent.__farewellNav('home')">
+            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="home" onclick="window.parent.__farewellNav('home')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Overview">
                 </div>
@@ -1017,7 +1017,7 @@ def render_journey_menu():
             </div>
 
             <!-- Card 2: Welcome -->
-            <div class="ref-card ref-card-light" data-chapter="welcome" onclick="window.parent.__farewellNav('welcome')">
+            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="welcome" onclick="window.parent.__farewellNav('welcome')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Welcome">
                 </div>
@@ -1031,7 +1031,7 @@ def render_journey_menu():
             </div>
 
             <!-- Card 3: Memories -->
-            <div class="ref-card ref-card-light" data-chapter="memories" onclick="window.parent.__farewellNav('memories')">
+            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="memories" onclick="window.parent.__farewellNav('memories')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_memories}" class="ref-card-thumb" alt="Memories">
                 </div>
@@ -1045,7 +1045,7 @@ def render_journey_menu():
             </div>
 
             <!-- Card 4: Words From My Heart -->
-            <div class="ref-card ref-card-light" data-chapter="words" onclick="window.parent.__farewellNav('words')">
+            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="words" onclick="window.parent.__farewellNav('words')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_words}" class="ref-card-thumb" alt="Words From My Heart">
                 </div>
@@ -1059,7 +1059,7 @@ def render_journey_menu():
             </div>
 
             <!-- Card 5: Why I Respect You -->
-            <div class="ref-card ref-card-light" data-chapter="respect" onclick="window.parent.__farewellNav('respect')">
+            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="respect" onclick="window.parent.__farewellNav('respect')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_respect}" class="ref-card-thumb" alt="Why I Respect You">
                 </div>
@@ -1073,7 +1073,7 @@ def render_journey_menu():
             </div>
 
             <!-- Card 6: Intentions -->
-            <div class="ref-card ref-card-light" data-chapter="intentions" onclick="window.parent.__farewellNav('intentions')">
+            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="intentions" onclick="window.parent.__farewellNav('intentions')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_intentions}" class="ref-card-thumb" alt="Intentions">
                 </div>
@@ -1087,7 +1087,7 @@ def render_journey_menu():
             </div>
 
             <!-- Card 7: Dua -->
-            <div class="ref-card ref-card-light" data-chapter="dua" onclick="window.parent.__farewellNav('dua')">
+            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="dua" onclick="window.parent.__farewellNav('dua')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_dua}" class="ref-card-thumb" alt="Dua">
                 </div>
@@ -1101,7 +1101,7 @@ def render_journey_menu():
             </div>
 
             <!-- Card 8: Final Note -->
-            <div class="ref-card ref-card-light" data-chapter="goodbye" onclick="window.parent.__farewellNav('goodbye')">
+            <div class="ref-card journey-card ref-card-light memory-card-box feature-card-item floating-element" data-chapter="goodbye" onclick="window.parent.__farewellNav('goodbye')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_goodbye}" class="ref-card-thumb" alt="Final Note">
                 </div>
@@ -1117,13 +1117,13 @@ def render_journey_menu():
 
         <!-- Return to Intro Button -->
         <div style="text-align: center; margin: 1.5rem 0 2.5rem 0;">
-            <button class="bottom-back-btn" id="btnBackIntro" data-action="landing" onclick="window.parent.__farewellGoToLanding && window.parent.__farewellGoToLanding()">
+            <button class="bottom-back-btn nav-action-btn floating-element" id="btnBackIntro" data-action="landing" onclick="window.parent.__farewellGoToLanding && window.parent.__farewellGoToLanding()">
                 ↺ Back to Intro Screen
             </button>
         </div>
 
         <!-- Bottom Footer Bar -->
-        <div class="v2-bottom-footer-bar">
+        <div class="v2-bottom-footer-bar quote-box floating-element">
             <span>🌸 &nbsp; 🌿 &nbsp; {c['bottom_quote']} &nbsp; ♡ &nbsp; 🌿 &nbsp; 🌸</span>
         </div>
     </div>

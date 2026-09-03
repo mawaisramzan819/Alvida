@@ -1748,16 +1748,45 @@ button[kind="primary"],
   }
 }
 
-/* --- B. Continuous Organic Float Keyframe --- */
+/* ========================================================
+   UNIVERSAL FLOATING SYSTEM - A FAREWELL THAT STAYS
+   ======================================================== */
+
+/* Primary subtle organic float */
+@keyframes universalFloatPrimary {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(0.25deg);
+  }
+  100% {
+    transform: translateY(-2px) rotate(-0.25deg);
+  }
+}
+
+/* Secondary float variation for staggered rhythm */
+@keyframes universalFloatSecondary {
+  0% {
+    transform: translateY(-2px) rotate(-0.2deg);
+  }
+  50% {
+    transform: translateY(-7px) rotate(0.2deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
 @keyframes continuousOrganicFloat {
   0% {
     transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-6px) rotate(0.3deg);
+    transform: translateY(-6px) rotate(0.25deg);
   }
   100% {
-    transform: translateY(-2px) rotate(-0.3deg);
+    transform: translateY(-2px) rotate(-0.25deg);
   }
 }
 
@@ -1766,71 +1795,140 @@ button[kind="primary"],
     transform: translateY(0px) rotate(0deg);
   }
   50% {
-    transform: translateY(-6px) rotate(0.3deg);
+    transform: translateY(-6px) rotate(0.25deg);
   }
   100% {
-    transform: translateY(-2px) rotate(-0.3deg);
+    transform: translateY(-2px) rotate(-0.25deg);
   }
 }
 
-/* Base class for all cards and interactive containers */
-.memory-card-box,
+/* 1. Landing Hero CTA Button */
+#btn_start_journey,
+#heroStartJourneyBtn,
+.hero-btn-primary,
+.hero-cta-button,
+.pulsing-cta,
+button[key="btn_start_journey"],
+button[key="start_journey_btn"],
+.st-key-btn_start_journey button {
+  animation: universalFloatPrimary 5.2s ease-in-out infinite alternate !important;
+  will-change: transform, box-shadow !important;
+}
+
+/* 2. Journey Menu Cards & Memory Feature Cards */
 .journey-card,
+.ref-card,
+.memory-card-box,
 .feature-card-item,
 .memory-polaroid-card,
 .memory-card-floating,
 .intention-item-card,
 .intentions-family-card,
-.floating-element {
-  animation: continuousOrganicFloat 5.4s ease-in-out infinite alternate !important;
+.floating-element,
+div[data-testid="stHorizontalBlock"] > div > div:has(.card-title),
+div[data-testid="stHorizontalBlock"] > div > div:has(h3) {
+  animation: universalFloatPrimary 5.6s ease-in-out infinite alternate !important;
   will-change: transform, box-shadow !important;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
 }
 
-/* Stagger floating speeds and delays so they drift independently */
-.memory-card-box:nth-child(1), .feature-card-item:nth-child(1), .memory-float-1, div[data-testid="stColumn"]:nth-child(1) .memory-polaroid-card { animation-duration: 5.2s !important; animation-delay: 0.0s !important; }
-.memory-card-box:nth-child(2), .feature-card-item:nth-child(2), .memory-float-2, div[data-testid="stColumn"]:nth-child(2) .memory-polaroid-card { animation-duration: 6.0s !important; animation-delay: 0.7s !important; }
-.memory-card-box:nth-child(3), .feature-card-item:nth-child(3), .memory-float-3, div[data-testid="stColumn"]:nth-child(3) .memory-polaroid-card { animation-duration: 4.8s !important; animation-delay: 1.3s !important; }
-.memory-card-box:nth-child(4), .feature-card-item:nth-child(4), .memory-float-4, div[data-testid="stColumn"]:nth-child(4) .memory-polaroid-card { animation-duration: 6.4s !important; animation-delay: 0.4s !important; }
-.memory-card-box:nth-child(5), .feature-card-item:nth-child(5), .memory-float-5 { animation-duration: 5.0s !important; animation-delay: 1.0s !important; }
-.memory-card-box:nth-child(6), .feature-card-item:nth-child(6), .memory-float-6 { animation-duration: 5.8s !important; animation-delay: 1.6s !important; }
-.memory-card-box:nth-child(7), .feature-card-item:nth-child(7), .memory-float-7 { animation-duration: 4.9s !important; animation-delay: 0.2s !important; }
-.memory-card-box:nth-child(8), .feature-card-item:nth-child(8), .memory-float-8 { animation-duration: 6.1s !important; animation-delay: 0.9s !important; }
+/* Stagger card timings across columns */
+div[data-testid="stHorizontalBlock"] > div:nth-child(1) .journey-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(1) .ref-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(1) .memory-card-box,
+div[data-testid="stColumn"]:nth-child(1) .memory-polaroid-card {
+  animation-duration: 5.0s !important;
+  animation-delay: 0.0s !important;
+}
+div[data-testid="stHorizontalBlock"] > div:nth-child(2) .journey-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(2) .ref-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(2) .memory-card-box,
+div[data-testid="stColumn"]:nth-child(2) .memory-polaroid-card {
+  animation-duration: 5.8s !important;
+  animation-delay: 0.6s !important;
+}
+div[data-testid="stHorizontalBlock"] > div:nth-child(3) .journey-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(3) .ref-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(3) .memory-card-box,
+div[data-testid="stColumn"]:nth-child(3) .memory-polaroid-card {
+  animation-duration: 5.2s !important;
+  animation-delay: 1.2s !important;
+}
+div[data-testid="stHorizontalBlock"] > div:nth-child(4) .journey-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(4) .ref-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(4) .memory-card-box,
+div[data-testid="stColumn"]:nth-child(4) .memory-polaroid-card {
+  animation-duration: 6.2s !important;
+  animation-delay: 0.4s !important;
+}
 
-/* Also apply smooth float to memory open buttons */
-div[data-testid="stColumn"] div.stButton > button {
-  animation: continuousOrganicFloat 5.6s ease-in-out infinite alternate !important;
+/* Specific memory float classes */
+.memory-float-1 { animation-duration: 5.0s !important; animation-delay: 0.0s !important; }
+.memory-float-2 { animation-duration: 5.8s !important; animation-delay: 0.6s !important; }
+.memory-float-3 { animation-duration: 5.2s !important; animation-delay: 1.2s !important; }
+.memory-float-4 { animation-duration: 6.2s !important; animation-delay: 0.4s !important; }
+.memory-float-5 { animation-duration: 5.4s !important; animation-delay: 0.8s !important; }
+.memory-float-6 { animation-duration: 6.0s !important; animation-delay: 1.4s !important; }
+.memory-float-7 { animation-duration: 4.9s !important; animation-delay: 0.2s !important; }
+.memory-float-8 { animation-duration: 5.6s !important; animation-delay: 0.9s !important; }
+
+/* 3. Emotional Quotes, Letter Containers & Message Boxes */
+.quote-box,
+.poetic-quote,
+.letter-box,
+.message-container,
+.active-memory-view,
+.chapter-letter-card,
+.respect-content-card,
+.dua-prayer-card,
+.finale-letter-card,
+.memory-opened-card,
+.finale-revealed-box,
+.chapter-highlight-quote-box,
+.respect-golden-banner,
+.dua-ayah-highlight-box,
+.intentions-family-card,
+.ref-quote-bar,
+.v2-bottom-footer-bar {
+  animation: universalFloatSecondary 6.5s ease-in-out infinite alternate !important;
   will-change: transform, box-shadow !important;
 }
 
-div[data-testid="stColumn"]:nth-child(1) div.stButton > button { animation-duration: 5.2s !important; animation-delay: 0.1s !important; }
-div[data-testid="stColumn"]:nth-child(2) div.stButton > button { animation-duration: 6.0s !important; animation-delay: 0.7s !important; }
-div[data-testid="stColumn"]:nth-child(3) div.stButton > button { animation-duration: 4.8s !important; animation-delay: 1.3s !important; }
-div[data-testid="stColumn"]:nth-child(4) div.stButton > button { animation-duration: 6.4s !important; animation-delay: 0.4s !important; }
-
-/* --- Continuous Float for Bottom Navigation Buttons --- */
+/* 4. Bottom Navigation Buttons (Prev, Back to Journey, Next) */
 div[data-testid="stHorizontalBlock"] button,
-.nav-action-btn {
-  animation: continuousOrganicFloat 5.6s ease-in-out infinite alternate !important;
+.nav-action-btn,
+.bottom-back-btn,
+#btnBackIntro,
+button[key*="btn_next"],
+button[key*="btn_prev"],
+button[key*="btn_back"],
+button[key*="foot_"] {
+  animation: universalFloatPrimary 5.4s ease-in-out infinite alternate !important;
   will-change: transform, box-shadow !important;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
 }
 
-/* Differentiate button float timing */
+/* Stagger bottom button timings */
 div[data-testid="stHorizontalBlock"] > div:nth-child(1) button {
-  animation-duration: 5.5s !important;
+  animation-duration: 5.4s !important;
   animation-delay: 0.2s !important;
 }
 div[data-testid="stHorizontalBlock"] > div:nth-child(2) button {
   animation-duration: 6.2s !important;
-  animation-delay: 0.8s !important;
+  animation-delay: 0.9s !important;
 }
 div[data-testid="stHorizontalBlock"] > div:nth-child(3) button {
   animation-duration: 5.0s !important;
-  animation-delay: 0.4s !important;
+  animation-delay: 0.5s !important;
 }
 
-/* Hover State: Pause float and give elevated feedback */
+/* 5. Hover State: Pause Float & Provide Interactive Glow */
+.journey-card:hover,
+.ref-card:hover,
+.memory-card-box:hover,
+.feature-card-item:hover,
+.quote-box:hover,
+.letter-box:hover,
 .chapter-letter-card:hover,
 .respect-content-card:hover,
 .dua-prayer-card:hover,
@@ -1842,11 +1940,12 @@ div[data-testid="stHorizontalBlock"] > div:nth-child(3) button {
 .memory-card-floating:hover,
 .memory-polaroid-card:hover,
 .floating-element:hover,
-.memory-card-box:hover,
-.feature-card-item:hover,
+#btn_start_journey:hover,
+#heroStartJourneyBtn:hover,
+.hero-btn-primary:hover,
 div[data-testid="stHorizontalBlock"] button:hover,
 div[data-testid="stColumn"] div.stButton > button:hover {
-  animation-play-state: paused !important; /* Hover par float pause ho jaye */
+  animation-play-state: paused !important;
   transform: translateY(-8px) scale(1.015) !important;
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(235, 140, 170, 0.25) !important;
   border-color: rgba(235, 140, 170, 0.45) !important;
