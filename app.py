@@ -774,17 +774,17 @@ def render_sidebar():
         ui(f"""
         <div class="sidebar-progress-card">
             <div class="progress-card-title-row">
-                <span class="progress-title-left">✦ Our Journey Progress</span>
+                <span class="progress-title-left">✦ Hamara Safar</span>
             </div>
             <div class="progress-sub-row">
-                <span class="progress-sub-left">Collecting beautiful memories</span>
+                <span class="progress-sub-left">Khoobsurat yaadein mehfooz</span>
                 <span class="progress-pct-bold">{progress_pct}%</span>
             </div>
             <div class="progress-card-track">
                 <div class="progress-card-fill" style="width: {progress_pct}%;"></div>
             </div>
             <div class="progress-footer-row">
-                <span class="progress-caption">Every moment matters.</span>
+                <span class="progress-caption">Har lamha khaas hai.</span>
                 <span class="progress-heart-icon">♡</span>
             </div>
         </div>
@@ -842,24 +842,48 @@ def render_chapter_footer(current_id: str):
 def render_hidden_bridge_dispatcher():
     """Invisible Streamlit button dispatcher that handles programmatic clicks from JS without reloading the page."""
     with st.container():
+        st.markdown(
+            """
+            <style>
+            .st-key-_bridge_landing, .st-key-_bridge_menu,
+            [class*="st-key-_bridge_"],
+            div[data-testid="stElementContainer"]:has([class*="st-key-_bridge_"]),
+            div[data-testid="stElementContainer"]:has(button[key*="_bridge_"]) {
+                display: none !important;
+                visibility: hidden !important;
+                position: absolute !important;
+                top: -9999px !important;
+                left: -9999px !important;
+                width: 0 !important;
+                height: 0 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                overflow: hidden !important;
+                pointer-events: none !important;
+            }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
         c = st.columns(1)[0]
         with c:
-            if st.button("bridge_go_landing", key="_bridge_landing"):
+            if st.button("bridge_go_landing", key="_bridge_landing", help="bridge_hidden"):
                 st.session_state["app_view"] = "landing"
                 st.session_state["selected_section"] = "home"
                 st.session_state["pending_target"] = None
+                st.session_state["nav_status"] = "idle"
                 st.session_state["selected_memory"] = None
                 reset_scroll_to_top()
                 st.rerun()
 
-            if st.button("bridge_go_menu", key="_bridge_menu"):
+            if st.button("bridge_go_menu", key="_bridge_menu", help="bridge_hidden"):
                 st.session_state["pending_target"] = {"view": "menu"}
                 st.session_state["selected_memory"] = None
                 reset_scroll_to_top()
                 st.rerun()
 
             for chap in config.CHAPTERS:
-                if st.button(f"bridge_go_{chap['id']}", key=f"_bridge_{chap['id']}"):
+                if st.button(f"bridge_go_{chap['id']}", key=f"_bridge_{chap['id']}", help="bridge_hidden"):
                     st.session_state["pending_target"] = {"view": "section", "section": chap["id"]}
                     st.session_state["selected_memory"] = None
                     reset_scroll_to_top()
@@ -938,8 +962,8 @@ def render_landing():
                     in the Heart
                 </h1>
                 <p class="hero-subtitle">
-                    Some goodbyes are not the end.<br>
-                    They are the beginning of a beautiful memory that stays forever.
+                    Kuch alvida asal mein khatam nahi hotay,<br>
+                    wo bas khoobsurat yaadon ki shuruat ban jatay hain.
                 </p>
                 <div class="hero-action-buttons">
                     <button class="hero-btn-primary" id="heroStartJourneyBtn" onclick="window.parent.__farewellStartJourney && window.parent.__farewellStartJourney()">
@@ -953,12 +977,12 @@ def render_landing():
                 <div class="stats-card-heart-circle">
                     <span class="stats-card-heart">♡</span>
                 </div>
-                <div class="stats-card-title">Memories Collected</div>
-                <div class="stats-card-pct">{hero_pct}% Complete</div>
+                <div class="stats-card-title">Yaadein Mehfooz</div>
+                <div class="stats-card-pct">{hero_pct}% Mukammal</div>
                 <div class="stats-card-track">
                     <div class="stats-card-fill" style="width: {hero_pct}%;"></div>
                 </div>
-                <div class="stats-card-caption">Keep going... beautiful moments await you.</div>
+                <div class="stats-card-caption">Aage barhein... kuch khoobsurat yaadein ap ki muntazir hain.</div>
                 <div class="stats-card-flower">🌸</div>
             </div>
         </div>
@@ -982,8 +1006,8 @@ def render_journey_menu():
     <div class="v2-main-wrap">
         <div class="journey-menu-header">
             <div class="journey-menu-badge">✦ A FAREWELL THAT STAYS</div>
-            <h1 class="journey-menu-title">Our Journey Chapters</h1>
-            <p class="journey-menu-subtitle">Explore each chapter of our shared memories, heartfelt words, and prayers.</p>
+            <h1 class="journey-menu-title">Hamari Kahani Ke Safhay</h1>
+            <p class="journey-menu-subtitle">Har safha dil se likhi yaadon, sachche alfaaz aur duaon se sajjaya gaya hai.</p>
         </div>
     """)
 
@@ -1015,7 +1039,7 @@ def render_journey_menu():
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Story Overview</h3>
-                    <p class="ref-card-desc">Overview and reflections of our shared story.</p>
+                    <p class="ref-card-desc">Hamari kahani ke woh lamhe jo hamesha dil mein rahein ge.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
@@ -1029,7 +1053,7 @@ def render_journey_menu():
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Welcome</h3>
-                    <p class="ref-card-desc">Start here with a warm hello and sincere message.</p>
+                    <p class="ref-card-desc">Jaane se pehle, ek baar ye khat zaroor parh lena.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
@@ -1043,7 +1067,7 @@ def render_journey_menu():
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Memories</h3>
-                    <p class="ref-card-desc">Relive the moments that will always stay close.</p>
+                    <p class="ref-card-desc">Woh khoobsurat lamhe jo waqt ke saath kabhi dhundhle nahi honge.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
@@ -1057,7 +1081,7 @@ def render_journey_menu():
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Words From My Heart</h3>
-                    <p class="ref-card-desc">Letters and words I wish I could say to you, always.</p>
+                    <p class="ref-card-desc">Woh sachchi baatein jo main ap k saamne keh na saka.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
@@ -1071,7 +1095,7 @@ def render_journey_menu():
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Why I Respect You</h3>
-                    <p class="ref-card-desc">The reasons and qualities that make you truly admirable.</p>
+                    <p class="ref-card-desc">Woh khoobian jin ki wajah se ap ki izzat hamesha dil mein rahe gi.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
@@ -1085,7 +1109,7 @@ def render_journey_menu():
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Intentions</h3>
-                    <p class="ref-card-desc">My heartfelt intentions for your happiness and success.</p>
+                    <p class="ref-card-desc">Meri sachchi duaein aur iradey jo sirf ap ki khushi ke liye hain.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
@@ -1099,7 +1123,7 @@ def render_journey_menu():
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Dua</h3>
-                    <p class="ref-card-desc">Prayers for your peace, well-being and blessings.</p>
+                    <p class="ref-card-desc">Tumhari khushi, sukoon aur kamyabi ke liye dil se dua.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
@@ -1113,7 +1137,7 @@ def render_journey_menu():
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Final Note</h3>
-                    <p class="ref-card-desc">A gentle note to close this chapter with warmth and love.</p>
+                    <p class="ref-card-desc">Ek aakhri baat... mohabbat, izzat aur duaon ke saath.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
@@ -1145,18 +1169,18 @@ def render_home_overview():
     c = content.HOME_SECTION
     ui(f"""
     <div class="v2-chapter-container">
-        <div class="chapter-eyebrow-badge">✦ OVERVIEW & REFLECTIONS</div>
+        <div class="chapter-eyebrow-badge">✦ HAMARI KAHANI KA SAFAR</div>
         <h2 class="chapter-main-title">A Farewell That Stays in the Heart</h2>
-        <p class="chapter-subtitle-italic">Some goodbyes are not the end — they are the beginning of a beautiful memory.</p>
+        <p class="chapter-subtitle-italic">Kuch alvida asal mein khatam nahi hotay — wo bas khoobsurat yaadon ki shuruat ban jatay hain.</p>
         
         <div class="chapter-letter-card">
             <div class="chapter-letter-body">
-                <p>Some people come into our lives and leave footprints on our hearts, and we are never quite the same.</p>
-                <p>This space is created to hold all the sincerity, beautiful memories, honest lessons, and unconditional prayers that time and distance cannot erase.</p>
-                <p>As you turn each page of this journey, remember that goodbye is never the end of respect, appreciation, and good wishes.</p>
+                <p>Kuch log zindagi mein aate hain aur dil par aise naqsh chor jaate hain jo waqt ke saath kabhi nahi mit'te.</p>
+                <p>Ye jagah un sabhi khoobsurat yaadon, sachchi seekhon aur be-shart duaon ke liye banayi gayi hai jinhein faaslay kabhi khatam nahi kar sakte.</p>
+                <p>Jaise jaise ap is safar ka har safha kholenge, bas itna yaad rakhna ke alvida kisi izzat, qadar aur duaon ka khatma nahi hota.</p>
             </div>
             <div class="chapter-handwritten-note">
-                “Distance means so little when someone means so much.”
+                “Faaslay chahe kitne bhi barh jayein, tum meri duaon aur dil mein hamesha raho gi.”
             </div>
         </div>
     </div>

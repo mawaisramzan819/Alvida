@@ -1,8 +1,8 @@
 """
 =============================================================================
-A FAREWELL THAT STAYS — Version 2 Content
+A FAREWELL THAT STAYS — Content Configuration
 All chapter text, loader messages, and UI strings.
-Roman Urdu + Simple English — Mature, Respectful, Sincere
+Authentic Pakistani Roman Urdu — Mature, Respectful, Sincere & Emotional
 =============================================================================
 """
 
@@ -10,18 +10,18 @@ RECIPIENT_NAME = "Almas"
 SENDER_NAME = "Awais"
 
 # -----------------------------------------------------------------------------
-# CHAPTER LOADING MESSAGES
+# CHAPTER LOADING MESSAGES (Natural Roman Urdu)
 # -----------------------------------------------------------------------------
 CHAPTER_LOADERS = {
-    "home":       {"title": "Home",               "message": "Gathering the moments that stayed..."},
-    "welcome":    {"title": "Welcome",            "message": "Opening a chapter I never wanted to forget..."},
-    "memories":   {"title": "Memories",           "message": "Some feelings take a moment to put into words..."},
-    "words":      {"title": "Words from My Heart","message": "Dil ke woh alfaaz jo sirf ap k liye the..."},
+    "home":       {"title": "Home",               "message": "Kuch yaadein dil ke bohat qareeb hoti hain..."},
+    "welcome":    {"title": "Welcome",            "message": "Jaane se pehle, dil ki ek aakhri baat..."},
+    "memories":   {"title": "Memories",           "message": "Purani yaadon ko sameta ja raha hai..."},
+    "words":      {"title": "Words From My Heart","message": "Dil ke woh alfaaz jo sirf ap k liye the..."},
     "respect":    {"title": "Why I Respect You",  "message": "Woh baat jo ap ko aur khoobsurat banati hai..."},
-    "learned":    {"title": "What I Learned",     "message": "Har ghalti ne kuch sikha diya..."},
-    "intentions": {"title": "Intentions",         "message": "Woh iradey jo dil ne sachche rakhe..."},
-    "dua":        {"title": "Dua",                "message": "Dil se nikli dua khul rahi hai..."},
-    "thankyou":   {"title": "Thank You",          "message": "Shukriya ada kiya ja raha hai..."},
+    "learned":    {"title": "What I Learned",     "message": "Har ghalti ne kuch naya sikhaya..."},
+    "intentions": {"title": "Intentions",         "message": "Woh iradey jo dil ne hamesha sachche rakhe..."},
+    "dua":        {"title": "Dua",                "message": "Tumhari khushi aur sukoon ke liye dil se dua..."},
+    "thankyou":   {"title": "Thank You",          "message": "Dil ki gehraiyon se shukriya..."},
     "goodbye":    {"title": "Final Note",         "message": "Aakhri alfaaz... dil ki gehraiyon se..."},
 }
 
@@ -31,34 +31,33 @@ CHAPTER_LOADERS = {
 HOME_SECTION = {
     "hero_headline": "A Farewell\nThat Stays\nin the Heart",
     "hero_subtitle": (
-        "Some goodbyes are not the end.\n"
-        "They are the beginning of a beautiful memory\n"
-        "that stays forever."
+        "Kuch alvida asal mein khatam nahi hotay,\n"
+        "wo bas khoobsurat yaadon ki shuruat ban jatay hain."
     ),
     "primary_button": "Start the Journey",
     "secondary_button": "Watch Intro",
-    "quote_bar": "Distance may take you far away, but you'll always stay in my prayers and heart.",
-    "bottom_quote": "No matter where life takes you, I'll always be cheering for you.",
+    "quote_bar": "Faaslay chahe kitne bhi barh jayein, tum meri duaon aur dil mein hamesha raho gi.",
+    "bottom_quote": "Zindagi ap ko jahan bhi le jaye, meri duaein hamesha ap k saath rahein gi.",
 }
 
 # Chapter card descriptions for Home grid (Exact Reference UI)
 HOME_CARDS = [
-    {"id": "welcome",    "title": "Welcome",              "desc": "Start here with a warm hello and a message from the heart.", "thumb": "thumb_welcome"},
-    {"id": "memories",   "title": "Memories",             "desc": "Relive the moments that will always stay close.", "thumb": "thumb_memories"},
-    {"id": "words",      "title": "Words From My Heart",  "desc": "Letters and words I wish I could say to you, always.", "thumb": "thumb_words"},
-    {"id": "respect",    "title": "Why I Respect You",    "desc": "The reasons that make you truly admirable.", "thumb": "thumb_respect"},
-    {"id": "intentions", "title": "Intentions",         "desc": "My heartfelt intentions for your happiness and success.", "thumb": "thumb_intentions"},
-    {"id": "dua",        "title": "Dua",                "desc": "Prayers for your well-being, peace and success.", "thumb": "thumb_dua"},
-    {"id": "goodbye",    "title": "Final Note",         "desc": "A gentle note to close this chapter with love.", "thumb": "thumb_goodbye"},
+    {"id": "home",       "title": "Story Overview",       "desc": "Hamari kahani ke woh lamhe jo hamesha dil mein rahein ge.", "thumb": "thumb_welcome"},
+    {"id": "welcome",    "title": "Welcome",              "desc": "Jaane se pehle, ek baar ye khat zaroor parh lena.", "thumb": "thumb_welcome"},
+    {"id": "memories",   "title": "Memories",             "desc": "Woh khoobsurat lamhe jo waqt ke saath kabhi dhundhle nahi honge.", "thumb": "thumb_memories"},
+    {"id": "words",      "title": "Words From My Heart",  "desc": "Woh sachchi baatein jo main ap k saamne keh na saka.", "thumb": "thumb_words"},
+    {"id": "respect",    "title": "Why I Respect You",    "desc": "Woh khoobian jin ki wajah se ap ki izzat hamesha dil mein rahe gi.", "thumb": "thumb_respect"},
+    {"id": "intentions", "title": "Intentions",         "desc": "Meri sachchi duaein aur iradey jo sirf ap ki khushi ke liye hain.", "thumb": "thumb_intentions"},
+    {"id": "goodbye",    "title": "Final Note",         "desc": "Ek aakhri baat... mohabbat, izzat aur duaon ke saath.", "thumb": "thumb_goodbye"},
 ]
 
 # -----------------------------------------------------------------------------
 # CHAPTER 1 — WELCOME
 # -----------------------------------------------------------------------------
 WELCOME_SECTION = {
-    "eyebrow": "A LETTER BEFORE GOODBYE",
-    "title": "Before You Go, Read This",
-    "subtitle": "Ye website kisi argument, complaint ya guilt ke liye nahi banayi gayi.",
+    "eyebrow": "JAANE SE PEHLE EK KHAT",
+    "title": "Jaane Se Pehle, Ek Baar Parh Lena",
+    "subtitle": "Ye safha kisi gile ya shikway ke liye nahi, sirf dil ki sachai ke liye hai.",
     "paragraphs": [
         (
             "Ye ek khat hai—dil se likha hua, imaandari se, izzat ke saath. "
@@ -84,8 +83,8 @@ WELCOME_SECTION = {
 # CHAPTER 2 — MEMORIES
 # -----------------------------------------------------------------------------
 MEMORIES_SECTION = {
-    "eyebrow": "SAFAR-E-YADEIN",
-    "title": "Moments That Stayed With Me",
+    "eyebrow": "SAFAR-E-YAADEIN",
+    "title": "Woh Yaadein Jo Hamesha Saath Rahein Gi",
     "subtitle": "Hamari kahani ke woh lamhe jo mere dil par hamesha ke liye naqsh ho gaye.",
     "cards": [
         {
@@ -152,7 +151,7 @@ MEMORIES_SECTION = {
             ),
         },
         {
-            "category": "Aaj — This Moment",
+            "category": "Aaj — Ye Lamha",
             "icon": "🌙",
             "accent_color": "#d4796a",
             "placeholder": (
@@ -168,14 +167,14 @@ MEMORIES_SECTION = {
 # -----------------------------------------------------------------------------
 WORDS_SECTION = {
     "eyebrow": "DIL KI BAAT",
-    "title": "Words I Wish I Could Say to You",
-    "subtitle": "Kash ye alfaaz pehle keh pata...",
+    "title": "Woh Alfaaz Jo Main Keh Nahi Saka",
+    "subtitle": "Kaash ye sachchi baatein main waqt par keh pata...",
     "paragraphs": [
         (
             "Main jaanta hoon ke hamare darmiyan jo sab se gehra zakhm bana, uski wajah "
             "meri ghalti thi. Maine woh baatein doosron ko bata dein jo sirf hamare darmiyan "
             "rehni chahiye theen. Us waqt main samajh nahi saka ke mohabbat ka matlab "
-            "sirf feelings nahi—bharosa, izzat aur privacy ki hifazat bhi hota hai."
+            "sirf jazbaat nahi—bharosa, izzat aur privacy ki hifazat bhi hota hai."
         ),
         (
             "Main guzra hua waqt badal nahi sakta. Ap ko meri wajah se jo takleef mili, "
@@ -199,8 +198,8 @@ WORDS_SECTION = {
 # -----------------------------------------------------------------------------
 RESPECT_SECTION = {
     "eyebrow": "WOH BAAT JO AP KO AUR KHOOBSURAT BANATI HAI",
-    "title": "One Thing I Will Always Respect About You",
-    "subtitle": "This is not about religion as an argument. This is about admiration.",
+    "title": "Woh Baat Jis Ki Main Hamesha Izzat Karunga",
+    "subtitle": "Ye koi behas nahi, dil se nikli sachi tareef aur izzat hai.",
     "main_content": [
         (
             "Jab bhi maine ap se contact karne ki koshish ki, ap ne ek baat kahi jo mujhe "
@@ -238,8 +237,8 @@ RESPECT_SECTION = {
 # CHAPTER 5 — WHAT I LEARNED (Self-Accountability)
 # -----------------------------------------------------------------------------
 LEARNED_SECTION = {
-    "eyebrow": "SEEKH",
-    "title": "What Loving You Taught Me",
+    "eyebrow": "SEEKH AUR AFSOOS",
+    "title": "Ap Se Mohabbat Ne Mujhe Kya Sikhaya",
     "subtitle": "Har rishte mein insaan kuch seekhta hai. Maine bhi seekha.",
     "lessons": [
         {
@@ -283,8 +282,8 @@ LEARNED_SECTION = {
 # -----------------------------------------------------------------------------
 INTENTIONS_SECTION = {
     "eyebrow": "SACHCHE IRADEY",
-    "title": "What My Heart Truly Wants",
-    "subtitle": "Ye koi waada nahi. Ye iradey hain — sachche aur khalis.",
+    "title": "Mera Dil Asal Mein Kya Chahta Hai",
+    "subtitle": "Ye koi dawa nahi. Ye iradey hain — sachche aur khalis.",
     "intentions": [
         {
             "title": "Ap Ki Khushi",
@@ -321,7 +320,7 @@ INTENTIONS_SECTION = {
     ],
     "family_note": (
         "Main samajhta hoon ke ap k apne ap k liye protective hain. Ye unki mohabbat hai. "
-        "Main un logon ko challenge nahi karna chahta — main unka aitbaar jeena chahta hoon."
+        "Main un logon ko challenge nahi karna chahta — main unka aitbaar jeetna chahta hoon."
     ),
 }
 
@@ -330,7 +329,7 @@ INTENTIONS_SECTION = {
 # -----------------------------------------------------------------------------
 DUA_SECTION = {
     "eyebrow": "EK KHALIS DUA",
-    "title": "A Prayer from the Deepest Part of My Heart",
+    "title": "Dil Ki Gehraiyon Se Nikli Dua",
     "subtitle": "Jab kuch na kar saka, to Rab ke aage haath utha diye.",
     "paragraphs": [
         (
@@ -359,8 +358,8 @@ DUA_SECTION = {
 # CHAPTER 8 — THANK YOU
 # -----------------------------------------------------------------------------
 THANKYOU_SECTION = {
-    "eyebrow": "SHUKRIYA",
-    "title": "Thank You for Everything",
+    "eyebrow": "DIL SE SHUKRIYA",
+    "title": "Har Us Lamhe Ka Shukriya",
     "subtitle": "Har us lamhe ke liye jo ap ne meri zindagi ko diya...",
     "gratitudes": [
         "Mujhe samjhane aur guide karne ka shukriya.",
@@ -388,8 +387,8 @@ THANKYOU_SECTION = {
 # -----------------------------------------------------------------------------
 GOODBYE_SECTION = {
     "eyebrow": "AAKHRI BAAT",
-    "title": "A Farewell, Not a Forgetting",
-    "subtitle": "Some love asks to be held. Some love learns to make dua and let Allah decide.",
+    "title": "Ek Alvida... Jo Dil Se Juda Nahi Karta",
+    "subtitle": "Kuch rishte duaon mein zinda rehte hain aur faisla Rab par chor dete hain.",
     "paragraphs": [
         (
             "Agar zindagi ap ko mujhse door le jaaye, to main hamari yaadon ko "
@@ -409,7 +408,13 @@ GOODBYE_SECTION = {
         "Kuch mohabbatein thamne ko kehti hain. "
         "Kuch mohabbatein dua karna seekh leti hain... aur faisla Allah par chor deti hain."
     ),
-    "final_visual_text": "You will always have a special place in my heart.",
+    "final_visual_text": "Tumhari jagah mere dil mein hamesha khaas rahe gi.",
+    "button_label": "Meri Aakhri Baat Parhein",
+    "revealed_text": (
+        "Main ap se ye nahi keh raha ke ap apni takleef bhool jao. Main sirf ek sachhi aur aakhri baat ka "
+        "mauqa maang raha hoon, is se pehle ke hamare itne saalon ki yaadein hamesha ki khamoshi ban jayein. "
+        "Agar hamare liye abhi bhi koi chota sa rasta baqi hai, to please bina dil ki baat sune mat jaana."
+    ),
     "absolute_last_line": (
         "Alvida nahi kehta... bas itna kehta hoon: "
         "Allah hafiz. Dua mein yaad rakhna."
