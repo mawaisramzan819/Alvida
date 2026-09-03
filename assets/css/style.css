@@ -1746,76 +1746,104 @@ button[kind="primary"],
 }
 
 /* ========================================================
-   UNIVERSAL FLOATING SYSTEM - A FAREWELL THAT STAYS
+   NATURAL "BREATHING" FLOATING ANIMATION
    ======================================================== */
 
-/* Primary subtle organic float */
-@keyframes universalFloatPrimary {
+@keyframes gentleBreathingFloat {
   0% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px) scale(1);
   }
   50% {
-    transform: translateY(-6px) rotate(0.25deg);
+    transform: translateY(-7px) scale(1.012);
   }
   100% {
-    transform: translateY(-2px) rotate(-0.25deg);
+    transform: translateY(-2px) scale(1.004);
   }
 }
 
-/* Secondary float variation for staggered rhythm */
-@keyframes universalFloatSecondary {
+/* Secondary rhythm for natural variety */
+@keyframes gentleBreathingFloatAlt {
   0% {
-    transform: translateY(-2px) rotate(-0.2deg);
+    transform: translateY(-2px) scale(1.005);
   }
   50% {
-    transform: translateY(-7px) rotate(0.2deg);
+    transform: translateY(-8px) scale(1.014);
   }
   100% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px) scale(1);
+  }
+}
+
+@keyframes universalFloatPrimary {
+  0% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-7px) scale(1.012);
+  }
+  100% {
+    transform: translateY(-2px) scale(1.004);
+  }
+}
+
+@keyframes universalFloatSecondary {
+  0% {
+    transform: translateY(-2px) scale(1.005);
+  }
+  50% {
+    transform: translateY(-8px) scale(1.014);
+  }
+  100% {
+    transform: translateY(0px) scale(1);
   }
 }
 
 @keyframes continuousOrganicFloat {
   0% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px) scale(1);
   }
   50% {
-    transform: translateY(-6px) rotate(0.25deg);
+    transform: translateY(-7px) scale(1.012);
   }
   100% {
-    transform: translateY(-2px) rotate(-0.25deg);
+    transform: translateY(-2px) scale(1.004);
   }
 }
 
 @keyframes continuousFloat {
   0% {
-    transform: translateY(0px) rotate(0deg);
+    transform: translateY(0px) scale(1);
   }
   50% {
-    transform: translateY(-6px) rotate(0.25deg);
+    transform: translateY(-7px) scale(1.012);
   }
   100% {
-    transform: translateY(-2px) rotate(-0.25deg);
+    transform: translateY(-2px) scale(1.004);
   }
 }
 
-/* 1. Landing Hero CTA Button */
-#btn_start_journey,
+/* 1. LANDING SCREEN: Hero Elements & "Start the Journey" Button */
+.hero-cta-button,
 #heroStartJourneyBtn,
 .hero-btn-primary,
-.hero-cta-button,
 .pulsing-cta,
+#btn_start_journey,
 button[key="btn_start_journey"],
 button[key="start_journey_btn"],
-.st-key-btn_start_journey button {
-  animation: universalFloatPrimary 5.2s ease-in-out infinite alternate !important;
+.st-key-btn_start_journey button,
+div:has(> button[key="btn_start_journey"]),
+.landing-hero-card,
+.hero-panoramic-card,
+.hero-floating-stats-card,
+.hero-quote-box {
+  animation: gentleBreathingFloat 3.2s ease-in-out infinite alternate !important;
   will-change: transform, box-shadow !important;
 }
 
-/* 2. Journey Menu Cards & Memory Feature Cards */
+/* 2. JOURNEY MENU: All 8 Navigation Cards */
+.journey-card-container,
 .journey-card,
 .ref-card,
-.journey-card-container,
 .card-body-box,
 .memory-card-box,
 .feature-card-item,
@@ -1828,52 +1856,55 @@ div[data-testid="stHorizontalBlock"] > div > div:has(.card-title),
 div[data-testid="stHorizontalBlock"] > div > div:has(h3) {
   visibility: visible !important;
   opacity: 1 !important;
-  animation: universalFloatPrimary 5.6s ease-in-out infinite alternate !important;
+  animation: gentleBreathingFloat 3.4s ease-in-out infinite alternate !important;
   will-change: transform, box-shadow !important;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
-/* Stagger card timings across columns */
+/* Stagger cards across columns */
 div[data-testid="stHorizontalBlock"] > div:nth-child(1) .journey-card,
 div[data-testid="stHorizontalBlock"] > div:nth-child(1) .ref-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(1) .journey-card-container,
 div[data-testid="stHorizontalBlock"] > div:nth-child(1) .memory-card-box,
-div[data-testid="stColumn"]:nth-child(1) .memory-polaroid-card {
-  animation-duration: 5.0s !important;
+div[data-testid="stColumn"]:nth-child(1) .memory-polaroid-card,
+.ref-cards-grid .ref-card:nth-child(1) {
+  animation-duration: 3.2s !important;
   animation-delay: 0.0s !important;
 }
 div[data-testid="stHorizontalBlock"] > div:nth-child(2) .journey-card,
 div[data-testid="stHorizontalBlock"] > div:nth-child(2) .ref-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(2) .journey-card-container,
 div[data-testid="stHorizontalBlock"] > div:nth-child(2) .memory-card-box,
-div[data-testid="stColumn"]:nth-child(2) .memory-polaroid-card {
-  animation-duration: 5.8s !important;
-  animation-delay: 0.6s !important;
+div[data-testid="stColumn"]:nth-child(2) .memory-polaroid-card,
+.ref-cards-grid .ref-card:nth-child(2) {
+  animation-duration: 3.6s !important;
+  animation-delay: 0.4s !important;
 }
 div[data-testid="stHorizontalBlock"] > div:nth-child(3) .journey-card,
 div[data-testid="stHorizontalBlock"] > div:nth-child(3) .ref-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(3) .journey-card-container,
 div[data-testid="stHorizontalBlock"] > div:nth-child(3) .memory-card-box,
-div[data-testid="stColumn"]:nth-child(3) .memory-polaroid-card {
-  animation-duration: 5.2s !important;
-  animation-delay: 1.2s !important;
+div[data-testid="stColumn"]:nth-child(3) .memory-polaroid-card,
+.ref-cards-grid .ref-card:nth-child(3) {
+  animation-duration: 3.3s !important;
+  animation-delay: 0.8s !important;
 }
 div[data-testid="stHorizontalBlock"] > div:nth-child(4) .journey-card,
 div[data-testid="stHorizontalBlock"] > div:nth-child(4) .ref-card,
+div[data-testid="stHorizontalBlock"] > div:nth-child(4) .journey-card-container,
 div[data-testid="stHorizontalBlock"] > div:nth-child(4) .memory-card-box,
-div[data-testid="stColumn"]:nth-child(4) .memory-polaroid-card {
-  animation-duration: 6.2s !important;
-  animation-delay: 0.4s !important;
+div[data-testid="stColumn"]:nth-child(4) .memory-polaroid-card,
+.ref-cards-grid .ref-card:nth-child(4) {
+  animation-duration: 3.7s !important;
+  animation-delay: 0.3s !important;
 }
 
-/* Specific memory float classes */
-.memory-float-1 { animation-duration: 5.0s !important; animation-delay: 0.0s !important; }
-.memory-float-2 { animation-duration: 5.8s !important; animation-delay: 0.6s !important; }
-.memory-float-3 { animation-duration: 5.2s !important; animation-delay: 1.2s !important; }
-.memory-float-4 { animation-duration: 6.2s !important; animation-delay: 0.4s !important; }
-.memory-float-5 { animation-duration: 5.4s !important; animation-delay: 0.8s !important; }
-.memory-float-6 { animation-duration: 6.0s !important; animation-delay: 1.4s !important; }
-.memory-float-7 { animation-duration: 4.9s !important; animation-delay: 0.2s !important; }
-.memory-float-8 { animation-duration: 5.6s !important; animation-delay: 0.9s !important; }
+.ref-cards-grid .ref-card:nth-child(5) { animation-duration: 3.2s !important; animation-delay: 0.5s !important; }
+.ref-cards-grid .ref-card:nth-child(6) { animation-duration: 3.6s !important; animation-delay: 0.9s !important; }
+.ref-cards-grid .ref-card:nth-child(7) { animation-duration: 3.4s !important; animation-delay: 0.2s !important; }
+.ref-cards-grid .ref-card:nth-child(8) { animation-duration: 3.7s !important; animation-delay: 0.6s !important; }
 
-/* 3. Emotional Quotes, Letter Containers & Message Boxes */
+/* 3. FEATURE SECTIONS: Memory Boxes, Letter Containers & Action Buttons */
 .quote-box,
 .poetic-quote,
 .letter-box,
@@ -1890,8 +1921,9 @@ div[data-testid="stColumn"]:nth-child(4) .memory-polaroid-card {
 .dua-ayah-highlight-box,
 .intentions-family-card,
 .ref-quote-bar,
+.v2-quote-banner,
 .v2-bottom-footer-bar {
-  animation: universalFloatSecondary 6.5s ease-in-out infinite alternate !important;
+  animation: gentleBreathingFloatAlt 3.5s ease-in-out infinite alternate !important;
   will-change: transform, box-shadow !important;
 }
 
@@ -1904,27 +1936,28 @@ button[key*="btn_next"],
 button[key*="btn_prev"],
 button[key*="btn_back"],
 button[key*="foot_"] {
-  animation: universalFloatPrimary 5.4s ease-in-out infinite alternate !important;
+  animation: gentleBreathingFloat 3.3s ease-in-out infinite alternate !important;
   will-change: transform, box-shadow !important;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease !important;
 }
 
 /* Stagger bottom button timings */
 div[data-testid="stHorizontalBlock"] > div:nth-child(1) button {
-  animation-duration: 5.4s !important;
-  animation-delay: 0.2s !important;
+  animation-duration: 3.2s !important;
+  animation-delay: 0.1s !important;
 }
 div[data-testid="stHorizontalBlock"] > div:nth-child(2) button {
-  animation-duration: 6.2s !important;
-  animation-delay: 0.9s !important;
+  animation-duration: 3.6s !important;
+  animation-delay: 0.5s !important;
 }
 div[data-testid="stHorizontalBlock"] > div:nth-child(3) button {
-  animation-duration: 5.0s !important;
-  animation-delay: 0.5s !important;
+  animation-duration: 3.3s !important;
+  animation-delay: 0.3s !important;
 }
 
 /* 5. Hover State: Pause Float & Provide Interactive Glow */
 .journey-card:hover,
+.journey-card-container:hover,
 .ref-card:hover,
 .memory-card-box:hover,
 .feature-card-item:hover,
@@ -1944,11 +1977,13 @@ div[data-testid="stHorizontalBlock"] > div:nth-child(3) button {
 #btn_start_journey:hover,
 #heroStartJourneyBtn:hover,
 .hero-btn-primary:hover,
+.hero-cta-button:hover,
+button:hover,
 div[data-testid="stHorizontalBlock"] button:hover,
 div[data-testid="stColumn"] div.stButton > button:hover {
   animation-play-state: paused !important;
-  transform: translateY(-8px) scale(1.015) !important;
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 20px rgba(235, 140, 170, 0.25) !important;
+  transform: translateY(-9px) scale(1.02) !important;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45), 0 0 22px rgba(235, 140, 170, 0.28) !important;
   border-color: rgba(235, 140, 170, 0.45) !important;
 }
 
