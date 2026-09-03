@@ -168,16 +168,9 @@ def render_cinematic_atmosphere(active_section: str):
 # 5. Startup State Machine & Audio Engine (DOM Persistent Injection)
 # -----------------------------------------------------------------------------
 def render_initial_splash_loader():
-    """Initial App Launch Splash with 2.5s Sweeping Analyzer & Universal Audio Engine."""
+    """Initial App Launch Splash with 2.5s Sweeping Visual Analyzer (Zero Audio on Launch)."""
     # 1. Visual HTML & CSS Overlay (Rendered via ui() to strip all indentation and prevent markdown leaks)
     ui("""
-    <!-- Native Persistent Audio Tag with Multi-Source Fallback (Zero-latency Streaming) -->
-    <audio id="farewellBgAudioMain" loop preload="auto" style="display:none;">
-        <source src="app/static/farewell.mp3" type="audio/mp3">
-        <source src="static/farewell.mp3" type="audio/mp3">
-        <source src="/app/static/farewell.mp3" type="audio/mp3">
-    </audio>
-
     <style>
     .cinematic-splash-overlay {
         position: fixed !important;
@@ -278,71 +271,6 @@ def render_initial_splash_loader():
         <div class="loader-quote-glow">“Some goodbyes stay in the heart forever.”</div>
     </div>
     """)
-
-    # 2. Pure JavaScript Audio Setup via Sandboxed Components (No Markdown Leak)
-    components.html(
-        """
-    <script>
-    (function() {
-        function setupAudio() {
-            let pDoc;
-            try { pDoc = window.parent && window.parent.document ? window.parent.document : document; } catch(e) { pDoc = document; }
-            let audio = pDoc.getElementById('farewellBgAudioMain') || document.getElementById('farewellBgAudioMain');
-            if (!audio) {
-                audio = pDoc.createElement('audio');
-                audio.id = 'farewellBgAudioMain';
-                audio.loop = true;
-                audio.preload = 'auto';
-                audio.innerHTML = '<source src="app/static/farewell.mp3" type="audio/mp3"><source src="static/farewell.mp3" type="audio/mp3"><source src="/app/static/farewell.mp3" type="audio/mp3">';
-                try { if (pDoc.body) pDoc.body.appendChild(audio); } catch(e) { document.body.appendChild(audio); }
-            }
-            if (window.parent) window.parent.__farewell_audio = audio;
-
-            const isMuted = (localStorage.getItem('farewell_music_paused') === 'true');
-            if (audio && !isMuted && audio.paused) {
-                audio.volume = 0.22;
-                let playProm = audio.play();
-                if (playProm !== undefined) {
-                    playProm.then(function() {
-                        if (window.parent && window.parent.__farewellUpdateMusicUI) {
-                            window.parent.__farewellUpdateMusicUI();
-                        }
-                    }).catch(function() {
-                        function unlockAudio() {
-                            if (localStorage.getItem('farewell_music_paused') !== 'true') {
-                                audio.play().then(function() {
-                                    audio.volume = 0.22;
-                                    if (window.parent && window.parent.__farewellUpdateMusicUI) {
-                                        window.parent.__farewellUpdateMusicUI();
-                                    }
-                                }).catch(function() {});
-                            }
-                            ['click', 'touchstart', 'pointerdown', 'keydown'].forEach(function(evt) {
-                                try { if (pDoc) pDoc.removeEventListener(evt, unlockAudio); } catch(e) {}
-                                document.removeEventListener(evt, unlockAudio);
-                            });
-                        }
-                        ['click', 'touchstart', 'pointerdown', 'keydown'].forEach(function(evt) {
-                            try { if (pDoc) pDoc.addEventListener(evt, unlockAudio, { passive: true, once: true }); } catch(e) {}
-                            document.addEventListener(evt, unlockAudio, { passive: true, once: true });
-                        });
-                    });
-                }
-            }
-        }
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', setupAudio);
-        } else {
-            setupAudio();
-        }
-        setTimeout(setupAudio, 300);
-        setTimeout(setupAudio, 800);
-    })();
-    </script>
-    """,
-        height=0,
-        width=0,
-    )
 
 
 def render_full_screen_initial_loader():
@@ -734,12 +662,44 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
 
         pDoc.addEventListener('click', window.parent.__farewellClickDelegation, true);
 
-        // 8. Attach audio event listeners
-        const audio = window.parent.__farewellGetAudio();
-        if (audio) {{
-            audio.onplay = () => window.parent.__farewellUpdateMusicUI();
-            audio.onpause = () => window.parent.__farewellUpdateMusicUI();
-            audio.ontimeupdate = () => window.parent.__farewellUpdateMusicUI();
+        // 8. Attach audio event listeners & auto-mount audio element in post-journey view
+        const isJourneyView = ('{active_view}' === 'journey_menu' || '{active_view}' === 'section' || '{active_view}' === 'menu');
+        
+        if (isJourneyView) {{
+            let audio = window.parent.__farewellGetAudio();
+            if (!audio) {{
+                audio = pDoc.createElement('audio');
+                audio.id = 'farewellBgAudioMain';
+                audio.loop = true;
+                audio.preload = 'auto';
+                audio.innerHTML = '<source src="app/static/farewell.mp3" type="audio/mp3"><source src="static/farewell.mp3" type="audio/mp3"><source src="/app/static/farewell.mp3" type="audio/mp3">';
+                try {{ if (pDoc.body) pDoc.body.appendChild(audio); }} catch(e) {{ document.body.appendChild(audio); }}
+                window.parent.__farewell_audio = audio;
+            }}
+
+            if (audio) {{
+                audio.onplay = () => window.parent.__farewellUpdateMusicUI();
+                audio.onpause = () => window.parent.__farewellUpdateMusicUI();
+                audio.ontimeupdate = () => window.parent.__farewellUpdateMusicUI();
+
+                const isMuted = (localStorage.getItem('farewell_music_paused') === 'true');
+                if (audio.paused && !isMuted) {{
+                    audio.volume = 0.22;
+                    audio.play().then(() => {{
+                        if (window.parent.__farewellUpdateMusicUI) {{
+                            window.parent.__farewellUpdateMusicUI();
+                        }}
+                    }}).catch(err => {{
+                        console.warn('Autoplay initiated in journey:', err);
+                    }});
+                }}
+            }}
+        }} else {{
+            // On landing, guarantee 100% complete silence
+            const audio = window.parent.__farewellGetAudio();
+            if (audio && !audio.paused) {{
+                try {{ audio.pause(); audio.currentTime = 0; }} catch(e) {{}}
+            }}
         }}
 
         // Initial sync
@@ -1369,25 +1329,16 @@ def render_top_center_music_player():
 # STATE 1 — LANDING / INTRO SCREEN
 # -----------------------------------------------------------------------------
 def render_landing():
-    """Render STATE 1: Pure Cinematic Hero Intro Screen (Zero Music Player on Landing)."""
+    """Render STATE 1: Pure Cinematic Hero Intro Screen (Zero Audio & Zero Music Player on Landing)."""
     reset_scroll_to_top()
     c = content.HOME_SECTION
     banner_b64 = get_hero_panorama_b64()
 
-    # 1. Initial Splash Overlay & Audio Engine (Zero-latency 2.5s dissolve on first load / refresh)
+    # 1. Initial Splash Overlay (Zero-latency 2.5s dissolve on first load / refresh)
     if not st.session_state.get("initial_splash_done", False):
         render_initial_splash_loader()
         st.session_state["initial_splash_done"] = True
         st.session_state["startup_completed"] = True
-    else:
-        # Guarantee Audio Engine is active on subsequent landings
-        ui("""
-        <audio id="farewellBgAudioMain" loop preload="auto" style="display:none;">
-            <source src="app/static/farewell.mp3" type="audio/mp3">
-            <source src="static/farewell.mp3" type="audio/mp3">
-            <source src="/app/static/farewell.mp3" type="audio/mp3">
-        </audio>
-        """)
 
     visited_set = st.session_state.get("visited_chapters", set())
     visited_pct = int((len(visited_set) / len(config.CHAPTERS)) * 100)
