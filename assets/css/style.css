@@ -2014,42 +2014,29 @@ div[data-testid="stColumn"] div.stButton > button:hover {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-primary-dark-bg);
+}
+
 /* ========================================================
    MEMORY SWITCH CROSSFADE & SLIDE ANIMATION
    ======================================================== */
 
 .memory-detail-wrapper,
+.memory-slide-container,
 .primary-card-entrance,
 .memory-content-fade {
-  animation: memorySwitchEnter 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  animation: memorySlideFadeIn 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
   will-change: transform, opacity, filter;
+  width: 100%;
 }
 
-@keyframes memorySwitchEnter {
+@keyframes memorySlideFadeIn {
   0% {
     opacity: 0;
-    transform: translateX(18px) scale(0.985);
-    filter: blur(6px);
+    transform: translateX(26px) scale(0.98);
+    filter: blur(8px);
   }
-  40% {
-    opacity: 0.8;
-    filter: blur(2px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0px) scale(1);
-    filter: blur(0px);
-  }
-}
-
-@keyframes memoryContentSwap {
-  0% {
-    opacity: 0;
-    transform: translateX(18px) scale(0.985);
-    filter: blur(6px);
-  }
-  40% {
-    opacity: 0.8;
+  45% {
+    opacity: 0.85;
     filter: blur(2px);
   }
   100% {
@@ -2061,52 +2048,81 @@ div[data-testid="stColumn"] div.stButton > button:hover {
 
 .memory-opened-card,
 .active-memory-card {
-  background: var(--surface-dark);
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-xl);
-  padding: 2.2rem;
-  margin-bottom: 2rem;
-  box-shadow: var(--shadow-card);
+  background: rgba(24, 18, 26, 0.9) !important;
+  border: 1px solid rgba(233, 101, 130, 0.25) !important;
+  border-radius: 20px !important;
+  padding: 2.4rem 2.6rem !important;
+  margin-bottom: 2rem !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 25px rgba(233, 101, 130, 0.12) !important;
+  backdrop-filter: blur(14px) !important;
+  min-height: 280px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  position: relative !important;
+  transition: all 0.35s ease !important;
 }
 
 .memory-opened-header {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.2rem;
+  display: flex !important;
+  align-items: center !important;
+  gap: 1.2rem !important;
+  margin-bottom: 1.2rem !important;
 }
 
-.memory-opened-icon {
-  font-size: 2.2rem;
+.memory-opened-icon-badge {
+  width: 56px !important;
+  height: 56px !important;
+  min-width: 56px !important;
+  border-radius: 14px !important;
+  background: rgba(233, 101, 130, 0.15) !important;
+  border: 1px solid rgba(233, 101, 130, 0.35) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.8rem !important;
+  box-shadow: 0 0 15px rgba(233, 101, 130, 0.2) !important;
+}
+
+.memory-opened-meta {
+  display: flex !important;
+  flex-direction: column !important;
 }
 
 .memory-opened-badge {
-  font-family: var(--font-body);
-  font-size: var(--fs-caption);
-  color: var(--accent-primary);
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-family: var(--font-body) !important;
+  font-size: 0.78rem !important;
+  color: var(--accent-primary) !important;
+  font-weight: 600 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1.2px !important;
+  margin-bottom: 0.2rem !important;
 }
 
 .memory-opened-title {
-  font-family: var(--font-display);
-  font-size: var(--fs-h2);
-  color: var(--text-primary-dark-bg);
-  margin: 0.15rem 0 0 0;
+  font-family: var(--font-display) !important;
+  font-size: 1.85rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  text-shadow: 0 0 12px rgba(233, 101, 130, 0.2) !important;
 }
 
 .memory-opened-divider {
-  height: 1px;
-  background: var(--border-dark);
-  margin-bottom: 1.4rem;
+  height: 1px !important;
+  background: linear-gradient(90deg, rgba(233, 101, 130, 0.45) 0%, rgba(255, 255, 255, 0.08) 70%, transparent 100%) !important;
+  margin-bottom: 1.4rem !important;
+  width: 100% !important;
 }
 
 .memory-opened-body {
-  font-family: var(--font-body);
-  font-size: var(--fs-body);
-  line-height: 1.85;
-  color: var(--text-primary-dark-bg);
+  font-family: var(--font-body) !important;
+  font-size: 1.02rem !important;
+  line-height: 1.88 !important;
+  color: #f0e6eb !important;
+  margin: 0 !important;
+  flex-grow: 1 !important;
 }
 
 /* ==========================================================================

@@ -1400,13 +1400,37 @@ def render_memories():
     # Mode B: Opened Memory View
     else:
         mem = c["cards"][idx]
-        anim_key = f"mem_active_{idx}"
-        ui(f"""
-        <div class="memory-detail-wrapper" id="wrap_{anim_key}" key="wrap_{anim_key}">
-            <div class="memory-opened-card active-memory-card memory-content-fade floating-element" id="{anim_key}" key="{anim_key}" style="border-left: 4px solid {mem['accent_color']};">
+        ts_id = int(time.time() * 1000)
+        anim_class = f"mem-slide-{idx}-{ts_id}"
+        st.markdown(
+            f"""
+        <style>
+        .{anim_class} {{
+            animation: memorySlideFadeIn 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+            will-change: transform, opacity, filter;
+        }}
+        @keyframes memorySlideFadeIn {{
+            0% {{
+                opacity: 0;
+                transform: translateX(26px) scale(0.98);
+                filter: blur(8px);
+            }}
+            45% {{
+                opacity: 0.85;
+                filter: blur(2px);
+            }}
+            100% {{
+                opacity: 1;
+                transform: translateX(0px) scale(1);
+                filter: blur(0px);
+            }}
+        }}
+        </style>
+        <div class="memory-detail-wrapper {anim_class}" id="wrap_mem_{idx}">
+            <div class="memory-opened-card active-memory-card memory-content-fade" style="border-left: 5px solid {mem['accent_color']} !important;">
                 <div class="memory-opened-header">
-                    <span class="memory-opened-icon">{mem['icon']}</span>
-                    <div>
+                    <div class="memory-opened-icon-badge">{mem['icon']}</div>
+                    <div class="memory-opened-meta">
                         <div class="memory-opened-badge">Memory #{idx + 1} of {len(c['cards'])}</div>
                         <h3 class="memory-opened-title">{mem['category']}</h3>
                     </div>
@@ -1415,21 +1439,23 @@ def render_memories():
                 <p class="memory-opened-body">{mem['placeholder']}</p>
             </div>
         </div>
-        """)
+        """,
+            unsafe_allow_html=True,
+        )
 
         mcol1, mcol2, mcol3 = st.columns([1, 1, 1])
         with mcol1:
             if idx > 0:
-                if st.button("← Previous Memory", key="mem_prev", use_container_width=True):
+                if st.button("← Previous Memory", key=f"mem_prev_{idx}", use_container_width=True):
                     st.session_state["selected_memory"] = idx - 1
                     st.rerun()
         with mcol2:
-            if st.button("Close View ×", key="mem_close", use_container_width=True):
+            if st.button("Close View ×", key=f"mem_close_{idx}", use_container_width=True):
                 st.session_state["selected_memory"] = None
                 st.rerun()
         with mcol3:
             if idx < len(c["cards"]) - 1:
-                if st.button("Next Memory →", key="mem_next", type="primary", use_container_width=True):
+                if st.button("Next Memory →", key=f"mem_next_{idx}", type="primary", use_container_width=True):
                     st.session_state["selected_memory"] = idx + 1
                     st.rerun()
 
