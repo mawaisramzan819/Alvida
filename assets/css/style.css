@@ -1412,6 +1412,103 @@ p {
 }
 
 /* ==========================================================================
+   11b. STARTUP FULL-SCREEN LOADER
+   ========================================================================== */
+.startup-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999999;
+  background: var(--bg-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.startup-loader-card {
+  max-width: 480px;
+  width: 90%;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.4s ease-out;
+}
+
+.startup-loader-icon-wrap {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 1.5rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.startup-loader-ring {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(233, 101, 130, 0.2);
+  border-top: 2px solid var(--accent-primary);
+  border-radius: 50%;
+  animation: spinSlow 1.2s linear infinite;
+}
+
+.startup-loader-heart {
+  font-size: 2.4rem;
+  animation: heartPulse 1.8s infinite ease-in-out;
+  display: inline-block;
+}
+
+.startup-brand-title {
+  font-family: var(--font-script);
+  font-size: 3rem;
+  color: var(--text-primary-dark-bg);
+  line-height: 1.1;
+  margin-bottom: 0.4rem;
+  text-shadow: 0 0 20px rgba(233, 101, 130, 0.35);
+}
+
+.startup-brand-subtitle {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2rem;
+  color: var(--accent-primary);
+  margin-bottom: 0.8rem;
+}
+
+.startup-quote-text {
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  color: var(--text-secondary-dark-bg);
+  font-style: italic;
+  margin-bottom: 1.6rem;
+}
+
+.startup-progress-track {
+  width: 220px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.startup-progress-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+  animation: startupFillAnim 2.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes startupFillAnim {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* ==========================================================================
    12. INTERMEDIATE LOADER
    ========================================================================== */
 .nav-loader-overlay {

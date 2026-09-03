@@ -168,18 +168,19 @@ def render_cinematic_atmosphere(active_section: str):
 # -----------------------------------------------------------------------------
 # 5. Startup State Machine & Audio Engine (DOM Persistent Injection)
 # -----------------------------------------------------------------------------
-def render_startup_state_machine():
-    """Inject background audio into parent document DOM and display 2.2s startup overlay."""
+def render_startup_screen():
+    """Display the full cinematic starting loader FIRST. Prevents landing page from flashing."""
     audio_b64 = get_audio_base64()
     audio_src = f"data:audio/mp3;base64,{audio_b64}" if audio_b64 else "/app/static/farewell.mp3"
 
+    # 1. Initialize persistent audio element on parent DOM
     components.html(
         f"""
     <script>
     (function() {{
         const pDoc = window.parent.document;
 
-        // 1. Persistent Audio Element on parent body
+        // Persistent Audio Element on parent body
         let audio = pDoc.getElementById('farewellBgAudioMain');
         if (!audio) {{
             audio = pDoc.createElement('audio');
@@ -191,85 +192,66 @@ def render_startup_state_machine():
             window.parent.__farewell_audio = audio;
         }}
 
-        // Attempt autoplay with user-gesture fallback
-        function triggerAudioPlayback() {{
-            if (!audio) return;
-            if (audio.paused) {{
-                audio.volume = 0;
-                let playPromise = audio.play();
-                if (playPromise !== undefined) {{
-                    playPromise.then(() => {{
-                        let start = performance.now();
-                        function fadeIn() {{
-                            let el = performance.now() - start;
-                            let frac = Math.min(el / 1500, 1);
-                            audio.volume = frac * 0.22;
-                            if (frac < 1) requestAnimationFrame(fadeIn);
-                        }}
-                        requestAnimationFrame(fadeIn);
-                    }}).catch(err => {{
-                        const unlockAction = () => {{
-                            audio.play().then(() => {{
-                                audio.volume = 0.22;
-                            }}).catch(() => {{}});
-                            pDoc.removeEventListener('click', unlockAction);
-                            pDoc.removeEventListener('touchstart', unlockAction);
-                            pDoc.removeEventListener('pointerdown', unlockAction);
-                        }};
-                        pDoc.addEventListener('click', unlockAction, {{ passive: true }});
-                        pDoc.addEventListener('touchstart', unlockAction, {{ passive: true }});
-                        pDoc.addEventListener('pointerdown', unlockAction, {{ passive: true }});
-                    }});
-                }}
+        // Trigger autoplay with user gesture fallback
+        if (audio && audio.paused) {{
+            audio.volume = 0;
+            let playPromise = audio.play();
+            if (playPromise !== undefined) {{
+                playPromise.then(() => {{
+                    let start = performance.now();
+                    function fadeIn() {{
+                        let el = performance.now() - start;
+                        let frac = Math.min(el / 1500, 1);
+                        audio.volume = frac * 0.22;
+                        if (frac < 1) requestAnimationFrame(fadeIn);
+                    }}
+                    requestAnimationFrame(fadeIn);
+                }}).catch(() => {{
+                    const unlockAction = () => {{
+                        audio.play().then(() => {{
+                            audio.volume = 0.22;
+                        }}).catch(() => {{}});
+                        pDoc.removeEventListener('click', unlockAction);
+                        pDoc.removeEventListener('touchstart', unlockAction);
+                        pDoc.removeEventListener('pointerdown', unlockAction);
+                    }};
+                    pDoc.addEventListener('click', unlockAction, {{ passive: true }});
+                    pDoc.addEventListener('touchstart', unlockAction, {{ passive: true }});
+                    pDoc.addEventListener('pointerdown', unlockAction, {{ passive: true }});
+                }});
             }}
         }}
-
-        triggerAudioPlayback();
-
-        // 2. Prevent duplicate startup overlay
-        if (pDoc.getElementById('startupMasterOverlay')) return;
-
-        const overlay = pDoc.createElement('div');
-        overlay.id = 'startupMasterOverlay';
-        overlay.style.cssText = 'position:fixed; inset:0; z-index:99999999; background:#0e101a; display:flex; flex-direction:column; align-items:center; justify-content:center; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; transition:opacity 0.5s ease-out;';
-
-        overlay.innerHTML = `
-            <style>
-                @keyframes pulseHeart {{
-                    0%, 100% {{ transform: scale(1); filter: drop-shadow(0 0 10px rgba(229,115,115,0.5)); }}
-                    50% {{ transform: scale(1.15); filter: drop-shadow(0 0 25px rgba(229,115,115,0.9)); }}
-                }}
-                @keyframes ringSpin {{
-                    0% {{ transform: rotate(0deg); }}
-                    100% {{ transform: rotate(360deg); }}
-                }}
-            </style>
-            <div style="text-align:center; padding:2rem; max-width:480px; width:90%;">
-                <div style="position:relative; width:90px; height:90px; margin:0 auto 1.5rem auto; display:flex; align-items:center; justify-content:center;">
-                    <div style="position:absolute; inset:0; border:2px solid rgba(229,115,115,0.2); border-top:2px solid #e57373; border-radius:50%; animation:ringSpin 1.2s linear infinite;"></div>
-                    <div style="font-size:2.4rem; animation:pulseHeart 2s infinite ease-in-out;">💗</div>
-                </div>
-                <div style="font-family:'Great Vibes', cursive; font-size:2.6rem; color:#f8ede8; margin-bottom:0.3rem;">A Farewell That Stays</div>
-                <div style="font-family:'Playfair Display', serif; font-style:italic; font-size:1.15rem; color:#e57373; margin-bottom:0.5rem;">Opening a story that was never forgotten...</div>
-                <div style="font-size:0.92rem; color:#baa9b4;">“Some goodbyes stay in the heart forever.”</div>
-            </div>
-        `;
-
-        pDoc.body.appendChild(overlay);
-
-        setTimeout(() => {{
-            overlay.style.opacity = '0';
-            overlay.style.pointerEvents = 'none';
-            setTimeout(() => {{
-                try {{ overlay.remove(); }} catch(e) {{}}
-            }}, 500);
-        }}, 2000);
     }})();
     </script>
     """,
         height=0,
         width=0,
     )
+
+    # 2. Render Full-Screen Startup Loader UI directly in Streamlit
+    loader_box = st.empty()
+    loader_html = """
+    <div class="startup-loader-overlay">
+        <div class="startup-loader-card">
+            <div class="startup-loader-icon-wrap">
+                <div class="startup-loader-ring"></div>
+                <div class="startup-loader-heart">💗</div>
+            </div>
+            <div class="startup-brand-title">A Farewell That Stays</div>
+            <div class="startup-brand-subtitle">Opening a story that was never forgotten...</div>
+            <div class="startup-quote-text">“Some goodbyes stay in the heart forever.”</div>
+            <div class="startup-progress-track">
+                <div class="startup-progress-fill"></div>
+            </div>
+        </div>
+    </div>
+    """
+    loader_box.markdown(loader_html, unsafe_allow_html=True)
+    time.sleep(2.2)
+    loader_box.empty()
+
+    st.session_state["startup_completed"] = True
+    st.rerun()
 
 
 # -----------------------------------------------------------------------------
@@ -1223,7 +1205,7 @@ def render_goodbye():
 def main():
     """Main state router and layout orchestrator."""
     defaults = {
-        "session_started": False,
+        "startup_completed": False,
         "active_section": "home",
         "pending_section": None,
         "show_final_words": False,
@@ -1243,10 +1225,10 @@ def main():
     # 1. Global Styles
     load_styles()
 
-    # 2. First-load Startup Overlay
-    if not st.session_state["session_started"]:
-        st.session_state["session_started"] = True
-        render_startup_state_machine()
+    # 2. First-load Startup Screen (Display starting loader FIRST, prevent landing page from flashing)
+    if not st.session_state.get("startup_completed", False):
+        render_startup_screen()
+        return
 
     # 3. Always Render Exact Sidebar Architecture (Brand -> Nav -> Music -> Progress)
     render_sidebar()
