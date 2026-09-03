@@ -46,52 +46,12 @@ def ui(html_content: str):
 # 2. Stylesheet & Viewport Injection
 # -----------------------------------------------------------------------------
 def load_styles():
-    """Load custom CSS, suppress Streamlit sidebar, and inject mobile viewport meta."""
-    st.markdown(
-        """
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-        <style>
-        /* Permanently hide Streamlit sidebar element */
-        [data-testid="stSidebar"],
-        section[data-testid="stSidebar"] {
-            display: none !important;
-            visibility: hidden !important;
-            width: 0 !important;
-            min-width: 0 !important;
-            max-width: 0 !important;
-            transform: translateX(-100%) !important;
-            pointer-events: none !important;
-        }
-
-        /* Hide the sidebar toggle chevron / collapse / expand button */
-        [data-testid="stSidebarCollapseButton"],
-        [data-testid="stSidebarCollapsedControl"],
-        button[data-testid="baseButton-headerNoPadding"],
-        [data-testid="collapsedControl"],
-        header button:has(svg),
-        [data-testid="stHeader"] button {
-            display: none !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
-        }
-
-        /* Adjust main content container to take 100% full width */
-        [data-testid="stAppViewBlockContainer"],
-        .main .block-container {
-            max-width: 100% !important;
-            padding-left: 1rem !important;
-            padding-right: 1rem !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
+    """Load custom CSS and inject mobile viewport meta without markdown leakage."""
+    ui('<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">')
     css_path = config.CSS_DIR / "style.css"
     if css_path.exists():
         with open(css_path, "r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+            ui(f"<style>{f.read()}</style>")
 
 
 # -----------------------------------------------------------------------------
@@ -209,9 +169,8 @@ def render_cinematic_atmosphere(active_section: str):
 # -----------------------------------------------------------------------------
 def render_initial_splash_loader():
     """Initial App Launch Splash with 2.5s Sweeping Analyzer & Universal Audio Engine."""
-    # 1. Visual HTML & CSS Overlay (Zero Markdown JS leaks)
-    st.markdown(
-        """
+    # 1. Visual HTML & CSS Overlay (Rendered via ui() to strip all indentation and prevent markdown leaks)
+    ui("""
     <!-- Native Persistent Audio Tag with Multi-Source Fallback (Zero-latency Streaming) -->
     <audio id="farewellBgAudioMain" loop preload="auto" style="display:none;">
         <source src="app/static/farewell.mp3" type="audio/mp3">
@@ -318,9 +277,7 @@ def render_initial_splash_loader():
         <div class="analyzer-track"><div class="analyzer-glow-fill"></div></div>
         <div class="loader-quote-glow">“Some goodbyes stay in the heart forever.”</div>
     </div>
-    """,
-        unsafe_allow_html=True,
-    )
+    """)
 
     # 2. Pure JavaScript Audio Setup via Sandboxed Components (No Markdown Leak)
     components.html(
@@ -628,6 +585,21 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
         }}
 
         window.parent.__farewellStartJourney = function() {{
+            // 1. Play audio starting from 00:00 using direct user gesture token
+            const audio = window.parent.__farewellGetAudio();
+            if (audio) {{
+                try {{
+                    audio.currentTime = 0;
+                    audio.volume = 0.22;
+                    audio.play().then(() => {{
+                        try {{ localStorage.setItem('farewell_music_paused', 'false'); }} catch(e) {{}}
+                        if (window.parent.__farewellUpdateMusicUI) {{
+                            window.parent.__farewellUpdateMusicUI();
+                        }}
+                    }}).catch(e => console.log("Audio play initiated on Start Journey:", e));
+                }} catch(e) {{}}
+            }}
+
             window.parent.__farewellShowInstantAnalyzer(null, 'journey_start');
             const container = pDoc.querySelector('.v2-main-wrap, .landing-page-wrap');
             if (container) {{ container.classList.add('view-exit'); }}
@@ -1163,6 +1135,10 @@ def render_section(section_id: str):
     sec = section_id or "welcome"
     if "visited_chapters" in st.session_state:
         st.session_state.visited_chapters.add(sec)
+
+    # Mount Music Player inside Journey chapters
+    render_top_center_music_player()
+
     router = {
         "home": render_home_overview,
         "welcome": render_welcome,
@@ -1217,6 +1193,8 @@ def on_navigate_start_journey():
     st.session_state.pending_section = None
     st.session_state.nav_mode = "journey_start"
     st.session_state.app_view = "transition"
+    st.session_state.music_started = True
+    st.session_state.music_playing = True
     st.session_state.selected_memory = None
 
 
@@ -1352,7 +1330,7 @@ def render_hidden_bridge_dispatcher():
 
 
 # -----------------------------------------------------------------------------
-# TOP-CENTER FULL MUSIC PLAYER
+# TOP-CENTER FULL MUSIC PLAYER (Mounted ONLY inside Journey & Chapters)
 # -----------------------------------------------------------------------------
 def render_top_center_music_player():
     """Render full horizontal music player at top-center (Song, Artist, Scrub Bar, Time, Controls)."""
@@ -1372,8 +1350,8 @@ def render_top_center_music_player():
             <div class="tc-music-timeline">
                 <span class="tc-music-time" id="musicTimeCurrent">00:00</span>
                 <div class="tc-music-track" id="musicProgressTrack" title="Click to seek track">
-                    <div class="tc-music-fill" id="musicProgressFill"></div>
-                    <span class="tc-music-dot" id="musicProgressDot"></span>
+                    <div class="tc-music-fill" id="musicProgressFill" style="width: 0%;"></div>
+                    <span class="tc-music-dot" id="musicProgressDot" style="left: 0%;"></span>
                 </div>
                 <span class="tc-music-time" id="musicTimeTotal">04:58</span>
             </div>
@@ -1391,7 +1369,7 @@ def render_top_center_music_player():
 # STATE 1 — LANDING / INTRO SCREEN
 # -----------------------------------------------------------------------------
 def render_landing():
-    """Render STATE 1: Pure Cinematic Hero Intro Screen with Synchronized Music Player & Hero Card."""
+    """Render STATE 1: Pure Cinematic Hero Intro Screen (Zero Music Player on Landing)."""
     reset_scroll_to_top()
     c = content.HOME_SECTION
     banner_b64 = get_hero_panorama_b64()
@@ -1415,78 +1393,48 @@ def render_landing():
     visited_pct = int((len(visited_set) / len(config.CHAPTERS)) * 100)
     hero_pct = max(12, visited_pct)
 
-    # 2. Unified Synchronized Landing Stage (Music Player + Panoramic Hero Card mount together)
+    # 2. Pure Panoramic Hero Stage (No Music Player on Landing Screen)
     ui(f"""
-    <div class="landing-unified-stage landing-mount-enter">
-        <div class="top-center-music-container">
-            <div class="top-center-music-player" id="topCenterMusicPlayer">
-                <div class="tc-music-header">
-                    <div class="tc-music-info">
-                        <span class="tc-music-note">🎵</span>
-                        <div class="tc-music-titles">
-                            <span class="tc-music-title">{config.AUDIO_CONFIG["song_title"]}</span>
-                            <span class="tc-music-artist">{config.AUDIO_CONFIG["song_artist"]}</span>
-                        </div>
-                    </div>
-                    <span class="tc-music-heart" id="tcMusicHeart" title="Favorite">♡</span>
-                </div>
-                <div class="tc-music-timeline">
-                    <span class="tc-music-time" id="musicTimeCurrent">00:00</span>
-                    <div class="tc-music-track" id="musicProgressTrack" title="Click to seek track">
-                        <div class="tc-music-fill" id="musicProgressFill"></div>
-                        <span class="tc-music-dot" id="musicProgressDot"></span>
-                    </div>
-                    <span class="tc-music-time" id="musicTimeTotal">04:58</span>
-                </div>
-                <div class="tc-music-controls">
-                    <button class="tc-music-btn" id="musicBtnPrev" title="Rewind 10s">⏮</button>
-                    <button class="tc-music-playpause" id="musicBtnPlayPause" title="Play / Pause">❚❚</button>
-                    <button class="tc-music-btn" id="musicBtnNext" title="Forward 10s">⏭</button>
+    <div class="v2-main-wrap landing-page-wrap landing-mount-enter">
+        <div class="hero-panoramic-card">
+            <img src="data:image/jpeg;base64,{banner_b64}" class="hero-panoramic-bg-img" alt="A Farewell That Stays">
+            
+            <!-- Atmospheric Layers -->
+            <div class="hero-panoramic-gradient-overlay"></div>
+            <div class="hero-atmospheric-haze"></div>
+            <div class="hero-horizon-sweep"></div>
+            
+            <!-- Left Typography Overlay -->
+            <div class="hero-left-overlay">
+                <div class="hero-heart-doodle">♡</div>
+                <h1 class="hero-headline">
+                    A Farewell<br>
+                    <span class="hero-cursive">That Stays</span><br>
+                    in the Heart
+                </h1>
+                <p class="hero-subtitle">
+                    Kuch alvida asal mein khatam nahi hotay,<br>
+                    wo bas khoobsurat yaadon ki shuruat ban jatay hain.
+                </p>
+                <div class="hero-action-buttons">
+                    <button class="hero-btn-primary hero-cta-button pulsing-cta" id="heroStartJourneyBtn" onclick="window.parent.__farewellStartJourney && window.parent.__farewellStartJourney()">
+                        <span class="btn-heart-glyph">♡</span> Start My Journey
+                    </button>
                 </div>
             </div>
-        </div>
 
-        <div class="v2-main-wrap landing-page-wrap">
-            <div class="hero-panoramic-card">
-                <img src="data:image/jpeg;base64,{banner_b64}" class="hero-panoramic-bg-img" alt="A Farewell That Stays">
-                
-                <!-- Atmospheric Layers -->
-                <div class="hero-panoramic-gradient-overlay"></div>
-                <div class="hero-atmospheric-haze"></div>
-                <div class="hero-horizon-sweep"></div>
-                
-                <!-- Left Typography Overlay -->
-                <div class="hero-left-overlay">
-                    <div class="hero-heart-doodle">♡</div>
-                    <h1 class="hero-headline">
-                        A Farewell<br>
-                        <span class="hero-cursive">That Stays</span><br>
-                        in the Heart
-                    </h1>
-                    <p class="hero-subtitle">
-                        Kuch alvida asal mein khatam nahi hotay,<br>
-                        wo bas khoobsurat yaadon ki shuruat ban jatay hain.
-                    </p>
-                    <div class="hero-action-buttons">
-                        <button class="hero-btn-primary hero-cta-button pulsing-cta" id="heroStartJourneyBtn" onclick="window.parent.__farewellStartJourney && window.parent.__farewellStartJourney()">
-                            <span class="btn-heart-glyph">♡</span> Start My Journey
-                        </button>
-                    </div>
+            <!-- Right Floating Memories Collected Stats Card -->
+            <div class="hero-floating-stats-card floating-element">
+                <div class="stats-card-heart-circle">
+                    <span class="stats-card-heart">♡</span>
                 </div>
-
-                <!-- Right Floating Memories Collected Stats Card -->
-                <div class="hero-floating-stats-card floating-element">
-                    <div class="stats-card-heart-circle">
-                        <span class="stats-card-heart">♡</span>
-                    </div>
-                    <div class="stats-card-title">Yaadein Mehfooz</div>
-                    <div class="stats-card-pct">{hero_pct}% Mukammal</div>
-                    <div class="stats-card-track">
-                        <div class="stats-card-fill" style="width: {hero_pct}%;"></div>
-                    </div>
-                    <div class="stats-card-caption">Aage barhein... kuch khoobsurat yaadein ap ki muntazir hain.</div>
-                    <div class="stats-card-flower">🌸</div>
+                <div class="stats-card-title">Yaadein Mehfooz</div>
+                <div class="stats-card-pct">{hero_pct}% Mukammal</div>
+                <div class="stats-card-track">
+                    <div class="stats-card-fill" style="width: {hero_pct}%;"></div>
                 </div>
+                <div class="stats-card-caption">Aage barhein... kuch khoobsurat yaadein ap ki muntazir hain.</div>
+                <div class="stats-card-flower">🌸</div>
             </div>
         </div>
     </div>
