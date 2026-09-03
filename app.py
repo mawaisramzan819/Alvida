@@ -636,36 +636,60 @@ def reset_scroll_to_top():
 
 
 # -----------------------------------------------------------------------------
-# 8. Intermediate Analyzing / Chapter Loading Transition (300ms Fast & Smooth)
+# 8. Navigation Transitions: A) Journey Entry Loader & B) Section Loader
 # -----------------------------------------------------------------------------
-def render_nav_loader(target):
-    """Render smooth chapter loading transition with full animation lifecycle.
-    
-    State machine phases:
-      1. Guard: skip if nav_status is already 'loading'
-      2. Mount: render loader overlay at full opacity
-      3. Await: sleep for full animation duration (0.88s > 0.85s CSS keyframe)
-      4. Swap: update app_view + active_section
-      5. Scroll: reset all scroll containers to top
-      6. Exit: clear loader, set nav_status idle, rerun
-    """
-    # Phase 1: Guard against double-trigger
+def render_journey_entry_loader():
+    """Render the full cinematic 'Journey Starting...' transition (rotating animation) when entering the Journey."""
     if st.session_state.get("nav_status") == "loading":
         return
     st.session_state["nav_status"] = "loading"
-
     reset_scroll_to_top()
-    target_section = target if isinstance(target, str) else target.get("section", "welcome")
-    target_view = "section" if isinstance(target, str) else target.get("view", "section")
+
+    loader_box = st.empty()
+    html = """
+    <div class="journey-entry-loader-overlay">
+        <div class="journey-entry-loader-card">
+            <div class="journey-entry-icon-wrap">
+                <div class="journey-entry-ring"></div>
+                <div class="journey-entry-heart">✦</div>
+            </div>
+            <div class="journey-entry-title">Journey Starting...</div>
+            <div class="journey-entry-subtitle">Hamara safar shuru ho raha hai...</div>
+            <div class="journey-entry-quote">“Kuch alvida asal mein khatam nahi hotay, wo bas khoobsurat yaadon ki shuruat ban jatay hain.”</div>
+            <div class="journey-entry-track">
+                <div class="journey-entry-fill"></div>
+            </div>
+        </div>
+    </div>
+    """
+    loader_box.markdown(html, unsafe_allow_html=True)
+
+    # Let the 1.1s rotating entry animation complete fully
+    time.sleep(1.15)
+    loader_box.empty()
+
+    st.session_state["app_view"] = "journey_menu"
+    st.session_state["transition_type"] = None
+    st.session_state["pending_target"] = None
+    st.session_state["nav_status"] = "idle"
+    reset_scroll_to_top()
+    st.rerun()
+
+
+def render_section_loader(target_section: str):
+    """Render a short, smooth feature-specific loading animation when opening a section from Journey Menu."""
+    if st.session_state.get("nav_status") == "loading":
+        return
+    st.session_state["nav_status"] = "loading"
+    reset_scroll_to_top()
 
     loader_box = st.empty()
     loader_info = content.CHAPTER_LOADERS.get(
-        target_section or "welcome", {"title": "Loading...", "message": "Opening our journey..."}
+        target_section or "welcome", {"title": (target_section or "welcome").title(), "message": "Safha khul raha hai..."}
     )
-    title = loader_info.get("title", "Loading...")
-    message = loader_info.get("message", "Opening our journey...")
+    title = loader_info.get("title", (target_section or "welcome").title())
+    message = loader_info.get("message", "Safha khul raha hai...")
 
-    # Phase 2: Mount loader overlay
     html = f"""
     <div class="nav-loader-overlay">
         <div class="nav-loader-card">
@@ -680,21 +704,42 @@ def render_nav_loader(target):
     """
     loader_box.markdown(html, unsafe_allow_html=True)
 
-    # Phase 3: Await full animation (0.88s > 0.85s CSS keyframe)
-    time.sleep(0.88)
-
-    # Phase 4: Swap content state
+    # Let the 0.70s section animation complete fully
+    time.sleep(0.75)
     loader_box.empty()
-    st.session_state["app_view"] = target_view
-    if target_section:
-        st.session_state["selected_section"] = target_section
-        st.session_state["visited_chapters"].add(target_section)
-    st.session_state["pending_target"] = None
 
-    # Phase 5/6: Scroll reset + exit
+    st.session_state["app_view"] = "section"
+    st.session_state["selected_section"] = target_section or "welcome"
+    st.session_state["visited_chapters"].add(target_section or "welcome")
+    st.session_state["transition_type"] = None
+    st.session_state["pending_target"] = None
     st.session_state["nav_status"] = "idle"
     reset_scroll_to_top()
     st.rerun()
+
+
+def render_nav_loader(target):
+    """Route to either the Journey Entry transition or the feature Section transition."""
+    if isinstance(target, dict):
+        trans = target.get("transition")
+        view = target.get("view")
+        section = target.get("section")
+        if trans == "journey_entry" or view in ["journey_menu", "menu"]:
+            render_journey_entry_loader()
+            return
+        elif trans == "section" or view == "section":
+            render_section_loader(section or "welcome")
+            return
+    elif isinstance(target, str):
+        if target in ["journey_menu", "menu"]:
+            render_journey_entry_loader()
+            return
+        else:
+            render_section_loader(target)
+            return
+
+    # Fallback
+    render_section_loader("welcome")
 
 
 # -----------------------------------------------------------------------------
@@ -815,22 +860,24 @@ def render_chapter_footer(current_id: str):
     with bcol1:
         if prev_id and prev_label:
             if st.button(f"← Prev: {prev_label}", key=f"foot_prev_{current_id}", use_container_width=True):
-                st.session_state["pending_target"] = {"view": "section", "section": prev_id}
+                st.session_state["pending_target"] = {"view": "section", "section": prev_id, "transition": "section"}
                 st.session_state["selected_memory"] = None
                 reset_scroll_to_top()
                 st.rerun()
 
     with bcol2:
         if st.button("← Back to Journey", key=f"foot_back_{current_id}", type="secondary", use_container_width=True):
-            st.session_state["app_view"] = "menu"
+            st.session_state["app_view"] = "journey_menu"
             st.session_state["selected_memory"] = None
+            st.session_state["pending_target"] = None
+            st.session_state["nav_status"] = "idle"
             reset_scroll_to_top()
             st.rerun()
 
     with bcol3:
         if next_id and next_label:
             if st.button(f"Next: {next_label} →", key=f"foot_next_{current_id}", type="primary", use_container_width=True):
-                st.session_state["pending_target"] = {"view": "section", "section": next_id}
+                st.session_state["pending_target"] = {"view": "section", "section": next_id, "transition": "section"}
                 st.session_state["selected_memory"] = None
                 reset_scroll_to_top()
                 st.rerun()
@@ -877,14 +924,14 @@ def render_hidden_bridge_dispatcher():
                 st.rerun()
 
             if st.button("bridge_go_menu", key="_bridge_menu", help="bridge_hidden"):
-                st.session_state["pending_target"] = {"view": "menu"}
+                st.session_state["pending_target"] = {"view": "journey_menu", "transition": "journey_entry"}
                 st.session_state["selected_memory"] = None
                 reset_scroll_to_top()
                 st.rerun()
 
             for chap in config.CHAPTERS:
                 if st.button(f"bridge_go_{chap['id']}", key=f"_bridge_{chap['id']}", help="bridge_hidden"):
-                    st.session_state["pending_target"] = {"view": "section", "section": chap["id"]}
+                    st.session_state["pending_target"] = {"view": "section", "section": chap["id"], "transition": "section"}
                     st.session_state["selected_memory"] = None
                     reset_scroll_to_top()
                     st.rerun()
@@ -1495,9 +1542,10 @@ def main():
     """Main state router and layout orchestrator with 3 distinct UI states."""
     defaults = {
         "startup_completed": False,
-        "app_view": "landing",          # "landing" | "menu" | "section"
+        "app_view": "landing",          # "landing" | "journey_menu" | "section"
         "selected_section": "home",     # active section if in "section" view
-        "pending_target": None,         # dict or None: {"view": "section", "section": "welcome"} | {"view": "menu"}
+        "transition_type": None,        # "journey_entry" | "section" | None
+        "pending_target": None,         # dict or None: {"view": "journey_menu", "transition": "journey_entry"} | {"view": "section", "section": "welcome", "transition": "section"}
         "nav_status": "idle",           # "idle" | "loading" — centralized navigation lock
         "show_final_words": False,
         "selected_memory": None,
@@ -1509,9 +1557,10 @@ def main():
 
     # Support URL query parameter routing
     url_view = st.query_params.get("view")
-    if url_view in ["landing", "menu", "section"]:
-        if st.session_state["app_view"] != url_view:
-            st.session_state["app_view"] = url_view
+    if url_view in ["landing", "journey_menu", "menu", "section"]:
+        mapped_view = "journey_menu" if url_view == "menu" else url_view
+        if st.session_state["app_view"] != mapped_view:
+            st.session_state["app_view"] = mapped_view
 
     url_chap = st.query_params.get("chapter")
     if url_chap and url_chap in [c["id"] for c in config.CHAPTERS]:
@@ -1552,7 +1601,7 @@ def main():
 
     if app_view == "landing":
         render_landing()
-    elif app_view == "menu":
+    elif app_view in ["journey_menu", "menu"]:
         render_journey_menu()
     elif app_view == "section":
         st.session_state["visited_chapters"].add(selected_section)
