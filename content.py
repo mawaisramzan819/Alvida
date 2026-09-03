@@ -47,8 +47,9 @@ HOME_CARDS = [
     {"id": "memories",   "title": "Memories",             "desc": "Woh khoobsurat lamhe jo waqt ke saath kabhi dhundhle nahi honge.", "thumb": "thumb_memories"},
     {"id": "words",      "title": "Words From My Heart",  "desc": "Woh sachchi baatein jo main ap k saamne keh na saka.", "thumb": "thumb_words"},
     {"id": "respect",    "title": "Why I Respect You",    "desc": "Woh khoobian jin ki wajah se ap ki izzat hamesha dil mein rahe gi.", "thumb": "thumb_respect"},
-    {"id": "intentions", "title": "Intentions",         "desc": "Meri sachchi duaein aur iradey jo sirf ap ki khushi ke liye hain.", "thumb": "thumb_intentions"},
-    {"id": "goodbye",    "title": "Final Note",         "desc": "Ek aakhri baat... mohabbat, izzat aur duaon ke saath.", "thumb": "thumb_goodbye"},
+    {"id": "intentions", "title": "Intentions",           "desc": "Meri sachchi duaein aur iradey jo sirf ap ki khushi ke liye hain.", "thumb": "thumb_intentions"},
+    {"id": "dua",        "title": "Dua",                  "desc": "Tumhari khushi, sukoon aur kamyabi ke liye dil se dua.", "thumb": "thumb_dua"},
+    {"id": "goodbye",    "title": "Final Note",           "desc": "Ek aakhri baat... mohabbat, izzat aur duaon ke saath.", "thumb": "thumb_goodbye"},
 ]
 
 # -----------------------------------------------------------------------------

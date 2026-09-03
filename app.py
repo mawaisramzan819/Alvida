@@ -1171,6 +1171,14 @@ def on_navigate_start_journey():
     st.session_state.selected_memory = None
 
 
+def on_navigate_preview(target_id: str):
+    """Callback to transition into focused teaser preview card for next chapter."""
+    st.session_state.pending_section = target_id
+    st.session_state.app_view = "section_preview"
+    st.session_state.selected_memory = None
+    st.session_state.selected_respect_plate = None
+
+
 def on_navigate_section(target_id: str):
     """Alias for forward navigation."""
     on_navigate_next(target_id)
@@ -1204,24 +1212,54 @@ def on_close_respect_plate():
 
 
 # -----------------------------------------------------------------------------
-# 11. Bottom Navigation Bar (Centered Single "Back to Journey")
+# 11. Bottom Navigation Bar (Back to Journey & Next Preview Button)
 # -----------------------------------------------------------------------------
 def render_chapter_footer(current_id: str):
-    """Render clean, streamlined navigation footer with a single prominent centered Back to Journey button."""
+    """Render clean navigation footer with Back to Journey and Next Preview buttons."""
+    chapter_ids = [c["id"] for c in config.CHAPTERS]
+    curr_idx = chapter_ids.index(current_id) if current_id in chapter_ids else 0
+    next_id = chapter_ids[curr_idx + 1] if curr_idx + 1 < len(chapter_ids) else None
+    next_label = None
+    if next_id:
+        for c in config.CHAPTERS:
+            if c["id"] == next_id:
+                next_label = c["label"]
+                break
+
     ui("""
     <div class="chapter-footer-divider"></div>
-    <div class="chapter-footer-single-wrap">
+    <div class="chapter-footer-nav-wrap">
     """)
 
-    bcol1, bcol2, bcol3 = st.columns([1, 1.8, 1])
-    with bcol2:
-        st.button(
-            "← Back to Journey",
-            key=f"foot_back_{current_id}",
-            type="secondary",
-            use_container_width=True,
-            on_click=on_navigate_back_to_menu,
-        )
+    if next_id and next_label:
+        bcol1, bcol2 = st.columns([1, 1], gap="medium")
+        with bcol1:
+            st.button(
+                "← Back to Journey",
+                key=f"foot_back_{current_id}",
+                type="secondary",
+                use_container_width=True,
+                on_click=on_navigate_back_to_menu,
+            )
+        with bcol2:
+            st.button(
+                f"Next: {next_label} →",
+                key=f"foot_next_{current_id}",
+                type="primary",
+                use_container_width=True,
+                on_click=on_navigate_preview,
+                args=(next_id,),
+            )
+    else:
+        bcol1, bcol2, bcol3 = st.columns([1, 1.8, 1])
+        with bcol2:
+            st.button(
+                "← Back to Journey",
+                key=f"foot_back_{current_id}",
+                type="secondary",
+                use_container_width=True,
+                on_click=on_navigate_back_to_menu,
+            )
 
     ui("</div>")
 
@@ -1550,6 +1588,79 @@ def render_journey_menu():
         </div>
     </div>
     """)
+
+
+# -----------------------------------------------------------------------------
+# TWO-STAGE DISCOVERY: RENDER SECTION PREVIEW (Teaser Card)
+# -----------------------------------------------------------------------------
+def render_section_preview():
+    """Render focused single-card teaser preview before opening full chapter interface."""
+    reset_scroll_to_top()
+    render_top_center_music_player()
+
+    target_id = st.session_state.get("pending_section") or "welcome"
+
+    chap_title = "Upcoming Chapter"
+    chap_desc = "Hamari kahani ka agla khoobsurat safha..."
+    chap_icon = "✦"
+    chap_thumb_key = f"thumb_{target_id}" if target_id != "home" else "thumb_welcome"
+
+    for card in content.HOME_CARDS:
+        if card["id"] == target_id:
+            chap_title = card["title"]
+            chap_desc = card["desc"]
+            chap_thumb_key = card.get("thumb", chap_thumb_key)
+            break
+
+    for c in config.CHAPTERS:
+        if c["id"] == target_id:
+            chap_icon = c.get("icon", "✦")
+            if not chap_title or chap_title == "Upcoming Chapter":
+                chap_title = c["label"]
+            break
+
+    thumb_b64 = get_thumbnail_b64(chap_thumb_key)
+    if not thumb_b64:
+        thumb_b64 = get_thumbnail_b64("thumb_welcome")
+
+    ui(f"""
+    <div class="v2-main-wrap section-preview-container feature-section-enter section-floating-enter" key="sec_wrapper_preview" id="sec_wrapper_preview">
+        <div class="chapter-eyebrow-badge preview-teaser-badge">✦ UPCOMING CHAPTER ✦</div>
+        
+        <div class="preview-teaser-card floating-element">
+            <div class="preview-teaser-thumb-frame">
+                <img src="data:image/png;base64,{thumb_b64}" class="preview-teaser-thumb-img" alt="{chap_title}">
+            </div>
+            
+            <div class="preview-teaser-content">
+                <div class="preview-teaser-icon-orb">{chap_icon}</div>
+                <h2 class="preview-teaser-title">{chap_title}</h2>
+                <p class="preview-teaser-desc">{chap_desc}</p>
+            </div>
+        </div>
+    </div>
+    """)
+
+    pcol1, pcol2, pcol3 = st.columns([1, 1.4, 1])
+    with pcol2:
+        st.button(
+            "Open →",
+            key=f"preview_open_btn_{target_id}",
+            type="primary",
+            use_container_width=True,
+            on_click=on_navigate_next,
+            args=(target_id,),
+        )
+
+    scol1, scol2, scol3 = st.columns([1, 1.4, 1])
+    with scol2:
+        st.button(
+            "← Back to Chapters Grid",
+            key="preview_back_grid_btn",
+            type="secondary",
+            use_container_width=True,
+            on_click=on_navigate_back_to_menu,
+        )
 
 
 # -----------------------------------------------------------------------------
@@ -2194,6 +2305,8 @@ def main():
         render_landing()
     elif app_view in ["journey_menu", "menu"]:
         render_journey_menu()
+    elif app_view == "section_preview":
+        render_section_preview()
     elif app_view == "section":
         render_section(st.session_state.get("active_section") or "welcome")
 
