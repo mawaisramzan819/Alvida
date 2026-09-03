@@ -169,8 +169,8 @@ def render_cinematic_atmosphere(active_section: str):
 # -----------------------------------------------------------------------------
 # 5. Startup State Machine & Audio Engine (DOM Persistent Injection)
 # -----------------------------------------------------------------------------
-def render_full_screen_initial_loader():
-    """Display the centralized glowing initial app launch splash loader."""
+def render_initial_splash_loader():
+    """Initial App Launch Splash (Refresh Par)"""
     audio_b64 = get_audio_base64()
     audio_src = f"data:audio/mp3;base64,{audio_b64}" if audio_b64 else "/app/static/farewell.mp3"
 
@@ -232,36 +232,118 @@ def render_full_screen_initial_loader():
         width=0,
     )
 
-    # 2. Render Full-Screen Centered Glowing Initial Splash Loader UI
+    # 2. Render Full-Screen Centered Glowing Initial Splash Loader with Atomic Inline Style
     st.markdown(
         """
-    <div class="initial-loader-overlay startup-loader-overlay">
-        <div class="initial-loader-content startup-loader-card">
-            <div class="initial-loader-icon-wrap startup-loader-icon-wrap">
-                <div class="initial-loader-ring startup-loader-ring"></div>
-                <div class="initial-loader-heart startup-loader-heart">❤️</div>
-            </div>
-            <div class="initial-brand-title startup-brand-title">A Farewell That Stays</div>
-            <div class="initial-brand-subtitle startup-brand-subtitle">Opening a story that was never forgotten...</div>
-            <div class="initial-quote-text startup-quote-text">“Some goodbyes stay in the heart forever.”</div>
-            <div class="initial-progress-track startup-progress-track">
-                <div class="initial-progress-fill startup-progress-fill"></div>
-            </div>
-        </div>
+    <style>
+    .cinematic-loader-backdrop {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: radial-gradient(circle at center, #1e131d 0%, #0a070a 100%) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        z-index: 99999999 !important;
+        text-align: center !important;
+        padding: 2rem !important;
+    }
+    .loader-heart-orb {
+        width: 70px !important;
+        height: 70px !important;
+        border-radius: 50% !important;
+        background: radial-gradient(circle, rgba(244, 143, 177, 0.25) 0%, transparent 70%) !important;
+        border: 2px solid rgba(244, 143, 177, 0.6) !important;
+        box-shadow: 0 0 25px rgba(244, 143, 177, 0.45) !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        font-size: 28px !important;
+        animation: orbPulse 1.6s ease-in-out infinite alternate !important;
+        margin: 0 auto 24px auto !important;
+    }
+    @keyframes orbPulse {
+        0% { transform: scale(0.92); box-shadow: 0 0 15px rgba(244, 143, 177, 0.3); }
+        100% { transform: scale(1.08); box-shadow: 0 0 35px rgba(244, 143, 177, 0.7); }
+    }
+    .analyzer-track {
+        width: 280px !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-radius: 999px !important;
+        overflow: hidden !important;
+        position: relative !important;
+        margin: 20px auto 14px auto !important;
+    }
+    .analyzer-glow-fill {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100% !important;
+        width: 100% !important;
+        background: linear-gradient(90deg, #e2557e, #f78da7, #ffffff) !important;
+        border-radius: 999px !important;
+        animation: analyzerFill 2.0s cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
+    }
+    @keyframes analyzerFill {
+        0% { transform: translateX(-100%); }
+        60% { transform: translateX(0%); }
+        100% { transform: translateX(100%); }
+    }
+    .loader-title-glow {
+        color: #ffffff !important;
+        font-family: 'Cormorant Garamond', Georgia, serif !important;
+        font-size: 1.65rem !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.01em !important;
+        margin-bottom: 6px !important;
+        text-shadow: 0 0 18px rgba(244, 143, 177, 0.35);
+    }
+    .loader-sub-glow {
+        color: #e2a8b8 !important;
+        font-family: 'Lora', Georgia, serif !important;
+        font-size: 0.95rem !important;
+        margin-bottom: 12px !important;
+        font-style: italic !important;
+    }
+    .loader-quote-glow {
+        color: #9d8c96 !important;
+        font-family: 'Lora', Georgia, serif !important;
+        font-size: 0.85rem !important;
+        max-width: 440px !important;
+        line-height: 1.5 !important;
+        font-style: italic !important;
+        margin: 0 auto !important;
+    }
+    </style>
+    <div class="cinematic-loader-backdrop">
+        <div class="loader-heart-orb">❤️</div>
+        <div class="loader-title-glow">A Farewell That Stays</div>
+        <div class="loader-sub-glow">Opening a story that was never forgotten...</div>
+        <div class="analyzer-track"><div class="analyzer-glow-fill"></div></div>
+        <div class="loader-quote-glow">“Some goodbyes stay in the heart forever.”</div>
     </div>
     """,
         unsafe_allow_html=True,
     )
 
 
+def render_full_screen_initial_loader():
+    """Alias for render_initial_splash_loader."""
+    render_initial_splash_loader()
+
+
 def render_initial_splash_screen():
-    """Alias for render_full_screen_initial_loader."""
-    render_full_screen_initial_loader()
+    """Alias for render_initial_splash_loader."""
+    render_initial_splash_loader()
 
 
 def render_startup_screen():
-    """Alias for render_full_screen_initial_loader."""
-    render_full_screen_initial_loader()
+    """Alias for render_initial_splash_loader."""
+    render_initial_splash_loader()
 
 
 # -----------------------------------------------------------------------------
@@ -682,22 +764,101 @@ def reset_scroll_to_top():
 # 8. Navigation Transitions: Journey Loader & Section Router
 # -----------------------------------------------------------------------------
 def render_journey_analyzer_loader():
-    """Render the dedicated 2.0s Journey Starting Analyzer Loader."""
+    """Journey Transition Analyzer (Start the Journey Par)"""
     reset_scroll_to_top()
     st.markdown(
         """
-    <div class="journey-entry-loader-overlay journey-analyzer-overlay">
-        <div class="journey-entry-loader-card journey-analyzer-card">
-            <div class="journey-entry-icon-wrap journey-analyzer-icon-wrap">
-                <div class="journey-entry-ring journey-analyzer-ring"></div>
-                <div class="journey-entry-heart journey-analyzer-heart">✦</div>
-            </div>
-            <div class="journey-entry-title journey-analyzer-title">✦ Journey Starting...</div>
-            <div class="journey-entry-subtitle journey-analyzer-subtitle">Hamara safar shuru ho raha hai...</div>
-            <div class="journey-entry-quote journey-analyzer-quote">“Kuch alvida asal mein khatam nahi hotay, wo bas khoobsurat yaadon ki shuruat ban jatay hain.”</div>
-            <div class="journey-entry-track journey-analyzer-track">
-                <div class="journey-entry-fill journey-analyzer-fill"></div>
-            </div>
+    <style>
+    .cinematic-loader-backdrop {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: radial-gradient(circle at center, #1e131d 0%, #0a070a 100%) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        z-index: 99999999 !important;
+        text-align: center !important;
+        padding: 2rem !important;
+    }
+    .loader-heart-orb {
+        width: 70px !important;
+        height: 70px !important;
+        border-radius: 50% !important;
+        background: radial-gradient(circle, rgba(244, 143, 177, 0.25) 0%, transparent 70%) !important;
+        border: 2px solid rgba(244, 143, 177, 0.6) !important;
+        box-shadow: 0 0 25px rgba(244, 143, 177, 0.45) !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        font-size: 28px !important;
+        animation: orbPulse 1.6s ease-in-out infinite alternate !important;
+        margin: 0 auto 24px auto !important;
+    }
+    @keyframes orbPulse {
+        0% { transform: scale(0.92); box-shadow: 0 0 15px rgba(244, 143, 177, 0.3); }
+        100% { transform: scale(1.08); box-shadow: 0 0 35px rgba(244, 143, 177, 0.7); }
+    }
+    .analyzer-track {
+        width: 280px !important;
+        height: 4px !important;
+        background: rgba(255, 255, 255, 0.08) !important;
+        border-radius: 999px !important;
+        overflow: hidden !important;
+        position: relative !important;
+        margin: 20px auto 14px auto !important;
+    }
+    .analyzer-glow-fill {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100% !important;
+        width: 100% !important;
+        background: linear-gradient(90deg, #e2557e, #f78da7, #ffffff) !important;
+        border-radius: 999px !important;
+        animation: analyzerFill 2.0s cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
+    }
+    @keyframes analyzerFill {
+        0% { transform: translateX(-100%); }
+        60% { transform: translateX(0%); }
+        100% { transform: translateX(100%); }
+    }
+    .loader-title-glow {
+        color: #ffffff !important;
+        font-family: 'Cormorant Garamond', Georgia, serif !important;
+        font-size: 1.65rem !important;
+        font-weight: 700 !important;
+        letter-spacing: -0.01em !important;
+        margin-bottom: 6px !important;
+        text-shadow: 0 0 18px rgba(244, 143, 177, 0.35);
+    }
+    .loader-sub-glow {
+        color: #e2a8b8 !important;
+        font-family: 'Lora', Georgia, serif !important;
+        font-size: 0.95rem !important;
+        margin-bottom: 12px !important;
+        font-style: italic !important;
+    }
+    .loader-quote-glow {
+        color: #9d8c96 !important;
+        font-family: 'Lora', Georgia, serif !important;
+        font-size: 0.85rem !important;
+        max-width: 440px !important;
+        line-height: 1.5 !important;
+        font-style: italic !important;
+        margin: 0 auto !important;
+    }
+    </style>
+    <div class="cinematic-loader-backdrop">
+        <div class="loader-heart-orb">✦</div>
+        <div class="loader-title-glow">Journey Starting...</div>
+        <div class="loader-sub-glow">Hamara safar shuru ho raha hai...</div>
+        <div class="analyzer-track"><div class="analyzer-glow-fill"></div></div>
+        <div class="loader-quote-glow">
+            “Kuch alvida asal mein khatam nahi hotay, wo bas khoobsurat yaadon ki shuruat ban jatay hain.”
         </div>
     </div>
     """,

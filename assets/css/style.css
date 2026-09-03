@@ -2541,233 +2541,129 @@ div[data-testid="stColumn"] div.stButton > button:hover {
 }
 
 /* ==========================================================================
-   11b. STARTUP FULL-SCREEN LOADER
+   11b. STARTUP FULL-SCREEN LOADER & ANALYZERS
    ========================================================================== */
+.cinematic-loader-backdrop,
 .initial-loader-overlay,
-.startup-loader-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  background: radial-gradient(circle at center, #1b1219 0%, #0d090d 100%) !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  text-align: center !important;
-  z-index: 99999999 !important;
-  padding: 2rem !important;
-}
-
-.initial-loader-content,
-.startup-loader-card {
-  max-width: 520px !important;
-  width: 90% !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  animation: loaderPulse 1.8s ease-in-out infinite alternate !important;
-}
-
-@keyframes loaderPulse {
-  0% { transform: scale(0.97); opacity: 0.85; }
-  100% { transform: scale(1.01); opacity: 1; filter: drop-shadow(0 0 18px rgba(244, 143, 177, 0.45)); }
-}
-
-.initial-loader-icon-wrap,
-.startup-loader-icon-wrap {
-  position: relative !important;
-  width: 90px !important;
-  height: 90px !important;
-  margin: 0 auto 1.5rem auto !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.initial-loader-ring,
-.startup-loader-ring {
-  position: absolute !important;
-  inset: 0 !important;
-  border: 2.5px solid rgba(233, 101, 130, 0.2) !important;
-  border-top: 2.5px solid var(--accent-primary) !important;
-  border-radius: 50% !important;
-  animation: spinSlow 1.2s linear infinite !important;
-}
-
-.initial-loader-heart,
-.startup-loader-heart {
-  font-size: 2.5rem !important;
-  animation: heartPulse 1.8s infinite ease-in-out !important;
-  display: inline-block !important;
-}
-
-.initial-brand-title,
-.startup-brand-title {
-  font-family: var(--font-script) !important;
-  font-size: 3.2rem !important;
-  color: #ffffff !important;
-  line-height: 1.1 !important;
-  margin-bottom: 0.4rem !important;
-  text-shadow: 0 0 24px rgba(233, 101, 130, 0.45) !important;
-}
-
-.initial-brand-subtitle,
-.startup-brand-subtitle {
-  font-family: var(--font-display) !important;
-  font-style: italic !important;
-  font-size: 1.25rem !important;
-  color: var(--accent-primary) !important;
-  margin-bottom: 0.8rem !important;
-}
-
-.initial-quote-text,
-.startup-quote-text {
-  font-family: var(--font-body) !important;
-  font-size: 0.95rem !important;
-  color: #dcd0d7 !important;
-  font-style: italic !important;
-  margin-bottom: 1.8rem !important;
-  line-height: 1.5 !important;
-}
-
-.initial-progress-track,
-.startup-progress-track {
-  width: 240px !important;
-  height: 4px !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-radius: 2px !important;
-  overflow: hidden !important;
-  margin: 0 auto !important;
-}
-
-.initial-progress-fill,
-.startup-progress-fill {
-  height: 100% !important;
-  background: var(--gradient-primary) !important;
-  border-radius: 2px !important;
-  animation: initialFillAnim 1.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
-}
-
-@keyframes initialFillAnim {
-  0% { width: 0%; }
-  100% { width: 100%; }
-}
-
-/* ==========================================================================
-   12. TRANSITION LOADERS: A) JOURNEY ENTRY LOADER & B) SECTION LOADER
-   ========================================================================== */
-/* A) JOURNEY ENTRY LOADER (Full Rotating Cinematic Animation — ONLY on Start the Journey) */
+.startup-loader-overlay,
 .journey-entry-loader-overlay,
 .journey-analyzer-overlay {
-  position: fixed !important;
-  inset: 0 !important;
-  width: 100vw !important;
-  height: 100vh !important;
-  z-index: 99999999 !important;
-  background: radial-gradient(circle at center, #1b1219 0%, #0d090d 100%) !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  padding: 2rem !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: radial-gradient(circle at center, #1e131d 0%, #0a070a 100%) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 99999999 !important;
+    text-align: center !important;
+    padding: 2rem !important;
 }
 
-.journey-entry-loader-card,
-.journey-analyzer-card {
-  background: rgba(24, 18, 26, 0.95) !important;
-  border: 1px solid rgba(233, 101, 130, 0.3) !important;
-  border-radius: 24px !important;
-  padding: 2.8rem 3.2rem !important;
-  text-align: center !important;
-  max-width: 500px !important;
-  width: 90% !important;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(233, 101, 130, 0.25) !important;
-  animation: fadeIn 0.3s ease-out !important;
-}
-
+/* Glowing Pulsing Ring / Spinner */
+.loader-heart-orb,
+.initial-loader-icon-wrap,
+.startup-loader-icon-wrap,
 .journey-entry-icon-wrap,
 .journey-analyzer-icon-wrap {
-  position: relative !important;
-  width: 76px !important;
-  height: 76px !important;
-  margin: 0 auto 1.4rem auto !important;
+    width: 70px !important;
+    height: 70px !important;
+    border-radius: 50% !important;
+    background: radial-gradient(circle, rgba(244, 143, 177, 0.25) 0%, transparent 70%) !important;
+    border: 2px solid rgba(244, 143, 177, 0.6) !important;
+    box-shadow: 0 0 25px rgba(244, 143, 177, 0.45) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 28px !important;
+    animation: orbPulse 1.6s ease-in-out infinite alternate !important;
+    margin: 0 auto 24px auto !important;
+    position: relative !important;
 }
 
-.journey-entry-ring,
-.journey-analyzer-ring {
-  position: absolute !important;
-  inset: 0 !important;
-  border: 2.5px solid rgba(233, 101, 130, 0.25) !important;
-  border-top-color: var(--accent-primary) !important;
-  border-right-color: var(--accent-soft) !important;
-  border-radius: 50% !important;
-  animation: spinSlow 1.2s linear infinite !important;
+@keyframes orbPulse {
+    0% { transform: scale(0.92); box-shadow: 0 0 15px rgba(244, 143, 177, 0.3); }
+    100% { transform: scale(1.08); box-shadow: 0 0 35px rgba(244, 143, 177, 0.7); }
 }
 
-.journey-entry-heart,
-.journey-analyzer-heart {
-  position: absolute !important;
-  inset: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  font-size: 1.8rem !important;
-  color: var(--accent-primary) !important;
-  animation: pulseGlow 1.8s ease-in-out infinite !important;
-}
-
-.journey-entry-title,
-.journey-analyzer-title {
-  font-family: var(--font-display) !important;
-  font-size: 2.2rem !important;
-  font-weight: 600 !important;
-  color: #ffffff !important;
-  margin-bottom: 0.35rem !important;
-}
-
-.journey-entry-subtitle,
-.journey-analyzer-subtitle {
-  font-family: var(--font-body) !important;
-  font-size: 1rem !important;
-  color: var(--accent-soft) !important;
-  font-style: italic !important;
-  margin-bottom: 1.1rem !important;
-}
-
-.journey-entry-quote,
-.journey-analyzer-quote {
-  font-family: var(--font-body) !important;
-  font-size: 0.88rem !important;
-  color: #dcd0d7 !important;
-  font-style: italic !important;
-  line-height: 1.55 !important;
-  margin-bottom: 1.8rem !important;
-}
-
+/* Glowing Analyzer Bar Animation */
+.analyzer-track,
+.initial-progress-track,
+.startup-progress-track,
 .journey-entry-track,
 .journey-analyzer-track {
-  width: 100% !important;
-  height: 4px !important;
-  background: rgba(255, 255, 255, 0.1) !important;
-  border-radius: 2px !important;
-  overflow: hidden !important;
+    width: 280px !important;
+    height: 4px !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-radius: 999px !important;
+    overflow: hidden !important;
+    position: relative !important;
+    margin: 20px auto 14px auto !important;
 }
 
+.analyzer-glow-fill,
+.initial-progress-fill,
+.startup-progress-fill,
 .journey-entry-fill,
 .journey-analyzer-fill {
-  height: 100% !important;
-  background: var(--gradient-primary) !important;
-  border-radius: 2px !important;
-  animation: journeyEntryFillAnim 2.0s cubic-bezier(0.2, 0.8, 0.2, 1) forwards !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    height: 100% !important;
+    width: 100% !important;
+    background: linear-gradient(90deg, #e2557e, #f78da7, #ffffff) !important;
+    border-radius: 999px !important;
+    animation: analyzerFill 2.0s cubic-bezier(0.16, 1, 0.3, 1) infinite !important;
 }
 
-@keyframes journeyEntryFillAnim {
-  0% { width: 0%; }
-  100% { width: 100%; }
+@keyframes analyzerFill {
+    0% { transform: translateX(-100%); }
+    60% { transform: translateX(0%); }
+    100% { transform: translateX(100%); }
+}
+
+/* Text styling inside loader */
+.loader-title-glow,
+.initial-brand-title,
+.startup-brand-title,
+.journey-entry-title,
+.journey-analyzer-title {
+    color: #ffffff !important;
+    font-family: var(--font-display), 'Cormorant Garamond', serif !important;
+    font-size: 1.65rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+    margin-bottom: 6px !important;
+    text-shadow: 0 0 18px rgba(244, 143, 177, 0.35) !important;
+}
+
+.loader-sub-glow,
+.initial-brand-subtitle,
+.startup-brand-subtitle,
+.journey-entry-subtitle,
+.journey-analyzer-subtitle {
+    color: #e2a8b8 !important;
+    font-family: var(--font-body), 'Lora', Georgia, serif !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 12px !important;
+    font-style: italic !important;
+}
+
+.loader-quote-glow,
+.initial-quote-text,
+.startup-quote-text,
+.journey-entry-quote,
+.journey-analyzer-quote {
+    color: #9d8c96 !important;
+    font-family: var(--font-body), 'Lora', Georgia, serif !important;
+    font-size: 0.85rem !important;
+    max-width: 440px !important;
+    line-height: 1.5 !important;
+    font-style: italic !important;
+    margin: 0 auto !important;
 }
 
 /* B) SECTION LOADER (Short, Smooth, Specific to each Feature) */
