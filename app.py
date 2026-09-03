@@ -1835,19 +1835,20 @@ def render_memories():
 
     idx = st.session_state.get("selected_memory")
 
-    # Mode A: Grid View (8 polaroid cards in 2 rows of 4)
+    # Mode A: Grid View (8 vintage keepsake cards in 2 rows of 4)
     if idx is None:
+        ui('<div class="memories-grid-container">')
         cols1 = st.columns(4, gap="medium")
         for i in range(4):
             mem = c["cards"][i]
             with cols1[i]:
                 ui(f"""
-                <div class="memory-polaroid-card memory-card-box feature-card-item memory-card-floating floating-element memory-float-{i+1}" style="border-top: 3px solid {mem['accent_color']};">
+                <div class="memory-polaroid-card memory-item-card memory-card-box feature-card-item memory-card-floating floating-element memory-float-{i+1}" style="border-top: 3.5px solid {mem['accent_color']};">
                     <div class="memory-polaroid-icon">{mem['icon']}</div>
                     <h4 class="memory-polaroid-title">{mem['category']}</h4>
                 </div>
                 """)
-                if st.button("Open Memory ✉️", key=f"mem_btn_{i}", use_container_width=True):
+                if st.button("Open Memory 📖", key=f"mem_btn_{i}", use_container_width=True):
                     st.session_state["selected_memory"] = i
                     st.rerun()
 
@@ -1859,14 +1860,15 @@ def render_memories():
             col_idx = i - 4
             with cols2[col_idx]:
                 ui(f"""
-                <div class="memory-polaroid-card memory-card-box feature-card-item memory-card-floating floating-element memory-float-{i+1}" style="border-top: 3px solid {mem['accent_color']};">
+                <div class="memory-polaroid-card memory-item-card memory-card-box feature-card-item memory-card-floating floating-element memory-float-{i+1}" style="border-top: 3.5px solid {mem['accent_color']};">
                     <div class="memory-polaroid-icon">{mem['icon']}</div>
                     <h4 class="memory-polaroid-title">{mem['category']}</h4>
                 </div>
                 """)
-                if st.button("Open Memory ✉️", key=f"mem_btn_{i}", use_container_width=True):
+                if st.button("Open Memory 📖", key=f"mem_btn_{i}", use_container_width=True):
                     st.session_state["selected_memory"] = i
                     st.rerun()
+        ui('</div>')
 
     # Mode B: Opened Memory View (High-End Glassmorphism Keepsake UI)
     else:

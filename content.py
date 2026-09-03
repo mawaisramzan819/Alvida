@@ -120,7 +120,7 @@ MEMORIES_SECTION = {
         {
             "category": "Pehli Salam",
             "icon": "🌱",
-            "accent_color": "#14b8a6",
+            "accent_color": "#6ee7b7",
             "placeholder": (
                 "School ke ek aam se din mein hamari kahani ek choti si salam se shuru hui. "
                 "Humein kya pata tha ke woh chota sa lamha meri zindagi ki sab se gehri yaad ban jayega."
@@ -129,7 +129,7 @@ MEMORIES_SECTION = {
         {
             "category": "Volleyball Ground",
             "icon": "🏐",
-            "accent_color": "#f59e0b",
+            "accent_color": "#fbbf24",
             "placeholder": (
                 "Main volleyball khelta tha, lekin meri nazrein aksar ap ko dhoondti rehti theen. "
                 "Ap ka mujhe dekhna ek aam se match ko mere liye khaas bana deta tha."
@@ -138,7 +138,7 @@ MEMORIES_SECTION = {
         {
             "category": "Jab Ap Achi Lagne Lageen",
             "icon": "✨",
-            "accent_color": "#38bdf8",
+            "accent_color": "#f472b6",
             "placeholder": (
                 "Mujhe yaad nahi ke woh kaunsa ek lamha tha. Bas ap ki rehnumai, hamari baaton "
                 "aur ek doosre ko samajhte samajhte ap mere liye sab kuch ban gayi."
@@ -147,7 +147,7 @@ MEMORIES_SECTION = {
         {
             "category": "Meri Sab Se Bari Ghalti",
             "icon": "🥀",
-            "accent_color": "#f43f5e",
+            "accent_color": "#f87171",
             "placeholder": (
                 "Maine hamari baatein ghalat logon ko bata dein. Unhon ne mera bharosa toda, "
                 "lekin pehli ghalti meri thi—main ap k bharose aur izzat ki hifazat nahi kar saka."
@@ -156,7 +156,7 @@ MEMORIES_SECTION = {
         {
             "category": "Do Saal Ki Khamoshi",
             "icon": "⏳",
-            "accent_color": "#a855f7",
+            "accent_color": "#a78bfa",
             "placeholder": (
                 "Do saal tak hamare darmiyan koi baat nahi hui. Sirf yaadein, afsos aur "
                 "ap k baghair reh jaane wali khamoshi mere saath rahi."
@@ -165,7 +165,7 @@ MEMORIES_SECTION = {
         {
             "category": "Accident Aur Ap Ki Dua",
             "icon": "🤲",
-            "accent_color": "#fbbf24",
+            "accent_color": "#fcd34d",
             "placeholder": (
                 "Jab main zindagi aur behoshi ke darmiyan tha, ap ki duaein mere saath theen. "
                 "Jab mujhe hosh aaya, mere dil ne sab se pehle sirf ap ko yaad kiya."
@@ -174,7 +174,7 @@ MEMORIES_SECTION = {
         {
             "category": "Ap Ka Dobara Lautna",
             "icon": "🕊️",
-            "accent_color": "#14b8a6",
+            "accent_color": "#38bdf8",
             "placeholder": (
                 "Itne arsay ke baad ap ki awaaz dobara sunna aisa tha jaise zindagi ne mujhe "
                 "meri khoi hui duniya wapas kar di ho."
@@ -183,7 +183,7 @@ MEMORIES_SECTION = {
         {
             "category": "Aaj — Ye Lamha",
             "icon": "🌙",
-            "accent_color": "#d4796a",
+            "accent_color": "#f1f5f9",
             "placeholder": (
                 "Itna sab kuch sehne ke baad bhi maine kabhi nahi socha tha ke ek din main "
                 "ap ko apne se door jaate hue dekhunga. Lekin aaj yehi sach hai."

@@ -2127,16 +2127,75 @@ div[data-testid="stColumn"] div.stButton > button:hover {
   border-color: rgba(235, 140, 170, 0.45) !important;
 }
 
+/* ========================================================
+   LEVEL 2: INDIVIDUAL MEMORY CARDS (WARM NOSTALGIC VINTAGE KEEPSAKE)
+   ======================================================== */
+.memories-grid-container {
+  width: 100% !important;
+  max-width: 960px !important;
+  margin: 0 auto !important;
+}
+
+.memories-grid-container .memory-item-card,
+.memory-polaroid-card {
+  position: relative !important;
+  background: radial-gradient(circle at 50% 0%, rgba(60, 36, 48, 0.65) 0%, rgba(20, 13, 22, 0.85) 100%) !important;
+  border: 1px solid rgba(251, 191, 36, 0.18) !important;
+  border-radius: 18px !important;
+  padding: 1.6rem 1.2rem !important;
+  text-align: center !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 236, 210, 0.08) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease !important;
+  margin-bottom: 0.8rem !important;
+}
+
+.memories-grid-container .memory-item-card:hover,
+.memory-polaroid-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  border-color: rgba(251, 191, 36, 0.45) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 25px rgba(251, 191, 36, 0.2) !important;
+}
+
 .memory-polaroid-icon {
-  font-size: 1.8rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.1rem !important;
+  margin-bottom: 0.6rem !important;
+  filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.35)) !important;
 }
 
 .memory-polaroid-title {
-  font-family: var(--font-display);
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text-primary-dark-bg);
+  font-family: 'Cormorant Garamond', Georgia, serif !important;
+  font-size: 1.22rem !important;
+  font-weight: 700 !important;
+  color: #FFF4ED !important;
+  line-height: 1.25 !important;
+  margin: 0 !important;
+}
+
+/* Warm Frosted Glass Buttons for Memory Grid */
+div.stButton:has(button[key^="mem_btn_"]) > button,
+.btn-open-memory {
+  background: rgba(251, 191, 36, 0.08) !important;
+  border: 1px solid rgba(251, 191, 36, 0.28) !important;
+  color: #fef3c7 !important;
+  border-radius: 999px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.04em !important;
+  padding: 8px 18px !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+  transition: all 0.3s ease !important;
+}
+
+div.stButton:has(button[key^="mem_btn_"]) > button:hover,
+.btn-open-memory:hover {
+  background: rgba(251, 191, 36, 0.22) !important;
+  border-color: rgba(251, 191, 36, 0.65) !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.4), 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  transform: translateY(-2px) !important;
 }
 
 /* ========================================================
