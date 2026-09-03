@@ -393,18 +393,31 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             }} catch(e) {{}}
         }};
 
-        window.parent.__farewellStartJourney = function() {{
-            if (window.parent.__farewellNavLock) return;
-            window.parent.__farewellNavLock = true;
-            window.parent.__farewellResetScroll();
-
-            const btn = pDoc.querySelector('button[key="_bridge_menu"], button[data-testid*="_bridge_menu"]');
+        function clickStreamlitBridge(keyId, textId) {{
+            // 1. Check parent doc and local doc by class
+            let btn = pDoc.querySelector(`.st-key-${{keyId}} button`) ||
+                      pDoc.querySelector(`div[class*="${{keyId}}"] button`) ||
+                      pDoc.querySelector(`button[key="${{keyId}}"]`) ||
+                      document.querySelector(`.st-key-${{keyId}} button`);
             if (btn) {{
                 btn.click();
-                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1500);
-                return;
+                return true;
             }}
-            window.parent.__farewellNavLock = false;
+            // 2. Iterate all buttons across parent document
+            const allBtns = pDoc.querySelectorAll('button');
+            for (let b of allBtns) {{
+                const txt = (b.innerText || b.textContent || '').trim();
+                if (txt === textId || txt.includes(textId)) {{
+                    b.click();
+                    return true;
+                }}
+            }}
+            return false;
+        }}
+
+        window.parent.__farewellStartJourney = function() {{
+            window.parent.__farewellResetScroll();
+            clickStreamlitBridge('_bridge_menu', 'bridge_go_menu');
         }};
 
         window.parent.__farewellGoToMenu = function() {{
@@ -412,32 +425,14 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
         }};
 
         window.parent.__farewellGoToLanding = function() {{
-            if (window.parent.__farewellNavLock) return;
-            window.parent.__farewellNavLock = true;
             window.parent.__farewellResetScroll();
-
-            const btn = pDoc.querySelector('button[key="_bridge_landing"], button[data-testid*="_bridge_landing"]');
-            if (btn) {{
-                btn.click();
-                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1500);
-                return;
-            }}
-            window.parent.__farewellNavLock = false;
+            clickStreamlitBridge('_bridge_landing', 'bridge_go_landing');
         }};
 
         window.parent.__farewellNav = function(chapterId) {{
             if (!chapterId) return;
-            if (window.parent.__farewellNavLock) return;
-            window.parent.__farewellNavLock = true;
             window.parent.__farewellResetScroll();
-
-            const btn = pDoc.querySelector(`button[key="_bridge_${{chapterId}}"], button[data-testid*="_bridge_${{chapterId}}"]`);
-            if (btn) {{
-                btn.click();
-                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1500);
-                return;
-            }}
-            window.parent.__farewellNavLock = false;
+            clickStreamlitBridge(`_bridge_${{chapterId}}`, `bridge_go_${{chapterId}}`);
         }};
 
         // 7. Global Event Delegation on Parent Document (Intercepts clicks regardless of Streamlit DOM updates)
@@ -865,18 +860,23 @@ def render_hidden_bridge_dispatcher():
             [class*="st-key-_bridge_"],
             div[data-testid="stElementContainer"]:has([class*="st-key-_bridge_"]),
             div[data-testid="stElementContainer"]:has(button[key*="_bridge_"]),
-            div[data-testid="stElementContainer"]:has(button[title="bridge_hidden"]) {
-                display: none !important;
-                visibility: hidden !important;
+            div[data-testid="stElementContainer"]:has(button[title="bridge_hidden"]),
+            div.stButton:has(button[key*="_bridge_"]),
+            div.stButton:has(button[title="bridge_hidden"]),
+            button[key*="_bridge_"],
+            button[title="bridge_hidden"] {
                 position: absolute !important;
                 top: -9999px !important;
                 left: -9999px !important;
-                width: 0 !important;
-                height: 0 !important;
-                margin: 0 !important;
+                width: 1px !important;
+                height: 1px !important;
                 padding: 0 !important;
+                margin: 0 !important;
+                border: none !important;
+                opacity: 0 !important;
+                pointer-events: auto !important;
                 overflow: hidden !important;
-                pointer-events: none !important;
+                clip: rect(0, 0, 0, 0) !important;
             }
             </style>
             """,
