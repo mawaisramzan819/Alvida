@@ -1188,11 +1188,11 @@ def render_welcome():
 # CHAPTER 2 — MEMORIES
 # -----------------------------------------------------------------------------
 def render_memories():
-    """Render Chapter 2: Memories timeline / cards with smooth 3D slide-down."""
+    """Render Chapter 2: Memories timeline / cards with cinematic entrance & floating cards."""
     reset_scroll_to_top()
     c = content.MEMORIES_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter">
+    <div class="v2-chapter-container feature-section-enter memories-page-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1207,7 +1207,7 @@ def render_memories():
             mem = c["cards"][i]
             with cols1[i]:
                 ui(f"""
-                <div class="memory-polaroid-card" style="border-top: 3px solid {mem['accent_color']};">
+                <div class="memory-polaroid-card memory-card-floating memory-float-{i+1}" style="border-top: 3px solid {mem['accent_color']};">
                     <div class="memory-polaroid-icon">{mem['icon']}</div>
                     <h4 class="memory-polaroid-title">{mem['category']}</h4>
                 </div>
@@ -1224,7 +1224,7 @@ def render_memories():
             col_idx = i - 4
             with cols2[col_idx]:
                 ui(f"""
-                <div class="memory-polaroid-card" style="border-top: 3px solid {mem['accent_color']};">
+                <div class="memory-polaroid-card memory-card-floating memory-float-{i+1}" style="border-top: 3px solid {mem['accent_color']};">
                     <div class="memory-polaroid-icon">{mem['icon']}</div>
                     <h4 class="memory-polaroid-title">{mem['category']}</h4>
                 </div>
