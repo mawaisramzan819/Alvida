@@ -529,6 +529,11 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             clickStreamlitBridge(`_bridge_${{chapterId}}`, `bridge_go_${{chapterId}}`);
         }};
 
+        window.parent.__farewellCloseFinalModal = function() {{
+            window.parent.__farewellResetScroll();
+            clickStreamlitBridge('_bridge_close_final_modal', 'bridge_close_final_modal');
+        }};
+
         // 7. Global Event Delegation on Parent Document (Intercepts clicks regardless of Streamlit DOM updates)
         if (window.parent.__farewellClickDelegation) {{
             pDoc.removeEventListener('click', window.parent.__farewellClickDelegation, true);
@@ -537,6 +542,14 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
         window.parent.__farewellClickDelegation = function(e) {{
             const target = e.target;
             if (!target) return;
+
+            const closeModalTrigger = target.closest('.final-spotlight-close-btn, #finalSpotlightModalOverlay');
+            if (closeModalTrigger && (target.id === 'finalSpotlightModalOverlay' || target.closest('.final-spotlight-close-btn'))) {{
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.__farewellCloseFinalModal();
+                return;
+            }}
 
             const startJourneyBtn = target.closest('#heroStartJourneyBtn, .hero-btn-primary');
             if (startJourneyBtn) {{
@@ -1041,6 +1054,16 @@ def on_navigate_landing():
     st.session_state.selected_memory = None
 
 
+def on_reveal_final_words():
+    """Callback to open centered spotlight final modal."""
+    st.session_state["show_final_words"] = True
+
+
+def on_close_final_words():
+    """Callback to close centered spotlight final modal."""
+    st.session_state["show_final_words"] = False
+
+
 # -----------------------------------------------------------------------------
 # 11. Bottom Navigation Bar (Back to Journey + Next/Prev Chapter)
 # -----------------------------------------------------------------------------
@@ -1102,7 +1125,7 @@ def render_hidden_bridge_dispatcher():
         st.markdown(
             """
             <style>
-            .st-key-_bridge_landing, .st-key-_bridge_menu,
+            .st-key-_bridge_landing, .st-key-_bridge_menu, .st-key-_bridge_close_final_modal,
             [class*="st-key-_bridge_"],
             div[data-testid="stElementContainer"]:has([class*="st-key-_bridge_"]),
             div[data-testid="stElementContainer"]:has(button[key*="_bridge_"]),
@@ -1132,6 +1155,7 @@ def render_hidden_bridge_dispatcher():
         with c:
             st.button("bridge_go_landing", key="_bridge_landing", help="bridge_hidden", on_click=on_navigate_landing)
             st.button("bridge_go_menu", key="_bridge_menu", help="bridge_hidden", on_click=on_navigate_menu)
+            st.button("bridge_close_final_modal", key="_bridge_close_final_modal", help="bridge_hidden", on_click=on_close_final_words)
 
             for chap in config.CHAPTERS:
                 st.button(
@@ -1845,18 +1869,44 @@ def render_goodbye():
     if not st.session_state.get("show_final_words", False):
         fcol1, fcol2, fcol3 = st.columns([1, 1.8, 1])
         with fcol2:
-            if st.button("Read My Final Words ✉️", key="reveal_final_words_btn", type="primary", use_container_width=True):
-                st.session_state["show_final_words"] = True
-                st.rerun()
+            st.button(
+                "Read My Final Words ✉️",
+                key="reveal_final_words_btn",
+                type="primary",
+                use_container_width=True,
+                on_click=on_reveal_final_words,
+            )
     else:
+        # Centered Spotlight Modal Overlay with Deep Backdrop Blur
         ui(f"""
-            <!-- 2. Focused Floating Letter Card -->
-            <div class="final-letter-card finale-revealed-box">
-                <div class="final-letter-header revealed-sub-badge">From Awais to Almas</div>
-                <div class="final-letter-body revealed-prayer-text">{c["absolute_last_line"]}</div>
-                <div class="final-letter-emojis revealed-amen-flower">🌸 🤍 🤲</div>
+        <div class="final-spotlight-modal-overlay" id="finalSpotlightModalOverlay">
+            <div class="final-spotlight-modal-card finale-modal-floating">
+                <div class="final-spotlight-lantern">🏮</div>
+                <div class="final-spotlight-badge">FROM AWAIS TO ALMAS</div>
+                <div class="final-spotlight-divider"></div>
+                <div class="final-spotlight-body">
+                    {c["absolute_last_line"]}
+                </div>
+                <div class="final-spotlight-emojis">🌸 &nbsp; 🤍 &nbsp; 🤲</div>
+                <div style="margin-top: 1.6rem; text-align: center;">
+                    <button class="final-spotlight-close-btn" onclick="window.parent.__farewellCloseFinalModal && window.parent.__farewellCloseFinalModal()">
+                        Close Letter ×
+                    </button>
+                </div>
             </div>
+        </div>
         """)
+
+        # Fallback button for native Streamlit interaction
+        fcol1, fcol2, fcol3 = st.columns([1, 1.6, 1])
+        with fcol2:
+            st.button(
+                "Close Letter ×",
+                key="close_final_words_btn",
+                type="secondary",
+                use_container_width=True,
+                on_click=on_close_final_words,
+            )
 
     ui("""
         </div>

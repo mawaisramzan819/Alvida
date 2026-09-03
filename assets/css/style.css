@@ -2560,6 +2560,141 @@ div[data-testid="stColumn"] div.stButton > button:hover {
   font-size: 1.35rem !important;
 }
 
+/* ========================================================
+   CINEMATIC SPOTLIGHT MODAL FOR FINAL WORDS
+   ======================================================== */
+.final-spotlight-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(10, 6, 12, 0.82) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999999 !important;
+  padding: 1.5rem !important;
+  animation: modalFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+}
+
+@keyframes modalFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.final-spotlight-modal-card {
+  max-width: 580px !important;
+  width: 92% !important;
+  background: radial-gradient(circle at top, rgba(38, 26, 36, 0.96) 0%, rgba(18, 12, 18, 0.98) 100%) !important;
+  border: 1.5px solid rgba(233, 101, 130, 0.45) !important;
+  border-radius: 24px !important;
+  padding: 2.8rem 2.2rem !important;
+  text-align: center !important;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(233, 101, 130, 0.28) !important;
+  animation: modalZoomIn 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards, finaleModalFloat 3.6s ease-in-out infinite alternate !important;
+  will-change: transform, box-shadow;
+  position: relative !important;
+}
+
+@keyframes modalZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.90) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes finaleModalFloat {
+  0% {
+    transform: translateY(0px) scale(1);
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.85), 0 0 35px rgba(233, 101, 130, 0.22);
+  }
+  100% {
+    transform: translateY(-8px) scale(1.008);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.9), 0 0 50px rgba(233, 101, 130, 0.4);
+  }
+}
+
+.final-spotlight-lantern {
+  font-size: 2.2rem !important;
+  margin-bottom: 0.6rem !important;
+  animation: lanternGlow 2.4s ease-in-out infinite alternate !important;
+}
+
+@keyframes lanternGlow {
+  0% { transform: scale(0.95); filter: drop-shadow(0 0 8px rgba(244, 143, 177, 0.3)); }
+  100% { transform: scale(1.08); filter: drop-shadow(0 0 20px rgba(244, 143, 177, 0.8)); }
+}
+
+.final-spotlight-badge {
+  font-family: var(--font-body), 'Lora', Georgia, serif !important;
+  font-size: 0.88rem !important;
+  color: var(--accent-primary) !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 2.2px !important;
+  margin-bottom: 0.6rem !important;
+  text-shadow: 0 0 15px rgba(233, 101, 130, 0.4) !important;
+}
+
+.final-spotlight-divider {
+  height: 1px !important;
+  background: linear-gradient(90deg, transparent 0%, rgba(233, 101, 130, 0.6) 50%, transparent 100%) !important;
+  margin: 0.8rem auto 1.4rem auto !important;
+  width: 75% !important;
+}
+
+.final-spotlight-body {
+  font-family: var(--font-body), 'Lora', Georgia, serif !important;
+  font-size: 1.12rem !important;
+  line-height: 1.95 !important;
+  color: #ffffff !important;
+  font-style: italic !important;
+  margin-bottom: 1.4rem !important;
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.15) !important;
+}
+
+.final-spotlight-emojis {
+  font-size: 1.5rem !important;
+  letter-spacing: 6px !important;
+  color: var(--accent-primary) !important;
+  margin-bottom: 0.8rem !important;
+}
+
+.final-spotlight-close-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(233, 101, 130, 0.4) !important;
+  color: #f7d6e0 !important;
+  padding: 8px 24px !important;
+  border-radius: 999px !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.9rem !important;
+  cursor: pointer !important;
+  transition: all 0.3s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.final-spotlight-close-btn:hover {
+  background: rgba(233, 101, 130, 0.25) !important;
+  border-color: var(--accent-primary) !important;
+  color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 18px rgba(233, 101, 130, 0.35) !important;
+}
+
 /* ==========================================================================
    10. FLOATING MUSIC TOGGLE BUTTON (Top-Right)
    ========================================================================== */
