@@ -172,6 +172,7 @@ def render_cinematic_atmosphere(active_section: str):
 # -----------------------------------------------------------------------------
 def render_initial_splash_loader():
     """Initial App Launch Splash with 2.5s Sweeping Analyzer & Universal Audio Engine."""
+    # 1. Visual HTML & CSS Overlay (Zero Markdown JS leaks)
     st.markdown(
         """
     <!-- Native Persistent Audio Tag with Multi-Source Fallback (Zero-latency Streaming) -->
@@ -280,26 +281,31 @@ def render_initial_splash_loader():
         <div class="analyzer-track"><div class="analyzer-glow-fill"></div></div>
         <div class="loader-quote-glow">“Some goodbyes stay in the heart forever.”</div>
     </div>
+    """,
+        unsafe_allow_html=True,
+    )
+
+    # 2. Pure JavaScript Audio Setup via Sandboxed Components (No Markdown Leak)
+    components.html(
+        """
     <script>
     (function() {
-        // Universal Audio Initializer & Multi-Trigger Gesture Unlocker
         function setupAudio() {
             let pDoc;
             try { pDoc = window.parent && window.parent.document ? window.parent.document : document; } catch(e) { pDoc = document; }
             let audio = pDoc.getElementById('farewellBgAudioMain') || document.getElementById('farewellBgAudioMain');
             if (!audio) {
-                audio = document.createElement('audio');
+                audio = pDoc.createElement('audio');
                 audio.id = 'farewellBgAudioMain';
                 audio.loop = true;
                 audio.preload = 'auto';
                 audio.innerHTML = '<source src="app/static/farewell.mp3" type="audio/mp3"><source src="static/farewell.mp3" type="audio/mp3"><source src="/app/static/farewell.mp3" type="audio/mp3">';
-                document.body.appendChild(audio);
-                try { if (pDoc && pDoc.body && pDoc !== document) pDoc.body.appendChild(audio.cloneNode(true)); } catch(e) {}
+                try { if (pDoc.body) pDoc.body.appendChild(audio); } catch(e) { document.body.appendChild(audio); }
             }
             if (window.parent) window.parent.__farewell_audio = audio;
 
             const isMuted = (localStorage.getItem('farewell_music_paused') === 'true');
-            if (audio && !isMuted) {
+            if (audio && !isMuted && audio.paused) {
                 audio.volume = 0.22;
                 let playProm = audio.play();
                 if (playProm !== undefined) {
@@ -318,13 +324,13 @@ def render_initial_splash_loader():
                                 }).catch(function() {});
                             }
                             ['click', 'touchstart', 'pointerdown', 'keydown'].forEach(function(evt) {
-                                document.removeEventListener(evt, unlockAudio);
                                 try { if (pDoc) pDoc.removeEventListener(evt, unlockAudio); } catch(e) {}
+                                document.removeEventListener(evt, unlockAudio);
                             });
                         }
                         ['click', 'touchstart', 'pointerdown', 'keydown'].forEach(function(evt) {
-                            document.addEventListener(evt, unlockAudio, { passive: true, once: true });
                             try { if (pDoc) pDoc.addEventListener(evt, unlockAudio, { passive: true, once: true }); } catch(e) {}
+                            document.addEventListener(evt, unlockAudio, { passive: true, once: true });
                         });
                     });
                 }
@@ -336,11 +342,12 @@ def render_initial_splash_loader():
             setupAudio();
         }
         setTimeout(setupAudio, 300);
-        setTimeout(setupAudio, 1000);
+        setTimeout(setupAudio, 800);
     })();
     </script>
     """,
-        unsafe_allow_html=True,
+        height=0,
+        width=0,
     )
 
 
