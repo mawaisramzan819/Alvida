@@ -380,7 +380,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
 
         // 6. Global Navigation Triggers
         window.parent.__farewellResetScroll = function() {{
-            try {{ window.parent.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }} catch(e) {{ try {{ window.parent.scrollTo(0, 0); }} catch(e) {{}} }}
+            try {{ window.parent.scrollTo({{ top: 0, left: 0, behavior: 'instant' }}); }} catch(e) {{ try {{ window.parent.scrollTo(0, 0); }} catch(e) {{}} }}
             try {{ if (pDoc.documentElement) pDoc.documentElement.scrollTop = 0; }} catch(e) {{}}
             try {{ if (pDoc.body) pDoc.body.scrollTop = 0; }} catch(e) {{}}
             try {{
