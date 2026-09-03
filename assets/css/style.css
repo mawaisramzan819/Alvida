@@ -2138,24 +2138,106 @@ div[data-testid="stColumn"] div.stButton > button:hover {
   box-shadow: var(--shadow-card);
 }
 
-.intention-card-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
+/* ========================================================
+   INTENTIONS CARDS & PAUSE-ON-HOVER SYSTEM
+   ======================================================== */
+
+.intentions-grid-container,
+.intentions-grid-layout {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  width: 100% !important;
+  max-width: 760px !important;
+  margin: 0 auto !important;
+}
+
+/* Base Card Style */
+.intention-point-card,
+.intention-item-card {
+  background: rgba(26, 18, 25, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 18px !important;
+  padding: 22px 26px !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35) !important;
+  backdrop-filter: blur(10px) !important;
+  
+  /* Natural Floating Motion */
+  animation: intentionCardFloat 4.2s ease-in-out infinite alternate !important;
+  will-change: transform, box-shadow, border-color !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.35s ease, 
+              border-color 0.35s ease !important;
+}
+
+/* Stagger floating rhythm across the cards */
+.intentions-grid-container .intention-point-card:nth-child(1),
+.intentions-grid-container .intention-item-card:nth-child(1) {
+  animation-duration: 4.0s !important;
+  animation-delay: 0.0s !important;
+}
+.intentions-grid-container .intention-point-card:nth-child(2),
+.intentions-grid-container .intention-item-card:nth-child(2) {
+  animation-duration: 4.6s !important;
+  animation-delay: 0.7s !important;
+}
+.intentions-grid-container .intention-point-card:nth-child(3),
+.intentions-grid-container .intention-item-card:nth-child(3) {
+  animation-duration: 4.2s !important;
+  animation-delay: 1.3s !important;
+}
+.intentions-grid-container .intention-point-card:nth-child(4),
+.intentions-grid-container .intention-item-card:nth-child(4) {
+  animation-duration: 4.5s !important;
+  animation-delay: 0.4s !important;
+}
+
+/* Floating Animation Keyframe */
+@keyframes intentionCardFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  100% {
+    transform: translateY(-7px);
+  }
+}
+
+/* CRITICAL: Pause Floating on Mouse Hover & Subtle Elevate */
+.intention-point-card:hover,
+.intention-item-card:hover {
+  animation-play-state: paused !important; /* Stops the floating immediately */
+  transform: translateY(-9px) scale(1.01) !important;
+  border-color: rgba(235, 140, 170, 0.45) !important;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55), 0 0 24px rgba(235, 140, 170, 0.25) !important;
+}
+
+/* Card Content Typography */
+.intention-card-header {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  margin-bottom: 12px !important;
+}
+
+.intention-icon {
+  font-size: 1.25rem !important;
 }
 
 .intention-card-title {
-  font-family: var(--font-display);
-  font-size: var(--fs-h3);
-  color: var(--text-primary-dark-bg);
-  margin: 0 0 0.5rem 0;
+  color: #fff !important;
+  font-family: var(--font-display) !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  margin: 0 !important;
+  letter-spacing: -0.01em;
 }
 
 .intention-card-body {
-  font-family: var(--font-body);
-  font-size: var(--fs-body);
-  line-height: 1.7;
-  color: var(--text-secondary-dark-bg);
-  margin: 0;
+  color: #dcd0d7 !important;
+  font-family: var(--font-body) !important;
+  font-size: 0.98rem !important;
+  line-height: 1.65 !important;
+  margin: 0 !important;
 }
 
 .intentions-family-card {

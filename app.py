@@ -1343,31 +1343,31 @@ def render_respect():
 # CHAPTER 5 — INTENTIONS
 # -----------------------------------------------------------------------------
 def render_intentions():
-    """Render Chapter 5: Intentions & Family Respect with smooth 3D slide-down."""
+    """Render Chapter 5: Intentions & Family Respect with dedicated card boxes and pause-on-hover."""
     reset_scroll_to_top()
     c = content.INTENTIONS_SECTION
-    ui(f"""
+    
+    cards_html = f"""
     <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_intentions" id="sec_wrapper_intentions">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
-        <div class="intentions-grid-layout">
-    """)
-
-    cols = st.columns(2, gap="large")
-    for i, intn in enumerate(c["intentions"]):
-        col_idx = i % 2
-        with cols[col_idx]:
-            ui(f"""
-            <div class="intention-item-card floating-element">
-                <div class="intention-card-icon">💝</div>
-                <h4 class="intention-card-title">{intn['title']}</h4>
-                <p class="intention-card-body">{intn['content']}</p>
+        <div class="intentions-grid-container">
+    """
+    
+    for item in c["intentions"]:
+        cards_html += f"""
+            <div class="intention-point-card intention-item-card">
+                <div class="intention-card-header">
+                    <span class="intention-icon">❤️</span>
+                    <h3 class="intention-card-title">{item["title"]}</h3>
+                </div>
+                <p class="intention-card-body">{item["content"]}</p>
             </div>
-            """)
-
-    ui(f"""
+        """
+        
+    cards_html += f"""
         </div>
         <div class="intentions-family-card floating-element">
             <span class="family-card-icon">🏡</span>
@@ -1376,7 +1376,8 @@ def render_intentions():
             </p>
         </div>
     </div>
-    """)
+    """
+    ui(cards_html)
     render_chapter_footer("intentions")
 
 
