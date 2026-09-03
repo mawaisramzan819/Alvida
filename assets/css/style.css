@@ -2544,15 +2544,40 @@ div[data-testid="stColumn"] div.stButton > button:hover {
    11b. STARTUP FULL-SCREEN LOADER
    ========================================================================== */
 .startup-loader-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 99999999;
-  background: var(--bg-deep);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 2rem;
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999999 !important;
+  background: var(--bg-deep) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 2rem !important;
+  animation: startupOverlayLifecycle 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  pointer-events: auto !important;
+}
+
+@keyframes startupOverlayLifecycle {
+  0% {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  75% {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+  95% {
+    opacity: 0;
+    visibility: visible;
+    pointer-events: none;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 .startup-loader-card {

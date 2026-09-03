@@ -1504,14 +1504,11 @@ def main():
     # 2. Global Styles
     load_styles()
 
-    # 3. Splash / Initial Loader Handling (Executes exactly ONCE on initial session startup)
+    # 3. Startup Splash Loader (Mounted as seamless overlay on initial session load)
     if not st.session_state.initial_splash_done:
         render_initial_splash_screen()
-        time.sleep(1.3)
         st.session_state.initial_splash_done = True
         st.session_state.startup_completed = True
-        st.session_state.app_view = "landing"
-        st.rerun()
 
     # 4. Top-Level Bridge Navigation Dispatcher (Evaluated FIRST to prevent waterfall re-renders)
     render_hidden_bridge_dispatcher()
