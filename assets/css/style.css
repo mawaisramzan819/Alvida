@@ -152,102 +152,52 @@ p {
 }
 
 /* ==========================================================================
-   2. DESKTOP TWO-COLUMN SHELL & LANDING FULL-WIDTH VIEW
+   2. PERMANENTLY SUPPRESS STREAMLIT SIDEBAR & TOGGLE BUTTON (ALL SCREENS)
    ========================================================================== */
-/* When in Landing state: No sidebar, 100% full-width main container */
-body.view-landing [data-testid="stSidebar"],
-.view-landing [data-testid="stSidebar"],
-[data-testid="stAppViewContainer"]:has(.landing-page-wrap) [data-testid="stSidebar"] {
+/* Permanently hide Streamlit sidebar element */
+[data-testid="stSidebar"],
+section[data-testid="stSidebar"] {
   display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  max-width: 0 !important;
+  transform: translateX(-100%) !important;
+  pointer-events: none !important;
 }
 
-body.view-landing [data-testid="stMain"],
-body.view-landing [data-testid="stAppViewContainer"] > .main,
-[data-testid="stAppViewContainer"]:has(.landing-page-wrap) [data-testid="stMain"],
-[data-testid="stAppViewContainer"]:has(.landing-page-wrap) [data-testid="stAppViewContainer"] > .main {
+/* Hide the sidebar toggle chevron / collapse / expand button */
+[data-testid="stSidebarCollapseButton"],
+[data-testid="stSidebarCollapsedControl"],
+button[data-testid="baseButton-headerNoPadding"],
+[data-testid="collapsedControl"],
+header button:has(svg),
+[data-testid="stHeader"] button {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
+/* Adjust main content container to take 100% full width */
+[data-testid="stMain"],
+[data-testid="stAppViewContainer"] > .main,
+[data-testid="stAppViewBlockContainer"],
+.main .block-container {
   margin-left: 0 !important;
   width: 100% !important;
   min-width: 100% !important;
+  max-width: 100% !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 
-[data-testid="stAppViewContainer"]:has(.landing-page-wrap) .main .block-container {
+.main .block-container {
   width: min(100% - 32px, 1400px) !important;
   max-width: 1400px !important;
   margin-inline: auto !important;
   padding: 20px 28px 48px 28px !important;
-}
-
-@media (min-width: 1025px) {
-  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stSidebar"] {
-    position: fixed !important;
-    top: 0 !important;
-    left: 0 !important;
-    bottom: 0 !important;
-    width: 270px !important;
-    min-width: 270px !important;
-    max-width: 270px !important;
-    height: 100vh !important;
-    z-index: 1000 !important;
-    transform: none !important;
-    visibility: visible !important;
-    background-color: var(--bg-sidebar) !important;
-    border-right: 1px solid var(--border-dark) !important;
-    box-shadow: 6px 0 28px rgba(0, 0, 0, 0.45) !important;
-    overflow-y: auto !important;
-    padding: 0 !important;
-  }
-
-  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stSidebar"] > div:first-child {
-    background-color: var(--bg-sidebar) !important;
-    padding: 1.6rem 1.15rem 2.5rem 1.15rem !important;
-  }
-
-  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stSidebarNav"],
-  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stSidebarCollapseButton"] {
-    display: none !important;
-  }
-
-  /* MAIN CONTENT OFFSET (Only when NOT in landing view) */
-  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stMain"],
-  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stAppViewContainer"] > .main {
-    margin-left: 270px !important;
-    width: calc(100% - 270px) !important;
-    min-width: 0 !important;
-  }
-
-  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) .main .block-container {
-    width: min(100% - 32px, 1400px) !important;
-    max-width: 1400px !important;
-    padding: 20px 28px 48px 28px !important;
-    margin: 0 auto !important;
-  }
-}
-
-@media (max-width: 1024px) {
-  [data-testid="stSidebar"] {
-    background-color: var(--bg-sidebar) !important;
-    border-right: 1px solid var(--border-dark) !important;
-    box-shadow: 10px 0 50px rgba(0, 0, 0, 0.85) !important;
-    z-index: 10000 !important;
-    width: min(85vw, 300px) !important;
-  }
-
-  [data-testid="stMain"],
-  [data-testid="stAppViewContainer"] > .main {
-    margin-left: 0 !important;
-    width: 100% !important;
-    min-width: 100% !important;
-  }
-
-  .main .block-container {
-    padding: 16px 16px 40px 16px !important;
-    max-width: 100% !important;
-  }
-
-  [data-testid="stSidebarCollapseButton"],
-  [data-testid="stSidebarCollapsedControl"] {
-    display: flex !important;
-  }
 }
 
 /* ==========================================================================
@@ -3234,12 +3184,6 @@ div[data-testid="stColumn"] div.stButton > button:hover {
     opacity: 1 !important;
   }
 
-  [data-testid="stSidebar"] {
-    min-width: min(85vw, 300px) !important;
-    max-width: min(85vw, 300px) !important;
-    box-shadow: 10px 0 50px rgba(0, 0, 0, 0.8) !important;
-  }
-  
   .main .block-container {
     padding-left: 1rem !important;
     padding-right: 1rem !important;

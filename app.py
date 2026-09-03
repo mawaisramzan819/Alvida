@@ -23,12 +23,12 @@ try:
 except Exception:
     pass
 
-# Page Configuration — Wide layout with persistent sidebar
+# Page Configuration — Wide layout with collapsed sidebar (permanently suppressed)
 st.set_page_config(
     page_title=config.APP_TITLE,
     page_icon=config.APP_ICON,
     layout=config.PAGE_LAYOUT,
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 
@@ -46,9 +46,46 @@ def ui(html_content: str):
 # 2. Stylesheet & Viewport Injection
 # -----------------------------------------------------------------------------
 def load_styles():
-    """Load custom CSS and inject mobile viewport meta."""
+    """Load custom CSS, suppress Streamlit sidebar, and inject mobile viewport meta."""
     st.markdown(
-        '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">',
+        """
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+        <style>
+        /* Permanently hide Streamlit sidebar element */
+        [data-testid="stSidebar"],
+        section[data-testid="stSidebar"] {
+            display: none !important;
+            visibility: hidden !important;
+            width: 0 !important;
+            min-width: 0 !important;
+            max-width: 0 !important;
+            transform: translateX(-100%) !important;
+            pointer-events: none !important;
+        }
+
+        /* Hide the sidebar toggle chevron / collapse / expand button */
+        [data-testid="stSidebarCollapseButton"],
+        [data-testid="stSidebarCollapsedControl"],
+        button[data-testid="baseButton-headerNoPadding"],
+        [data-testid="collapsedControl"],
+        header button:has(svg),
+        [data-testid="stHeader"] button {
+            display: none !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+        }
+
+        /* Adjust main content container to take 100% full width */
+        [data-testid="stAppViewBlockContainer"],
+        .main .block-container {
+            max-width: 100% !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        </style>
+        """,
         unsafe_allow_html=True,
     )
     css_path = config.CSS_DIR / "style.css"
@@ -1141,23 +1178,11 @@ def render_section(section_id: str):
 
 
 # -----------------------------------------------------------------------------
-# 9. Sidebar Component (Minimal Branded Header)
+# 9. Sidebar Component (Permanently Disabled)
 # -----------------------------------------------------------------------------
 def render_sidebar():
-    """Render minimal cinematic left sidebar containing Brand Header."""
-    with st.sidebar:
-        ui("""
-        <div class="sidebar-brand-wrapper" onclick="window.parent.__farewellGoToLanding && window.parent.__farewellGoToLanding()" style="cursor: pointer;" title="Return to Intro Screen">
-            <div class="sidebar-brand-heart-glow">
-                <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E96582" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
-            </div>
-            <div class="sidebar-brand-title">A Farewell</div>
-            <div class="sidebar-brand-sub">That Stays</div>
-            <div class="sidebar-brand-sub-bottom">in the Heart</div>
-        </div>
-        """)
+    """Sidebar permanently suppressed to give 100% full-screen immersive view."""
+    pass
 
 
 # -----------------------------------------------------------------------------
@@ -2196,11 +2221,7 @@ def main():
     render_cinematic_atmosphere(active_section if app_view == "section" else "home")
     render_sidebar_and_navigation_bridge(app_view, active_section)
 
-    # 7. Sidebar (Mounted ONLY inside the Journey — not on Landing or Transitions)
-    if app_view in ["journey_menu", "section"]:
-        render_sidebar()
-
-    # 8. Main Mutually Exclusive Active Views
+    # 7. Main Mutually Exclusive Active Views
     if app_view == "landing":
         render_landing()
     elif app_view in ["journey_menu", "menu"]:
