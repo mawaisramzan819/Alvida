@@ -102,9 +102,8 @@ footer,
 }
 
 [data-testid="stAppViewContainer"] {
-  background-color: var(--bg-deep) !important;
-  background-image: radial-gradient(circle at 50% 10%, #17162A 0%, var(--bg-deep) 70%) !important;
-  background-attachment: fixed !important;
+  background-color: transparent !important;
+  background-image: none !important;
   color: var(--text-primary-dark-bg) !important;
   font-family: var(--font-body) !important;
   -webkit-font-smoothing: antialiased;
@@ -551,7 +550,8 @@ p {
   border: 1px solid var(--border-dark);
   margin-top: 0;
   margin-bottom: var(--space-8);
-  background: #090D1B;
+  background: rgba(9, 13, 27, 0.35);
+  backdrop-filter: blur(2px);
 }
 
 .hero-panoramic-bg-img {
@@ -562,6 +562,8 @@ p {
   object-fit: cover;
   object-position: right center;
   display: block;
+  opacity: 0.28;
+  mix-blend-mode: screen;
 }
 
 .hero-panoramic-gradient-overlay {

@@ -7,6 +7,7 @@ Full-fidelity layout matching reference mockup: Fixed Sidebar + Panoramic Hero +
 
 import base64
 import importlib
+import json
 from pathlib import Path
 import time
 import streamlit as st
@@ -255,145 +256,156 @@ def render_startup_screen():
 
 
 # -----------------------------------------------------------------------------
-# 6. Interactive Sidebar Music & Navigation JavaScript Bridge
+# 6. Interactive Sidebar Music, 3D WebGL & Navigation JavaScript Bridge
 # -----------------------------------------------------------------------------
-def render_sidebar_and_navigation_bridge():
-    """Register global navigation helper and bind bulletproof real-time sidebar music controls."""
+def get_farewell_3d_js():
+    """Read the 3D WebGL script from assets/js/farewell_3d.js."""
+    js_path = config.BASE_DIR / "assets" / "js" / "farewell_3d.js"
+    if js_path.exists():
+        return js_path.read_text(encoding="utf-8")
+    return ""
+
+
+def render_sidebar_and_navigation_bridge(active: str = "home"):
+    """Register global navigation helper, bind sidebar music controls, and orchestrate 3D WebGL engine."""
+    three_d_code = get_farewell_3d_js()
+    three_d_json = json.dumps(three_d_code)
+
     components.html(
-        """
+        f"""
     <script>
-    (function() {
+    (function() {{
         const pDoc = window.parent.document;
 
         // 1. Dynamic Audio Resolver
-        window.parent.__farewellGetAudio = function() {
+        window.parent.__farewellGetAudio = function() {{
             let a = pDoc.getElementById('farewellBgAudioMain') || window.parent.__farewell_audio;
-            if (!a) {
+            if (!a) {{
                 const audios = pDoc.getElementsByTagName('audio');
                 if (audios.length > 0) a = audios[0];
-            }
+            }}
             return a;
-        };
+        }};
 
         // 2. Format Seconds into MM:SS
-        function fmtTime(sec) {
+        function fmtTime(sec) {{
             if (!sec || isNaN(sec)) return "00:00";
             const m = Math.floor(sec / 60);
             const s = Math.floor(sec % 60);
             return (m < 10 ? "0" + m : m) + ":" + (s < 10 ? "0" + s : s);
-        }
+        }}
 
         // 3. Real-Time UI Synchronizer
-        window.parent.__farewellUpdateMusicUI = function() {
+        window.parent.__farewellUpdateMusicUI = function() {{
             const audio = window.parent.__farewellGetAudio();
             const isPaused = !audio || audio.paused;
 
             // Circular Play/Pause button
             const playBtn = pDoc.getElementById('musicBtnPlayPause');
-            if (playBtn) {
+            if (playBtn) {{
                 playBtn.innerHTML = isPaused ? '▶' : '❚❚';
                 playBtn.title = isPaused ? 'Start Music' : 'Stop Music';
-            }
+            }}
 
             // Stop / Start Pill Button
             const stopStartBtn = pDoc.getElementById('musicBtnStopStart');
             const stopStartIcon = pDoc.getElementById('musicBtnStopStartIcon');
             const stopStartText = pDoc.getElementById('musicBtnStopStartText');
-            if (stopStartBtn && stopStartIcon && stopStartText) {
+            if (stopStartBtn && stopStartIcon && stopStartText) {{
                 stopStartIcon.textContent = isPaused ? '▶' : '⏸';
                 stopStartText.textContent = isPaused ? 'Start Music' : 'Stop Music';
                 stopStartBtn.classList.toggle('is-stopped', isPaused);
                 stopStartBtn.title = isPaused ? 'Click to Start Music' : 'Click to Stop Music';
-            }
+            }}
 
             // Timeline & Track
-            if (audio) {
+            if (audio) {{
                 const curTime = pDoc.getElementById('musicTimeCurrent');
                 const totTime = pDoc.getElementById('musicTimeTotal');
                 const fill = pDoc.getElementById('musicProgressFill');
                 const dot = pDoc.getElementById('musicProgressDot');
 
                 if (curTime) curTime.textContent = fmtTime(audio.currentTime);
-                if (totTime && audio.duration && !isNaN(audio.duration)) {
+                if (totTime && audio.duration && !isNaN(audio.duration)) {{
                     totTime.textContent = fmtTime(audio.duration);
-                }
-                if (fill && dot && audio.duration && !isNaN(audio.duration)) {
+                }}
+                if (fill && dot && audio.duration && !isNaN(audio.duration)) {{
                     const pct = Math.min(100, Math.max(0, (audio.currentTime / audio.duration) * 100));
                     fill.style.width = pct + '%';
                     dot.style.left = pct + '%';
-                }
-            }
-        };
+                }}
+            }}
+        }};
 
         // 4. Guaranteed Audio Toggle Function
-        window.parent.__farewellToggleAudio = function() {
+        window.parent.__farewellToggleAudio = function() {{
             const audio = window.parent.__farewellGetAudio();
-            if (!audio) {
+            if (!audio) {{
                 console.warn('Farewell: No audio element available on document.');
                 return;
-            }
-            if (audio.paused) {
-                audio.play().then(() => {
-                    if (window.parent.__farewellUpdateMusicUI) {
+            }}
+            if (audio.paused) {{
+                audio.play().then(() => {{
+                    if (window.parent.__farewellUpdateMusicUI) {{
                         window.parent.__farewellUpdateMusicUI();
-                    }
-                }).catch(err => {
+                    }}
+                }}).catch(err => {{
                     console.error('Audio play error:', err);
-                });
-            } else {
+                }});
+            }} else {{
                 audio.pause();
-                if (window.parent.__farewellUpdateMusicUI) {
+                if (window.parent.__farewellUpdateMusicUI) {{
                     window.parent.__farewellUpdateMusicUI();
-                }
-            }
-        };
+                }}
+            }}
+        }};
 
         // 5. Rewind & Fast-Forward
-        window.parent.__farewellRewind = function() {
+        window.parent.__farewellRewind = function() {{
             const a = window.parent.__farewellGetAudio();
-            if (a) {
+            if (a) {{
                 a.currentTime = Math.max(0, a.currentTime - 10);
                 window.parent.__farewellUpdateMusicUI();
-            }
-        };
+            }}
+        }};
 
-        window.parent.__farewellForward = function() {
+        window.parent.__farewellForward = function() {{
             const a = window.parent.__farewellGetAudio();
-            if (a && a.duration) {
+            if (a && a.duration) {{
                 a.currentTime = Math.min(a.duration, a.currentTime + 10);
                 window.parent.__farewellUpdateMusicUI();
-            }
-        };
+            }}
+        }};
 
         // 6. Global Navigation Trigger callable from any HTML card or button
-        window.parent.__farewellNav = function(chapterId) {
+        window.parent.__farewellNav = function(chapterId) {{
             if (!chapterId) return;
             const sidebar = pDoc.querySelector('[data-testid="stSidebar"]');
-            if (sidebar) {
+            if (sidebar) {{
                 const allBtns = sidebar.querySelectorAll('div.stButton > button');
-                for (let b of allBtns) {
+                for (let b of allBtns) {{
                     const txt = (b.innerText || '').toLowerCase();
                     if (txt.includes(chapterId.toLowerCase()) || 
                         (chapterId === 'words' && txt.includes('words')) ||
                         (chapterId === 'respect' && txt.includes('respect')) ||
-                        (chapterId === 'goodbye' && txt.includes('final note'))) {
+                        (chapterId === 'goodbye' && txt.includes('final note'))) {{
                         b.click();
                         return;
-                    }
-                }
-            }
+                    }}
+                }}
+            }}
             // Fallback: URL query param
             const url = new URL(window.parent.location.href);
             url.searchParams.set('chapter', chapterId);
             window.parent.location.href = url.href;
-        };
+        }};
 
         // 7. Global Event Delegation on Parent Document (Intercepts clicks regardless of Streamlit DOM updates)
-        if (window.parent.__farewellClickDelegation) {
+        if (window.parent.__farewellClickDelegation) {{
             pDoc.removeEventListener('click', window.parent.__farewellClickDelegation, true);
-        }
+        }}
 
-        window.parent.__farewellClickDelegation = function(e) {
+        window.parent.__farewellClickDelegation = function(e) {{
             const target = e.target;
             if (!target) return;
 
@@ -404,73 +416,122 @@ def render_sidebar_and_navigation_bridge():
             const heartBtn = target.closest('#musicBtnHeart');
             const track = target.closest('#musicProgressTrack');
 
-            if (stopStart || playPause) {
+            if (stopStart || playPause) {{
                 e.preventDefault();
                 e.stopPropagation();
                 window.parent.__farewellToggleAudio();
                 return;
-            }
+            }}
 
-            if (prevBtn) {
+            if (prevBtn) {{
                 e.preventDefault();
                 e.stopPropagation();
                 window.parent.__farewellRewind();
                 return;
-            }
+            }}
 
-            if (nextBtn) {
+            if (nextBtn) {{
                 e.preventDefault();
                 e.stopPropagation();
                 window.parent.__farewellForward();
                 return;
-            }
+            }}
 
-            if (heartBtn) {
+            if (heartBtn) {{
                 e.preventDefault();
                 e.stopPropagation();
                 const isFav = heartBtn.classList.toggle('favorited');
                 heartBtn.textContent = isFav ? '♥' : '♡';
                 heartBtn.style.color = isFav ? '#E96582' : '#C9B7B5';
                 return;
-            }
+            }}
 
-            if (track) {
+            if (track) {{
                 e.preventDefault();
                 e.stopPropagation();
                 const a = window.parent.__farewellGetAudio();
-                if (a && a.duration) {
+                if (a && a.duration) {{
                     const rect = track.getBoundingClientRect();
                     const clickX = e.clientX - rect.left;
                     const pct = Math.max(0, Math.min(1, clickX / rect.width));
                     a.currentTime = pct * a.duration;
                     window.parent.__farewellUpdateMusicUI();
-                }
+                }}
                 return;
-            }
-        };
+            }}
+        }};
 
         pDoc.addEventListener('click', window.parent.__farewellClickDelegation, true);
 
         // 8. Attach audio event listeners
         const audio = window.parent.__farewellGetAudio();
-        if (audio) {
+        if (audio) {{
             audio.onplay = () => window.parent.__farewellUpdateMusicUI();
             audio.onpause = () => window.parent.__farewellUpdateMusicUI();
             audio.ontimeupdate = () => window.parent.__farewellUpdateMusicUI();
-        }
+        }}
 
         // Initial sync
         window.parent.__farewellUpdateMusicUI();
 
         // Continuous sync loop on parent window
-        if (!window.parent.__farewellSyncInterval) {
-            window.parent.__farewellSyncInterval = setInterval(() => {
-                if (window.parent.__farewellUpdateMusicUI) {
+        if (!window.parent.__farewellSyncInterval) {{
+            window.parent.__farewellSyncInterval = setInterval(() => {{
+                if (window.parent.__farewellUpdateMusicUI) {{
                     window.parent.__farewellUpdateMusicUI();
-                }
-            }, 300);
-        }
-    })();
+                }}
+            }}, 300);
+        }}
+
+        // 9. Load Three.js and Farewell 3D WebGL Engine
+        function inject3DEngine() {{
+            if (!pDoc.getElementById('farewell3DScript')) {{
+                const s3d = pDoc.createElement('script');
+                s3d.id = 'farewell3DScript';
+                s3d.textContent = {three_d_json};
+                pDoc.body.appendChild(s3d);
+            }}
+            if (window.parent.__farewellSet3DChapter) {{
+                window.parent.__farewellSet3DChapter('{active}');
+            }}
+        }}
+
+        if (!window.parent.THREE) {{
+            const threeScript = pDoc.createElement('script');
+            threeScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+            threeScript.onload = function() {{
+                inject3DEngine();
+            }};
+            pDoc.head.appendChild(threeScript);
+        }} else {{
+            inject3DEngine();
+        }}
+
+        // 10. Scroll & Mouse Parallax Bridge
+        function setupScrollAndParallax() {{
+            function handleScroll() {{
+                const docEl = pDoc.documentElement || pDoc.body;
+                const scrollTop = window.parent.pageYOffset || docEl.scrollTop || 0;
+                const maxScroll = (docEl.scrollHeight || 1) - (window.parent.innerHeight || 1);
+                const progress = maxScroll > 0 ? Math.max(0, Math.min(1, scrollTop / maxScroll)) : 0;
+                if (window.parent.__farewellOnScroll) {{
+                    window.parent.__farewellOnScroll(progress);
+                }}
+            }}
+
+            window.parent.addEventListener('scroll', handleScroll, {{ passive: true }});
+            pDoc.addEventListener('scroll', handleScroll, {{ passive: true }});
+
+            const scrollContainers = pDoc.querySelectorAll('[data-testid="stMain"], [data-testid="stAppViewContainer"], .main');
+            scrollContainers.forEach(el => el.addEventListener('scroll', handleScroll, {{ passive: true }}));
+        }}
+
+        setupScrollAndParallax();
+
+        if (window.parent.__farewellSet3DChapter) {{
+            window.parent.__farewellSet3DChapter('{active}');
+        }}
+    }})();
     </script>
     """,
         height=0,
@@ -1246,8 +1307,8 @@ def main():
     # Render Chapter Ambient Atmosphere Layer
     render_cinematic_atmosphere(active)
 
-    # Connect JavaScript Audio & Navigation Bridge
-    render_sidebar_and_navigation_bridge()
+    # Connect JavaScript Audio, 3D WebGL & Navigation Bridge
+    render_sidebar_and_navigation_bridge(active)
 
     router = {
         "home": render_home,
