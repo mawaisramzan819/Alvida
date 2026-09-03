@@ -383,41 +383,28 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             }}
         }};
 
-        // 6. Global Navigation Triggers
+        // 6. Global Navigation Triggers (Reliable, fast, and no page reload!)
         window.parent.__farewellResetScroll = function() {{
             try {{ window.parent.scrollTo({{ top: 0, left: 0, behavior: 'instant' }}); }} catch(e) {{ try {{ window.parent.scrollTo(0, 0); }} catch(e) {{}} }}
             try {{ if (pDoc.documentElement) pDoc.documentElement.scrollTop = 0; }} catch(e) {{}}
             try {{ if (pDoc.body) pDoc.body.scrollTop = 0; }} catch(e) {{}}
             try {{
-                pDoc.querySelectorAll('[data-testid="stMain"], [data-testid="stAppViewContainer"], .main, .main .block-container').forEach(el => {{ el.scrollTop = 0; }});
+                pDoc.querySelectorAll('[data-testid="stMain"], [data-testid="stAppViewContainer"], section.main, .main, .main .block-container').forEach(el => {{ el.scrollTop = 0; }});
             }} catch(e) {{}}
         }};
 
         window.parent.__farewellStartJourney = function() {{
+            if (window.parent.__farewellNavLock) return;
+            window.parent.__farewellNavLock = true;
             window.parent.__farewellResetScroll();
-            // 1. Try hidden Streamlit trigger button
-            const hiddenBtns = pDoc.querySelectorAll('button[key="btn_start_journey_hidden"], button[data-testid*="btn_start_journey_hidden"]');
-            for (let b of hiddenBtns) {{
-                b.click();
+
+            const btn = pDoc.querySelector('button[key="_bridge_menu"], button[data-testid*="_bridge_menu"]');
+            if (btn) {{
+                btn.click();
+                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1200);
                 return;
             }}
-            // 2. Try sidebar if already mounted
-            const sidebar = pDoc.querySelector('[data-testid="stSidebar"]');
-            if (sidebar) {{
-                const allBtns = sidebar.querySelectorAll('div.stButton > button');
-                for (let b of allBtns) {{
-                    const txt = (b.innerText || '').toLowerCase();
-                    if (txt.includes('journey menu') || txt.includes('all chapters')) {{
-                        b.click();
-                        return;
-                    }}
-                }}
-            }}
-            // 3. Fallback: URL query param
-            const url = new URL(window.parent.location.href);
-            url.searchParams.set('view', 'menu');
-            url.searchParams.delete('chapter');
-            window.parent.location.href = url.href;
+            window.parent.__farewellNavLock = false;
         }};
 
         window.parent.__farewellGoToMenu = function() {{
@@ -425,35 +412,32 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
         }};
 
         window.parent.__farewellGoToLanding = function() {{
+            if (window.parent.__farewellNavLock) return;
+            window.parent.__farewellNavLock = true;
             window.parent.__farewellResetScroll();
-            const url = new URL(window.parent.location.href);
-            url.searchParams.set('view', 'landing');
-            url.searchParams.delete('chapter');
-            window.parent.location.href = url.href;
+
+            const btn = pDoc.querySelector('button[key="_bridge_landing"], button[data-testid*="_bridge_landing"]');
+            if (btn) {{
+                btn.click();
+                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1200);
+                return;
+            }}
+            window.parent.__farewellNavLock = false;
         }};
 
         window.parent.__farewellNav = function(chapterId) {{
             if (!chapterId) return;
+            if (window.parent.__farewellNavLock) return;
+            window.parent.__farewellNavLock = true;
             window.parent.__farewellResetScroll();
 
-            const sidebar = pDoc.querySelector('[data-testid="stSidebar"]');
-            if (sidebar) {{
-                const allBtns = sidebar.querySelectorAll('div.stButton > button');
-                for (let b of allBtns) {{
-                    const txt = (b.innerText || '').toLowerCase();
-                    if (txt.includes(chapterId.toLowerCase()) || 
-                        (chapterId === 'words' && txt.includes('words')) ||
-                        (chapterId === 'respect' && txt.includes('respect')) ||
-                        (chapterId === 'goodbye' && txt.includes('final note'))) {{
-                        b.click();
-                        return;
-                    }}
-                }}
+            const btn = pDoc.querySelector(`button[key="_bridge_${{chapterId}}"], button[data-testid*="_bridge_${{chapterId}}"]`);
+            if (btn) {{
+                btn.click();
+                setTimeout(() => {{ window.parent.__farewellNavLock = false; }}, 1200);
+                return;
             }}
-            const url = new URL(window.parent.location.href);
-            url.searchParams.set('view', 'section');
-            url.searchParams.set('chapter', chapterId);
-            window.parent.location.href = url.href;
+            window.parent.__farewellNavLock = false;
         }};
 
         // 7. Global Event Delegation on Parent Document (Intercepts clicks regardless of Streamlit DOM updates)
@@ -680,7 +664,7 @@ def render_nav_loader(target):
     </div>
     """
     loader_box.markdown(html, unsafe_allow_html=True)
-    time.sleep(0.30)
+    time.sleep(0.78)
     loader_box.empty()
 
     st.session_state["app_view"] = target_view
@@ -693,10 +677,10 @@ def render_nav_loader(target):
 
 
 # -----------------------------------------------------------------------------
-# 9. Sidebar Component (Matching Exact 4-Tier Hierarchy from Reference UI)
+# 9. Sidebar Component (Brand Header + Full Music Player + Journey Progress)
 # -----------------------------------------------------------------------------
 def render_sidebar():
-    """Render cinematic left sidebar matching exact reference UI with full 4-tier hierarchy."""
+    """Render cinematic left sidebar containing Brand, Music Player, and Progress Tracker."""
     with st.sidebar:
         # =====================================================================
         # 1. TOP BRAND / TITLE AREA (A Farewell / That Stays / in the Heart)
@@ -715,31 +699,7 @@ def render_sidebar():
         """)
 
         # =====================================================================
-        # 2. VERTICAL NAVIGATION (Journey Hub + 8 Chapters)
-        # =====================================================================
-        app_view = st.session_state.get("app_view", "landing")
-        active_id = st.session_state.get("selected_section", "home")
-
-        is_menu_active = (app_view == "menu")
-        menu_btn_type = "primary" if is_menu_active else "secondary"
-        if st.button("✦  Journey Menu (All Chapters)", key="sb_nav_menu", use_container_width=True, type=menu_btn_type):
-            st.session_state["app_view"] = "menu"
-            st.session_state["selected_memory"] = None
-            reset_scroll_to_top()
-            st.rerun()
-
-        for chap in config.CHAPTERS:
-            is_active = (app_view == "section" and active_id == chap["id"])
-            btn_type = "primary" if is_active else "secondary"
-            btn_label = f"{chap['icon']}  {chap['label']}"
-            if st.button(btn_label, key=f"sb_nav_{chap['id']}", use_container_width=True, type=btn_type):
-                st.session_state["pending_target"] = {"view": "section", "section": chap["id"]}
-                st.session_state["selected_memory"] = None
-                reset_scroll_to_top()
-                st.rerun()
-
-        # =====================================================================
-        # 3. LOWER: MUSIC PLAYER CARD (Integrated & Fully Interactive)
+        # 2. LOWER: MUSIC PLAYER CARD (Integrated & Fully Interactive)
         # =====================================================================
         ui(f"""
         <div class="sidebar-music-card" id="sidebarMusicCard">
@@ -774,8 +734,10 @@ def render_sidebar():
         """)
 
         # =====================================================================
-        # 4. BOTTOM: JOURNEY PROGRESS CARD (Calculated from Real Chapter Position)
+        # 3. BOTTOM: JOURNEY PROGRESS CARD (Calculated from Real Chapter Position)
         # =====================================================================
+        app_view = st.session_state.get("app_view", "landing")
+        active_id = st.session_state.get("selected_section", "home")
         chapter_order = ["home", "welcome", "memories", "words", "respect", "intentions", "dua", "goodbye"]
         active_idx = chapter_order.index(active_id) if active_id in chapter_order else 0
 
@@ -854,6 +816,36 @@ def render_chapter_footer(current_id: str):
 
 
 # -----------------------------------------------------------------------------
+# INVISIBLE STREAMLIT BRIDGE DISPATCHER (Zero-latency Programmatic Clicks)
+# -----------------------------------------------------------------------------
+def render_hidden_bridge_dispatcher():
+    """Invisible Streamlit button dispatcher that handles programmatic clicks from JS without reloading the page."""
+    with st.container():
+        c = st.columns(1)[0]
+        with c:
+            if st.button("bridge_go_landing", key="_bridge_landing"):
+                st.session_state["app_view"] = "landing"
+                st.session_state["selected_section"] = "home"
+                st.session_state["pending_target"] = None
+                st.session_state["selected_memory"] = None
+                reset_scroll_to_top()
+                st.rerun()
+
+            if st.button("bridge_go_menu", key="_bridge_menu"):
+                st.session_state["pending_target"] = {"view": "menu"}
+                st.session_state["selected_memory"] = None
+                reset_scroll_to_top()
+                st.rerun()
+
+            for chap in config.CHAPTERS:
+                if st.button(f"bridge_go_{chap['id']}", key=f"_bridge_{chap['id']}"):
+                    st.session_state["pending_target"] = {"view": "section", "section": chap["id"]}
+                    st.session_state["selected_memory"] = None
+                    reset_scroll_to_top()
+                    st.rerun()
+
+
+# -----------------------------------------------------------------------------
 # TOP-CENTER FULL MUSIC PLAYER
 # -----------------------------------------------------------------------------
 def render_top_center_music_player():
@@ -901,12 +893,6 @@ def render_landing():
     visited_set = st.session_state.get("visited_chapters", set())
     visited_pct = int((len(visited_set) / len(config.CHAPTERS)) * 100)
     hero_pct = max(12, visited_pct)
-
-    # Hidden Streamlit Bridge Trigger Button
-    if st.button("Start Journey Hidden", key="btn_start_journey_hidden"):
-        st.session_state["pending_target"] = {"view": "menu"}
-        reset_scroll_to_top()
-        st.rerun()
 
     # 1. Top-Center Full Music Player
     render_top_center_music_player()
@@ -963,7 +949,7 @@ def render_landing():
 # STATE 2 — MAIN JOURNEY MENU (Central Hub)
 # -----------------------------------------------------------------------------
 def render_journey_menu():
-    """Render STATE 2: Main Journey Menu / Central Hub (Quotation Bar + 2x4 Card Grid)."""
+    """Render STATE 2: Main Journey Menu / Central Hub (Quotation Bar + 8 Compact Cards Grid)."""
     reset_scroll_to_top()
     c = content.HOME_SECTION
 
@@ -990,7 +976,7 @@ def render_journey_menu():
         </div>
     """)
 
-    # 3. 2×4 Chapter Cards Grid (8 Cards: 7 Light Cream Cards + 1 Dark Twilight Lantern Card)
+    # 3. 2×4 Chapter Cards Grid (8 Compact Primary Navigation Cards)
     t_welcome = get_thumbnail_b64("thumb_welcome")
     t_memories = get_thumbnail_b64("thumb_memories")
     t_words = get_thumbnail_b64("thumb_words")
@@ -998,25 +984,38 @@ def render_journey_menu():
     t_intentions = get_thumbnail_b64("thumb_intentions")
     t_dua = get_thumbnail_b64("thumb_dua")
     t_goodbye = get_thumbnail_b64("thumb_goodbye")
-    t_lantern = get_thumbnail_b64("thumb_lantern")
 
     ui(f"""
         <div class="ref-cards-grid">
-            <!-- Card 1: Welcome -->
-            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('welcome')">
+            <!-- Card 1: Story Overview -->
+            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('home')">
                 <div class="ref-card-thumb-wrap">
-                    <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Welcome">
+                    <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Overview">
                 </div>
                 <div class="ref-card-content">
-                    <h3 class="ref-card-title">Welcome</h3>
-                    <p class="ref-card-desc">Start here with a warm hello and a message from the heart.</p>
+                    <h3 class="ref-card-title">Story Overview</h3>
+                    <p class="ref-card-desc">Overview and reflections of our shared story.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 2: Memories -->
+            <!-- Card 2: Welcome -->
+            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('welcome')">
+                <div class="ref-card-thumb-wrap">
+                    <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Welcome">
+                </div>
+                <div class="ref-card-content">
+                    <h3 class="ref-card-title">Welcome</h3>
+                    <p class="ref-card-desc">Start here with a warm hello and sincere message.</p>
+                    <div class="ref-card-btn-row">
+                        <span class="ref-card-open-btn">Open →</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Memories -->
             <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('memories')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_memories}" class="ref-card-thumb" alt="Memories">
@@ -1030,7 +1029,7 @@ def render_journey_menu():
                 </div>
             </div>
 
-            <!-- Card 3: Words From My Heart -->
+            <!-- Card 4: Words From My Heart -->
             <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('words')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_words}" class="ref-card-thumb" alt="Words From My Heart">
@@ -1044,21 +1043,21 @@ def render_journey_menu():
                 </div>
             </div>
 
-            <!-- Card 4: Why I Respect You -->
+            <!-- Card 5: Why I Respect You -->
             <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('respect')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_respect}" class="ref-card-thumb" alt="Why I Respect You">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Why I Respect You</h3>
-                    <p class="ref-card-desc">The reasons that make you truly admirable.</p>
+                    <p class="ref-card-desc">The reasons and qualities that make you truly admirable.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 5: Intentions -->
+            <!-- Card 6: Intentions -->
             <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('intentions')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_intentions}" class="ref-card-thumb" alt="Intentions">
@@ -1072,42 +1071,31 @@ def render_journey_menu():
                 </div>
             </div>
 
-            <!-- Card 6: Dua -->
+            <!-- Card 7: Dua -->
             <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('dua')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_dua}" class="ref-card-thumb" alt="Dua">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Dua</h3>
-                    <p class="ref-card-desc">Prayers for your well-being, peace and success.</p>
+                    <p class="ref-card-desc">Prayers for your peace, well-being and blessings.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Card 7: Final Note -->
+            <!-- Card 8: Final Note -->
             <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('goodbye')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_goodbye}" class="ref-card-thumb" alt="Final Note">
                 </div>
                 <div class="ref-card-content">
                     <h3 class="ref-card-title">Final Note</h3>
-                    <p class="ref-card-desc">A gentle note to close this chapter with love.</p>
+                    <p class="ref-card-desc">A gentle note to close this chapter with warmth and love.</p>
                     <div class="ref-card-btn-row">
                         <span class="ref-card-open-btn">Open →</span>
                     </div>
-                </div>
-            </div>
-
-            <!-- Card 8: Special Twilight Lantern Card -->
-            <div class="ref-card ref-card-dark" onclick="window.parent.__farewellNav('goodbye')">
-                <div class="ref-card-dark-content">
-                    <h3 class="ref-card-dark-title">You will always have a special place in my heart.</h3>
-                    <div class="ref-card-dark-heart">♡</div>
-                </div>
-                <div class="ref-card-thumb-wrap">
-                    <img src="data:image/png;base64,{t_lantern}" class="ref-card-thumb-lantern" alt="Lantern">
                 </div>
             </div>
         </div>
@@ -1512,6 +1500,9 @@ def main():
 
     # Connect JavaScript Audio, 3D WebGL & Navigation Bridge
     render_sidebar_and_navigation_bridge(app_view, selected_section)
+
+    # Mount Invisible Streamlit Bridge Button Dispatcher
+    render_hidden_bridge_dispatcher()
 
     if app_view == "landing":
         render_landing()
