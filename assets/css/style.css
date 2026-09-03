@@ -130,10 +130,32 @@ p {
 }
 
 /* ==========================================================================
-   2. DESKTOP TWO-COLUMN SHELL (Width: 270px Sidebar + Main Content Offset)
+   2. DESKTOP TWO-COLUMN SHELL & LANDING FULL-WIDTH VIEW
    ========================================================================== */
+/* When in Landing state: No sidebar, 100% full-width main container */
+body.view-landing [data-testid="stSidebar"],
+.view-landing [data-testid="stSidebar"],
+[data-testid="stAppViewContainer"]:has(.landing-page-wrap) [data-testid="stSidebar"] {
+  display: none !important;
+}
+
+body.view-landing [data-testid="stMain"],
+body.view-landing [data-testid="stAppViewContainer"] > .main,
+[data-testid="stAppViewContainer"]:has(.landing-page-wrap) [data-testid="stMain"],
+[data-testid="stAppViewContainer"]:has(.landing-page-wrap) [data-testid="stAppViewContainer"] > .main {
+  margin-left: 0 !important;
+  width: 100% !important;
+  min-width: 100% !important;
+}
+
+[data-testid="stAppViewContainer"]:has(.landing-page-wrap) .main .block-container {
+  max-width: 1200px !important;
+  padding: 24px 24px 48px 24px !important;
+  margin: 0 auto !important;
+}
+
 @media (min-width: 1025px) {
-  [data-testid="stSidebar"] {
+  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stSidebar"] {
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
@@ -152,25 +174,25 @@ p {
     padding: 0 !important;
   }
 
-  [data-testid="stSidebar"] > div:first-child {
+  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stSidebar"] > div:first-child {
     background-color: var(--bg-sidebar) !important;
     padding: 1.6rem 1.15rem 2.5rem 1.15rem !important;
   }
 
-  [data-testid="stSidebarNav"],
-  [data-testid="stSidebarCollapseButton"] {
+  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stSidebarNav"],
+  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stSidebarCollapseButton"] {
     display: none !important;
   }
 
-  /* MAIN CONTENT OFFSET */
-  [data-testid="stMain"],
-  [data-testid="stAppViewContainer"] > .main {
+  /* MAIN CONTENT OFFSET (Only when NOT in landing view) */
+  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stMain"],
+  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) [data-testid="stAppViewContainer"] > .main {
     margin-left: 270px !important;
     width: calc(100% - 270px) !important;
     min-width: 0 !important;
   }
 
-  .main .block-container {
+  [data-testid="stAppViewContainer"]:not(:has(.landing-page-wrap)) .main .block-container {
     max-width: 1280px !important;
     padding: 20px 32px 48px 32px !important;
     margin: 0 auto !important;
@@ -202,6 +224,61 @@ p {
   [data-testid="stSidebarCollapsedControl"] {
     display: flex !important;
   }
+}
+
+/* ==========================================================================
+   GLOBAL FLOATING MUSIC CONTROL PILL (Visible on Landing, Menu, Sections)
+   ========================================================================== */
+.global-music-pill-container {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.5rem;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+}
+
+.global-music-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(24, 23, 43, 0.82);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--radius-pill);
+  padding: 0.48rem 1.15rem;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-primary-dark-bg);
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all var(--duration-fast) var(--ease-standard);
+  user-select: none;
+}
+
+.global-music-toggle-pill:hover {
+  background: rgba(36, 32, 54, 0.95);
+  border-color: var(--accent-primary);
+  box-shadow: 0 8px 24px rgba(233, 101, 130, 0.25);
+  transform: translateY(-1px);
+}
+
+.global-music-toggle-pill.is-stopped {
+  opacity: 0.78;
+  border-color: rgba(201, 183, 181, 0.3);
+  color: var(--text-secondary-dark-bg);
+}
+
+.global-music-toggle-pill.is-stopped:hover {
+  opacity: 1;
+  border-color: var(--accent-primary);
+}
+
+.global-music-pill-icon {
+  font-size: 0.95rem;
+  line-height: 1;
 }
 
 /* 1. TOP BRANDING AREA */

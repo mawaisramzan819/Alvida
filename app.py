@@ -193,8 +193,9 @@ def render_startup_screen():
             window.parent.__farewell_audio = audio;
         }}
 
-        // Trigger autoplay with user gesture fallback
-        if (audio && audio.paused) {{
+        // Trigger autoplay only if user hasn't paused previously
+        const isMutedByUser = (localStorage.getItem('farewell_music_paused') === 'true');
+        if (audio && audio.paused && !isMutedByUser) {{
             audio.volume = 0;
             let playPromise = audio.play();
             if (playPromise !== undefined) {{
@@ -209,9 +210,11 @@ def render_startup_screen():
                     requestAnimationFrame(fadeIn);
                 }}).catch(() => {{
                     const unlockAction = () => {{
-                        audio.play().then(() => {{
-                            audio.volume = 0.22;
-                        }}).catch(() => {{}});
+                        if (localStorage.getItem('farewell_music_paused') !== 'true') {{
+                            audio.play().then(() => {{
+                                audio.volume = 0.22;
+                            }}).catch(() => {{}});
+                        }}
                         pDoc.removeEventListener('click', unlockAction);
                         pDoc.removeEventListener('touchstart', unlockAction);
                         pDoc.removeEventListener('pointerdown', unlockAction);
@@ -301,6 +304,17 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             const audio = window.parent.__farewellGetAudio();
             const isPaused = !audio || audio.paused;
 
+            // Global Music Toggle Pill (Top-Right on Landing / Menu / Sections)
+            const pillBtns = pDoc.querySelectorAll('.global-music-toggle-pill, #globalMusicTogglePill');
+            pillBtns.forEach(pill => {{
+                const icon = pill.querySelector('#globalMusicPillIcon') || pill.querySelector('.global-music-pill-icon');
+                const text = pill.querySelector('#globalMusicPillText') || pill.querySelector('span:not(.global-music-pill-icon)');
+                if (icon) icon.textContent = isPaused ? '🔇' : '🎵';
+                if (text) text.textContent = isPaused ? 'Music Off' : 'Music On';
+                pill.classList.toggle('is-stopped', isPaused);
+                pill.title = isPaused ? 'Click to Turn Music On' : 'Click to Turn Music Off';
+            }});
+
             // Circular Play/Pause button
             const playBtn = pDoc.getElementById('musicBtnPlayPause');
             if (playBtn) {{
@@ -347,6 +361,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             }}
             if (audio.paused) {{
                 audio.play().then(() => {{
+                    try {{ localStorage.setItem('farewell_music_paused', 'false'); }} catch(e) {{}}
                     if (window.parent.__farewellUpdateMusicUI) {{
                         window.parent.__farewellUpdateMusicUI();
                     }}
@@ -355,6 +370,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
                 }});
             }} else {{
                 audio.pause();
+                try {{ localStorage.setItem('farewell_music_paused', 'true'); }} catch(e) {{}}
                 if (window.parent.__farewellUpdateMusicUI) {{
                     window.parent.__farewellUpdateMusicUI();
                 }}
@@ -448,6 +464,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             const target = e.target;
             if (!target) return;
 
+            const globalPill = target.closest('#globalMusicTogglePill, .global-music-toggle-pill');
             const stopStart = target.closest('#musicBtnStopStart');
             const playPause = target.closest('#musicBtnPlayPause');
             const prevBtn = target.closest('#musicBtnPrev');
@@ -455,7 +472,7 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
             const heartBtn = target.closest('#musicBtnHeart');
             const track = target.closest('#musicProgressTrack');
 
-            if (stopStart || playPause) {{
+            if (globalPill || stopStart || playPause) {{
                 e.preventDefault();
                 e.stopPropagation();
                 window.parent.__farewellToggleAudio();
@@ -829,8 +846,20 @@ def render_chapter_footer(current_id: str):
 
 
 # -----------------------------------------------------------------------------
-# CHAPTER 0 — HOME (Matching Exact Reference UI Mockup)
+# GLOBAL FLOATING MUSIC PILL
 # -----------------------------------------------------------------------------
+def render_global_music_pill():
+    """Render compact floating music control pill in top-right corner."""
+    ui("""
+    <div class="global-music-pill-container" id="globalMusicPillContainer">
+        <button class="global-music-toggle-pill" id="globalMusicTogglePill" onclick="window.parent.__farewellToggleAudio && window.parent.__farewellToggleAudio()" title="Toggle Music On/Off">
+            <span class="global-music-pill-icon" id="globalMusicPillIcon">🎵</span>
+            <span id="globalMusicPillText">Music On</span>
+        </button>
+    </div>
+    """)
+
+
 # -----------------------------------------------------------------------------
 # STATE 1 — LANDING / INTRO SCREEN
 # -----------------------------------------------------------------------------
@@ -843,6 +872,9 @@ def render_landing():
     visited_set = st.session_state.get("visited_chapters", set())
     visited_pct = int((len(visited_set) / len(config.CHAPTERS)) * 100)
     hero_pct = max(12, visited_pct)
+
+    # Global Top-Right Music Pill
+    render_global_music_pill()
 
     ui(f"""
     <div class="v2-main-wrap landing-page-wrap">
@@ -901,6 +933,9 @@ def render_journey_menu():
     """Render STATE 2: Main Journey Menu / Central Hub (Quotation Bar + 2x4 Card Grid)."""
     reset_scroll_to_top()
     c = content.HOME_SECTION
+
+    # Global Top-Right Music Pill
+    render_global_music_pill()
 
     # 1. Header
     ui("""
@@ -1424,8 +1459,13 @@ def main():
         render_startup_screen()
         return
 
-    # 3. Always Render Exact Sidebar Architecture (Brand -> Nav -> Music -> Progress)
-    render_sidebar()
+    # 3. Current Application View State
+    app_view = st.session_state.get("app_view", "landing")
+    selected_section = st.session_state.get("selected_section", "home")
+
+    # Only render Journey Sidebar when inside the Journey (not on Landing Screen)
+    if app_view != "landing":
+        render_sidebar()
 
     # 4. Handle Pending Navigation Transition
     if st.session_state.get("pending_target"):
@@ -1434,9 +1474,6 @@ def main():
         return
 
     # 5. Route between 3 Distinct UI States
-    app_view = st.session_state.get("app_view", "landing")
-    selected_section = st.session_state.get("selected_section", "home")
-
     # Render Chapter Ambient Atmosphere Layer
     render_cinematic_atmosphere(selected_section if app_view == "section" else "home")
 
