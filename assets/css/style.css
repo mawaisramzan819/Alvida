@@ -1575,6 +1575,47 @@ button[kind="primary"],
   box-shadow: 0 0 24px rgba(235, 130, 160, 0.45) !important;
 }
 
+/* 1. Initial Render: Smooth Zoom-in & Fade-in for Primary Card */
+.primary-card-entrance {
+  animation: primaryCardEnter 950ms var(--ease-emotional-out) forwards;
+  will-change: transform, opacity, filter;
+  transform-origin: center center;
+}
+
+@keyframes primaryCardEnter {
+  0% {
+    opacity: 0;
+    transform: scale(0.92) translateY(16px);
+    filter: blur(8px);
+  }
+  40% {
+    opacity: 0.7;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
+}
+
+/* 2. Content Transition: Gentle Crossfade on Memory Change */
+.memory-content-fade {
+  animation: memoryContentSwap 650ms var(--ease-emotional-out) forwards;
+  will-change: opacity, transform;
+}
+
+@keyframes memoryContentSwap {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .chapter-eyebrow-badge {
   display: inline-block;
   font-family: var(--font-body);
