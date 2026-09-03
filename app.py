@@ -1128,11 +1128,11 @@ def render_journey_menu():
 # STATE 3 — SECTION VIEW: HOME / OVERVIEW
 # -----------------------------------------------------------------------------
 def render_home_overview():
-    """Render Story Overview & Reflections Section."""
+    """Render Story Overview & Reflections Section with smooth 3D slide-down."""
     reset_scroll_to_top()
     c = content.HOME_SECTION
     ui(f"""
-    <div class="v2-chapter-container">
+    <div class="v2-chapter-container feature-section-enter">
         <div class="chapter-eyebrow-badge">✦ HAMARI KAHANI KA SAFAR</div>
         <h2 class="chapter-main-title">A Farewell That Stays in the Heart</h2>
         <p class="chapter-subtitle-italic">Kuch alvida asal mein khatam nahi hotay — wo bas khoobsurat yaadon ki shuruat ban jatay hain.</p>
@@ -1156,11 +1156,11 @@ def render_home_overview():
 # CHAPTER 1 — WELCOME
 # -----------------------------------------------------------------------------
 def render_welcome():
-    """Render Chapter 1: Welcome letter."""
+    """Render Chapter 1: Welcome letter with smooth 3D slide-down."""
     reset_scroll_to_top()
     c = content.WELCOME_SECTION
     ui(f"""
-    <div class="v2-chapter-container">
+    <div class="v2-chapter-container feature-section-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1182,11 +1182,11 @@ def render_welcome():
 # CHAPTER 2 — MEMORIES
 # -----------------------------------------------------------------------------
 def render_memories():
-    """Render Chapter 2: Memories timeline / cards."""
+    """Render Chapter 2: Memories timeline / cards with smooth 3D slide-down."""
     reset_scroll_to_top()
     c = content.MEMORIES_SECTION
     ui(f"""
-    <div class="v2-chapter-container">
+    <div class="v2-chapter-container feature-section-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1268,11 +1268,11 @@ def render_memories():
 # CHAPTER 3 — WORDS FROM MY HEART
 # -----------------------------------------------------------------------------
 def render_words():
-    """Render Chapter 3: Words From My Heart intimate letter."""
+    """Render Chapter 3: Words From My Heart intimate letter with smooth 3D slide-down."""
     reset_scroll_to_top()
     c = content.WORDS_SECTION
     ui(f"""
-    <div class="v2-chapter-container">
+    <div class="v2-chapter-container feature-section-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1297,11 +1297,11 @@ def render_words():
 # CHAPTER 4 — WHY I RESPECT YOU (Special Golden Visual Section)
 # -----------------------------------------------------------------------------
 def render_respect():
-    """Render Chapter 4: Respect & Na-mehram boundary admiration."""
+    """Render Chapter 4: Respect & Na-mehram boundary admiration with smooth 3D slide-down."""
     reset_scroll_to_top()
     c = content.RESPECT_SECTION
     ui(f"""
-    <div class="v2-chapter-container respect-special-section">
+    <div class="v2-chapter-container respect-special-section feature-section-enter">
         <div class="chapter-eyebrow-badge respect-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title respect-gold-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic respect-gold-sub">{c['subtitle']}</p>
@@ -1334,11 +1334,11 @@ def render_respect():
 # CHAPTER 5 — INTENTIONS
 # -----------------------------------------------------------------------------
 def render_intentions():
-    """Render Chapter 5: Intentions & Family Respect."""
+    """Render Chapter 5: Intentions & Family Respect with smooth 3D slide-down."""
     reset_scroll_to_top()
     c = content.INTENTIONS_SECTION
     ui(f"""
-    <div class="v2-chapter-container">
+    <div class="v2-chapter-container feature-section-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1375,11 +1375,11 @@ def render_intentions():
 # CHAPTER 6 — DUA
 # -----------------------------------------------------------------------------
 def render_dua():
-    """Render Chapter 6: Prayer & Duas."""
+    """Render Chapter 6: Prayer & Duas with smooth 3D slide-down."""
     reset_scroll_to_top()
     c = content.DUA_SECTION
     ui(f"""
-    <div class="v2-chapter-container">
+    <div class="v2-chapter-container feature-section-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1405,11 +1405,11 @@ def render_dua():
 # CHAPTER 7 — FINAL NOTE (Goodbye)
 # -----------------------------------------------------------------------------
 def render_goodbye():
-    """Render Chapter 7: Final Note with interactive reveal."""
+    """Render Chapter 7: Final Note with interactive reveal and smooth 3D slide-down."""
     reset_scroll_to_top()
     c = content.GOODBYE_SECTION
     ui(f"""
-    <div class="v2-chapter-container">
+    <div class="v2-chapter-container feature-section-enter">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
