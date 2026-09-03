@@ -380,6 +380,13 @@ def render_sidebar_and_navigation_bridge(active: str = "home"):
         // 6. Global Navigation Trigger callable from any HTML card or button
         window.parent.__farewellNav = function(chapterId) {{
             if (!chapterId) return;
+            try {{ window.parent.scrollTo({ top: 0, left: 0, behavior: 'instant' }); }} catch(e) {{ try {{ window.parent.scrollTo(0, 0); }} catch(e) {{}} }}
+            try {{ if (pDoc.documentElement) pDoc.documentElement.scrollTop = 0; }} catch(e) {{}}
+            try {{ if (pDoc.body) pDoc.body.scrollTop = 0; }} catch(e) {{}}
+            try {{
+                pDoc.querySelectorAll('[data-testid="stMain"], [data-testid="stAppViewContainer"], .main, .main .block-container').forEach(el => {{ el.scrollTop = 0; }});
+            }} catch(e) {{}}
+
             const sidebar = pDoc.querySelector('[data-testid="stSidebar"]');
             if (sidebar) {{
                 const allBtns = sidebar.querySelectorAll('div.stButton > button');
@@ -543,17 +550,21 @@ def render_sidebar_and_navigation_bridge(active: str = "home"):
 # 7. Multi-Container Scroll Reset to Top
 # -----------------------------------------------------------------------------
 def reset_scroll_to_top():
-    """Scroll parent window and Streamlit scroll containers to the top."""
+    """Scroll parent window and all Streamlit scroll containers to the top."""
     components.html(
         """
     <script>
     (function() {
         const p = window.parent;
         const pDoc = p.document;
+
+        if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+        if (p && 'scrollRestoration' in p.history) p.history.scrollRestoration = 'manual';
+
         function doScroll() {
-            try { p.scrollTo(0, 0); } catch(e) {}
-            try { pDoc.documentElement.scrollTop = 0; } catch(e) {}
-            try { pDoc.body.scrollTop = 0; } catch(e) {}
+            try { p.scrollTo({ top: 0, left: 0, behavior: 'instant' }); } catch(e) { try { p.scrollTo(0, 0); } catch(e) {} }
+            try { if (pDoc.documentElement) pDoc.documentElement.scrollTop = 0; } catch(e) {}
+            try { if (pDoc.body) pDoc.body.scrollTop = 0; } catch(e) {}
             try {
                 const selectors = [
                     '[data-testid="stMain"]',
@@ -569,9 +580,12 @@ def reset_scroll_to_top():
             } catch(e) {}
         }
         doScroll();
-        setTimeout(doScroll, 40);
+        requestAnimationFrame(doScroll);
+        setTimeout(doScroll, 20);
+        setTimeout(doScroll, 60);
         setTimeout(doScroll, 120);
         setTimeout(doScroll, 250);
+        setTimeout(doScroll, 450);
     })();
     </script>
     """,
@@ -585,6 +599,7 @@ def reset_scroll_to_top():
 # -----------------------------------------------------------------------------
 def render_nav_loader(target_key: str):
     """Render 1.30s intermediate chapter loading screen."""
+    reset_scroll_to_top()
     loader_box = st.empty()
     loader_info = content.CHAPTER_LOADERS.get(
         target_key, {"title": "Loading...", "message": "Turning the page..."}

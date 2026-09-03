@@ -130,49 +130,78 @@ p {
 }
 
 /* ==========================================================================
-   2. FIXED LEFT SIDEBAR (Width: 270px) & DESKTOP TWO-COLUMN SHELL
+   2. DESKTOP TWO-COLUMN SHELL (Width: 270px Sidebar + Main Content Offset)
    ========================================================================== */
-[data-testid="stSidebar"] {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  bottom: 0 !important;
-  width: 270px !important;
-  min-width: 270px !important;
-  max-width: 270px !important;
-  height: 100vh !important;
-  z-index: 1000 !important;
-  transform: none !important;
-  visibility: visible !important;
-  background-color: var(--bg-sidebar) !important;
-  border-right: 1px solid var(--border-dark) !important;
-  box-shadow: 6px 0 28px rgba(0, 0, 0, 0.45) !important;
-  overflow-y: auto !important;
-  padding: 0 !important;
+@media (min-width: 1025px) {
+  [data-testid="stSidebar"] {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;
+    width: 270px !important;
+    min-width: 270px !important;
+    max-width: 270px !important;
+    height: 100vh !important;
+    z-index: 1000 !important;
+    transform: none !important;
+    visibility: visible !important;
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-dark) !important;
+    box-shadow: 6px 0 28px rgba(0, 0, 0, 0.45) !important;
+    overflow-y: auto !important;
+    padding: 0 !important;
+  }
+
+  [data-testid="stSidebar"] > div:first-child {
+    background-color: var(--bg-sidebar) !important;
+    padding: 1.6rem 1.15rem 2.5rem 1.15rem !important;
+  }
+
+  [data-testid="stSidebarNav"],
+  [data-testid="stSidebarCollapseButton"] {
+    display: none !important;
+  }
+
+  /* MAIN CONTENT OFFSET */
+  [data-testid="stMain"],
+  [data-testid="stAppViewContainer"] > .main {
+    margin-left: 270px !important;
+    width: calc(100% - 270px) !important;
+    min-width: 0 !important;
+  }
+
+  .main .block-container {
+    max-width: 1280px !important;
+    padding: 20px 32px 48px 32px !important;
+    margin: 0 auto !important;
+  }
 }
 
-[data-testid="stSidebar"] > div:first-child {
-  background-color: var(--bg-sidebar) !important;
-  padding: 1.6rem 1.15rem 2.5rem 1.15rem !important;
-}
+@media (max-width: 1024px) {
+  [data-testid="stSidebar"] {
+    background-color: var(--bg-sidebar) !important;
+    border-right: 1px solid var(--border-dark) !important;
+    box-shadow: 10px 0 50px rgba(0, 0, 0, 0.85) !important;
+    z-index: 10000 !important;
+    width: min(85vw, 300px) !important;
+  }
 
-[data-testid="stSidebarNav"],
-[data-testid="stSidebarCollapseButton"] {
-  display: none !important;
-}
+  [data-testid="stMain"],
+  [data-testid="stAppViewContainer"] > .main {
+    margin-left: 0 !important;
+    width: 100% !important;
+    min-width: 100% !important;
+  }
 
-/* MAIN CONTENT OFFSET */
-[data-testid="stMain"],
-[data-testid="stAppViewContainer"] > .main {
-  margin-left: 270px !important;
-  width: calc(100% - 270px) !important;
-  min-width: 0 !important;
-}
+  .main .block-container {
+    padding: 16px 16px 40px 16px !important;
+    max-width: 100% !important;
+  }
 
-.main .block-container {
-  max-width: 1280px !important;
-  padding: 20px 32px 48px 32px !important;
-  margin: 0 auto !important;
+  [data-testid="stSidebarCollapseButton"],
+  [data-testid="stSidebarCollapsedControl"] {
+    display: flex !important;
+  }
 }
 
 /* 1. TOP BRANDING AREA */
@@ -1710,43 +1739,139 @@ p {
 }
 
 @media (max-width: 768px) {
+  #farewell3DCanvas {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    min-height: 100svh !important;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    display: block !important;
+    opacity: 1 !important;
+  }
+
   [data-testid="stSidebar"] {
-    min-width: min(85vw, 320px) !important;
-    max-width: min(85vw, 320px) !important;
+    min-width: min(85vw, 300px) !important;
+    max-width: min(85vw, 300px) !important;
     box-shadow: 10px 0 50px rgba(0, 0, 0, 0.8) !important;
   }
   
   .main .block-container {
     padding-left: 1rem !important;
     padding-right: 1rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 3.5rem !important;
+    max-width: 100% !important;
   }
 
   .hero-panoramic-card {
-    height: auto;
-    min-height: 480px;
+    position: relative !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: clamp(480px, 85vh, 680px) !important;
+    overflow: hidden !important;
+    background: rgba(9, 13, 27, 0.35) !important;
+    backdrop-filter: blur(2px) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding: 1.5rem 1rem !important;
+    margin-bottom: var(--space-6) !important;
+  }
+
+  .hero-panoramic-bg-img {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100svh !important;
+    object-fit: cover !important;
+    object-position: 65% center !important;
+    display: block !important;
+    opacity: 0.28 !important;
+    z-index: 0 !important;
+  }
+
+  .hero-panoramic-gradient-overlay {
+    position: absolute !important;
+    inset: 0 !important;
+    background: linear-gradient(180deg, rgba(9, 13, 27, 0.75) 0%, rgba(9, 13, 27, 0.35) 40%, rgba(9, 13, 27, 0.9) 100%) !important;
+    z-index: 1 !important;
+    pointer-events: none !important;
   }
 
   .hero-left-overlay {
-    width: 90%;
-    left: 1.5rem;
-    top: 1.5rem;
-    bottom: auto;
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 1rem 0 0.5rem 0 !important;
+    z-index: 2 !important;
+    text-align: left !important;
+  }
+
+  .hero-heart-doodle {
+    font-size: 1.8rem !important;
+  }
+
+  .hero-headline {
+    font-size: 2.2rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .hero-subtitle {
+    font-size: 0.95rem !important;
+    max-width: 100% !important;
+    margin-bottom: 1.2rem !important;
+  }
+
+  .hero-action-buttons {
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 0.75rem !important;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    width: 100% !important;
+    justify-content: center !important;
+    min-height: 48px !important;
   }
 
   .hero-floating-stats-card {
-    position: relative;
-    right: auto;
-    bottom: auto;
-    margin: 18rem auto 1.5rem auto;
-    width: 85%;
+    position: relative !important;
+    right: auto !important;
+    bottom: auto !important;
+    margin: 1.5rem 0 0 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    z-index: 2 !important;
   }
 
   .ref-cards-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
   }
 
   .chapter-letter-card {
-    padding: 1.6rem 1.4rem;
+    padding: 1.6rem 1.2rem !important;
+  }
+
+  .chapter-letter-body {
+    font-size: 1.05rem !important;
+    line-height: 1.8 !important;
+  }
+
+  .ref-quote-bar {
+    padding: 1.2rem 1rem !important;
+    margin-bottom: var(--space-6) !important;
+  }
+
+  .ref-quote-text {
+    font-size: 1.1rem !important;
   }
 }
 

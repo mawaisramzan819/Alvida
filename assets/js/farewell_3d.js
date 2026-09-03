@@ -722,13 +722,34 @@
         scrollProgress.target = Math.max(0, Math.min(1, prog));
     }
 
-    function onWindowResize() {
+    function updateCameraFraming() {
         width = window.innerWidth;
         height = window.innerHeight;
-        camera.aspect = width / height;
+        const aspect = width / height;
+        camera.aspect = aspect;
+
+        if (aspect < 1.0) {
+            // Mobile Portrait (Aspect ~0.45 - 0.75): Frame boy and girl centrally
+            camera.fov = 58;
+            camera.position.x = 1.3 + mouse.x * 0.2;
+            camera.position.y = 2.1 + mouse.y * -0.15 - scrollProgress.current * 0.3;
+            camera.position.z = 8.5 - scrollProgress.current * 1.5;
+            camera.lookAt(1.6 + mouse.x * 0.08, 1.7 - scrollProgress.current * 0.2, 0);
+        } else {
+            // Desktop / Landscape
+            camera.fov = 45;
+            camera.position.x = mouse.x * 0.35;
+            camera.position.y = 2.2 + mouse.y * -0.25 - scrollProgress.current * 0.3;
+            camera.position.z = 7.5 - scrollProgress.current * 1.5;
+            camera.lookAt(mouse.x * 0.1, 1.8 - scrollProgress.current * 0.2, 0);
+        }
         camera.updateProjectionMatrix();
         renderer.setSize(width, height);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.2 : 2.0));
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, width < 768 ? 1.25 : 2.0));
+    }
+
+    function onWindowResize() {
+        updateCameraFraming();
     }
 
     // ------------------------------------------------------------------------
@@ -749,11 +770,19 @@
         scrollProgress.current += (scrollProgress.target - scrollProgress.current) * 0.05;
         const sp = scrollProgress.current;
 
-        // 3. Camera Position: Parallax + Scroll Transition
-        camera.position.x = mouse.x * 0.35;
-        camera.position.y = 2.2 + mouse.y * -0.25 - sp * 0.3;
-        camera.position.z = 7.5 - sp * 1.5;
-        camera.lookAt(mouse.x * 0.1, 1.8 - sp * 0.2, 0);
+        // 3. Responsive Camera Position: Parallax + Scroll Transition
+        const aspect = width / height;
+        if (aspect < 1.0) {
+            camera.position.x = 1.3 + mouse.x * 0.2;
+            camera.position.y = 2.1 + mouse.y * -0.15 - sp * 0.3;
+            camera.position.z = 8.5 - sp * 1.5;
+            camera.lookAt(1.6 + mouse.x * 0.08, 1.7 - sp * 0.2, 0);
+        } else {
+            camera.position.x = mouse.x * 0.35;
+            camera.position.y = 2.2 + mouse.y * -0.25 - sp * 0.3;
+            camera.position.z = 7.5 - sp * 1.5;
+            camera.lookAt(mouse.x * 0.1, 1.8 - sp * 0.2, 0);
+        }
 
         // 4. Girl Character Progression: Slowly walks away down the path as user scrolls
         if (girlGroup) {
