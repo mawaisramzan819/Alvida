@@ -77,15 +77,23 @@
   --radius-xl: 22px;
   --radius-pill: 999px;
 
-  /* SHADOWS */
+  /* SHADOWS & GLOWS */
   --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.18);
   --shadow-light-card: 0 5px 16px rgba(54, 31, 45, 0.14);
   --shadow-glow: 0 0 28px rgba(233, 101, 130, 0.22);
+  --glow-accent: rgba(230, 160, 180, 0.18);
+  --shadow-soft: 0 12px 32px -8px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 20px 48px -10px rgba(0, 0, 0, 0.5), 0 0 24px rgba(230, 160, 180, 0.18);
 
-  /* MOTION */
+  /* CINEMATIC MOTION & EASING */
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-gentle: cubic-bezier(0.25, 0.1, 0.25, 1);
   --duration-fast: 160ms;
   --duration-normal: 280ms;
+  --duration-hover: 400ms;
   --duration-slow: 500ms;
+  --duration-flip: 800ms;
+  --duration-enter: 1000ms;
   --ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
@@ -1120,7 +1128,8 @@ button[kind="primary"],
   margin: var(--space-4) 0 var(--space-8) 0;
 }
 
-.ref-card {
+.ref-card,
+.journey-card {
   position: relative;
   border-radius: var(--radius-lg);
   padding: 12px 16px;
@@ -1128,25 +1137,53 @@ button[kind="primary"],
   max-height: 180px;
   height: 100%;
   cursor: pointer;
-  transition: all var(--duration-normal) var(--ease-standard);
+  transition: 
+    transform var(--duration-hover) var(--ease-gentle),
+    box-shadow var(--duration-hover) var(--ease-gentle),
+    border-color var(--duration-hover) var(--ease-gentle);
   display: flex;
   align-items: center;
   gap: 14px;
   user-select: none;
   box-sizing: border-box;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: var(--shadow-soft);
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+  animation: cardFadeIn var(--duration-enter) var(--ease-cinematic) forwards;
+  will-change: transform, opacity;
 }
 
-/* Cream Content Cards */
+/* Stagger delays across the 8 feature cards */
+.ref-cards-grid .ref-card:nth-child(1), .journey-card:nth-child(1) { animation-delay: 100ms; }
+.ref-cards-grid .ref-card:nth-child(2), .journey-card:nth-child(2) { animation-delay: 180ms; }
+.ref-cards-grid .ref-card:nth-child(3), .journey-card:nth-child(3) { animation-delay: 260ms; }
+.ref-cards-grid .ref-card:nth-child(4), .journey-card:nth-child(4) { animation-delay: 340ms; }
+.ref-cards-grid .ref-card:nth-child(5), .journey-card:nth-child(5) { animation-delay: 420ms; }
+.ref-cards-grid .ref-card:nth-child(6), .journey-card:nth-child(6) { animation-delay: 500ms; }
+.ref-cards-grid .ref-card:nth-child(7), .journey-card:nth-child(7) { animation-delay: 580ms; }
+.ref-cards-grid .ref-card:nth-child(8), .journey-card:nth-child(8) { animation-delay: 660ms; }
+
+@keyframes cardFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Cream Content Cards & Keepsake Hover */
 .ref-card-light {
   background: var(--surface-light);
   border: 1px solid var(--border-light);
-  box-shadow: var(--shadow-light-card);
+  box-shadow: var(--shadow-soft);
 }
 
-.ref-card-light:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(54, 31, 45, 0.18);
-  border-color: var(--accent-primary);
+.ref-card-light:hover,
+.ref-card:hover,
+.journey-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 40px -8px rgba(54, 31, 45, 0.28), 0 0 24px var(--glow-accent);
+  border-color: rgba(233, 101, 130, 0.45);
 }
 
 .ref-card-thumb-wrap {
@@ -1215,7 +1252,7 @@ button[kind="primary"],
   margin-top: auto;
 }
 
-/* Understated Open Button */
+/* Understated Open Button & Arrow Micro-Interaction */
 .ref-card-open-btn {
   background: var(--surface-light-soft) !important;
   color: var(--accent-primary) !important;
@@ -1225,18 +1262,63 @@ button[kind="primary"],
   font-size: 0.78rem !important;
   font-weight: 700 !important;
   border: 1px solid rgba(229, 101, 130, 0.35) !important;
-  transition: all var(--duration-fast) !important;
+  transition: 
+    background var(--duration-fast) var(--ease-gentle),
+    color var(--duration-fast) var(--ease-gentle),
+    border-color var(--duration-fast) var(--ease-gentle),
+    transform 300ms var(--ease-gentle) !important;
   display: inline-flex !important;
   align-items: center !important;
+  gap: 3px !important;
   cursor: pointer !important;
   pointer-events: auto !important;
 }
 
-.ref-card-light:hover .ref-card-open-btn,
-.ref-card:hover .ref-card-open-btn {
+.ref-card:hover .ref-card-open-btn,
+.journey-card:hover .action-link span,
+.ref-card-light:hover .ref-card-open-btn {
   background: var(--accent-primary) !important;
   color: #FFF8F4 !important;
   border-color: var(--accent-primary) !important;
+  transform: translateX(3px) !important;
+}
+
+/* 3D Card-Flip Interaction (Front / Back Keepsake Preview) */
+.flip-card-wrapper {
+  perspective: 1200px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--duration-flip) var(--ease-cinematic);
+}
+
+.flip-card-wrapper.flipped .flip-card-inner,
+.flip-card-wrapper:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front,
+.flip-card-back {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  background: radial-gradient(circle at center, #241922 0%, #151017 100%);
 }
 
 /* Bottom Return / Back to Intro Button */
@@ -1337,34 +1419,64 @@ button[kind="primary"],
 }
 
 /* ==========================================================================
-   6. CHAPTER CONTENT PAGES (Smooth 3D Slide-Down & Blur Animation on Open)
+   6. CHAPTER CONTENT PAGES (Section Arrival: 3D Slide & Focus-Pull Transition)
    ========================================================================== */
+.section-enter-active,
 .feature-section-enter,
 .v2-chapter-container {
   max-width: 880px;
   margin: 0 auto;
   padding: 1.5rem 0 3rem 0;
-  perspective: 1200px;
-  animation: smoothSlideDown 1.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  perspective: 1000px;
+  animation: emotionalEntrance 1100ms var(--ease-cinematic) forwards;
   transform-origin: top center;
   will-change: transform, opacity, filter;
 }
 
-@keyframes smoothSlideDown {
+@keyframes emotionalEntrance {
   0% {
     opacity: 0;
-    transform: translateY(-70px) rotateX(8deg) scale(0.97);
-    filter: blur(10px);
+    transform: translateY(-40px) scale(0.97) rotateX(4deg);
+    filter: blur(8px);
   }
   40% {
-    opacity: 0.85;
+    opacity: 0.7;
     filter: blur(3px);
   }
   100% {
     opacity: 1;
-    transform: translateY(0px) rotateX(0deg) scale(1);
+    transform: translateY(0) scale(1) rotateX(0deg);
     filter: blur(0px);
   }
+}
+
+/* Interactive Highlights: Poetic Text & Sentiments Soft Shimmer */
+.poetic-quote,
+.chapter-handwritten-note,
+.chapter-highlight-quote-box,
+.respect-golden-banner,
+.dua-ayah-arabic,
+.finale-quote-highlight {
+  position: relative;
+  font-style: italic;
+  background: linear-gradient(
+    120deg, 
+    rgba(255, 255, 255, 0.85) 0%, 
+    rgba(255, 220, 230, 1) 35%, 
+    rgba(245, 177, 143, 1) 50%,
+    rgba(255, 220, 230, 1) 65%,
+    rgba(255, 255, 255, 0.85) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: softShimmer 8s ease infinite;
+}
+
+@keyframes softShimmer {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .chapter-eyebrow-badge {
@@ -2391,10 +2503,11 @@ button[kind="primary"],
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ambient-bokeh-orb,
-  .celestial-star,
-  .ambient-dust-speck,
-  .sidebar-brand-heart-glow {
-    animation: none !important;
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    filter: none !important;
+    transform: none !important;
   }
 }
