@@ -3120,6 +3120,89 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
   margin: 0 auto 8px auto !important;
 }
 
+/* ==========================================================================
+   MOBILE PREVIEW TEASER BUTTON COMPACTION (< 640px)
+   ========================================================================== */
+@media (max-width: 640px) {
+  .section-preview-container {
+    padding: 1rem 0.5rem 2rem 0.5rem !important;
+  }
+
+  .preview-teaser-card {
+    padding: 24px 18px !important;
+    margin: 0 auto 1.2rem auto !important;
+    border-radius: 22px !important;
+  }
+
+  .preview-teaser-thumb-frame {
+    height: 160px !important;
+    margin-bottom: 16px !important;
+    border-radius: 14px !important;
+  }
+
+  .preview-teaser-title {
+    font-size: 1.75rem !important;
+    margin-bottom: 8px !important;
+  }
+
+  .preview-teaser-desc {
+    font-size: 0.92rem !important;
+    line-height: 1.65 !important;
+  }
+
+  .section-preview-btn-container,
+  .section-preview-btn-wrapper {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 12px auto 0 auto !important;
+  }
+
+  div.stButton:has(button[key*="preview_open_btn_"]),
+  div.stButton:has(button[key="preview_back_grid_btn"]) {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  /* Scope to the preview teaser card's action button */
+  div.stButton:has(button[key*="preview_open_btn_"]) > button,
+  button[key*="preview_open_btn_"],
+  .section-preview-btn-container button[kind="primary"] {
+    max-width: 200px !important;
+    width: auto !important;
+    min-width: 160px !important;
+    height: auto !important;
+    min-height: 42px !important;
+    padding: 8px 24px !important;
+    font-size: 0.9rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.04em !important;
+    margin: 14px auto 8px auto !important;
+    display: block !important;
+    border-radius: 999px !important;
+    box-shadow: 0 4px 16px rgba(233, 101, 130, 0.35) !important;
+  }
+
+  div.stButton:has(button[key="preview_back_grid_btn"]) > button,
+  button[key="preview_back_grid_btn"] {
+    max-width: 230px !important;
+    width: auto !important;
+    min-width: 180px !important;
+    height: auto !important;
+    min-height: 38px !important;
+    padding: 6px 18px !important;
+    font-size: 0.82rem !important;
+    margin: 4px auto 16px auto !important;
+    display: block !important;
+    border-radius: 999px !important;
+  }
+}
+
 /* ========================================================
    INTENTIONS CARDS & PAUSE-ON-HOVER SYSTEM
    ======================================================== */

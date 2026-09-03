@@ -1636,7 +1636,8 @@ def render_section_preview():
     </div>
     """)
 
-    pcol1, pcol2, pcol3 = st.columns([1, 1.4, 1])
+    ui('<div class="section-preview-btn-container">')
+    pcol1, pcol2, pcol3 = st.columns([1, 1.2, 1])
     with pcol2:
         st.button(
             "Open →",
@@ -1647,7 +1648,7 @@ def render_section_preview():
             args=(target_id,),
         )
 
-    scol1, scol2, scol3 = st.columns([1, 1.4, 1])
+    scol1, scol2, scol3 = st.columns([1, 1.2, 1])
     with scol2:
         st.button(
             "← Back to Chapters Grid",
@@ -1656,6 +1657,7 @@ def render_section_preview():
             use_container_width=True,
             on_click=on_navigate_back_to_menu,
         )
+    ui('</div>')
 
 
 # -----------------------------------------------------------------------------
