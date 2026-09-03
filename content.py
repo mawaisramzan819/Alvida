@@ -52,9 +52,9 @@ HOME_CARDS = [
 ]
 
 # -----------------------------------------------------------------------------
-# CHAPTER 1 — WELCOME
+# STORY OVERVIEW SECTION (Kept untouched)
 # -----------------------------------------------------------------------------
-WELCOME_SECTION = {
+STORY_OVERVIEW_SECTION = {
     "eyebrow": "✦ HAMARI KAHANI KA SAFAR",
     "title": "A Farewell That Stays in the Heart",
     "subtitle": "Kuch alvida asal mein khatam nahi hotay — wo bas khoobsurat yaadon ki shuruat ban jatay hain.",
@@ -75,6 +75,37 @@ WELCOME_SECTION = {
         ),
     ],
     "closing_note": "Bas itna hai ke tumhari kami shayad waqt ke saath aadat ban jaye…\nlekin tumhari jagah kabhi koi nahi le sakega.",
+}
+
+# -----------------------------------------------------------------------------
+# CHAPTER 1 — WELCOME (Unique Welcome Content)
+# -----------------------------------------------------------------------------
+WELCOME_SECTION = {
+    "eyebrow": "✦ JAANE SE PEHLE",
+    "title": "Jaane Se Pehle, Ek Baar Parh Lena",
+    "subtitle": "Ye safha kisi gile ya shikway ke liye nahi, sirf dil ki sachai ke liye hai.",
+    "paragraphs": [
+        (
+            "Kabhi kabhi kisi insan ka humari zindagi mein aana itna aam sa lagta hai…\n"
+            "lekin aahista aahista wahi insan humari roz ki soch, muskurahat aur yaadon\n"
+            "ka hissa ban jata hai."
+        ),
+        (
+            "Pata hi nahi chalta ke kab uski ek choti si baat bhi dil ko sukoon dene\n"
+            "lagti hai, aur kab uski khamoshi bhi mehsoos hone lagti hai."
+        ),
+        (
+            "Shayad hum har baat keh nahi pate, har ehsaas samjha nahi pate…\n"
+            "lekin iska matlab ye nahi hota ke wo ehsaas kam thay.\n"
+            "Kuch jazbaat bas dil ke andar reh jaate hain, bina kisi shor ke."
+        ),
+        (
+            "Aur shayad isi liye ye safar bana hai…\n"
+            "taake jo baatein kabhi alfaaz tak nahi aa sakin,\n"
+            "wo kam az kam yaadon mein apni jagah bana saken."
+        ),
+    ],
+    "closing_note": "Agar kabhi meri baaton ki kami mehsoos ho…\nto bas itna samajh lena ke kuch log door ja kar bhi\ndil se kabhi door nahi hote.",
 }
 
 # -----------------------------------------------------------------------------

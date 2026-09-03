@@ -3,7 +3,7 @@
    Theme: Midnight Navy (#090D1B) + Warm Ivory (#F8EDE4) + Dusty Rose (#E96582) + Peach (#F5B18F)
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Allura&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Inter:wght@400;500;600;700&family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap');
 
 :root {
   /* COLORS */
@@ -22,8 +22,8 @@
   --accent-peach: #F5B18F;
   --accent-gold: #EAB378;
 
-  --text-primary-dark-bg: #FFF4ED;
-  --text-secondary-dark-bg: #C9B7B5;
+  --text-primary-dark-bg: #F5E8E2;
+  --text-secondary-dark-bg: #D8C6C3;
 
   --text-primary-light-bg: #302436;
   --text-secondary-light-bg: #725E67;
@@ -45,10 +45,12 @@
     #272036 100%
   );
 
-  /* TYPOGRAPHY */
+  /* TYPOGRAPHY HIERARCHY */
   --font-display: "Cormorant Garamond", Georgia, serif;
   --font-script: "Allura", "Great Vibes", cursive;
-  --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Lora", Georgia, serif;
+  --font-story: "Lora", Georgia, serif;
+  --font-ui: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
 
   --fs-hero: clamp(48px, 4.8vw, 76px);
   --fs-h1: 42px;
@@ -1623,26 +1625,47 @@ button[key="btn_start_journey"]:hover,
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 30px rgba(0, 0, 0, 0.25);
   padding: 2.4rem 2.8rem;
   margin-bottom: 2rem;
+  max-width: 680px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
   animation: gentleFloat 5.6s ease-in-out infinite alternate;
   will-change: transform, box-shadow;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
 }
 
-.chapter-paragraph-text {
-  font-family: var(--font-body);
-  font-size: var(--fs-body);
-  line-height: 1.85;
-  color: var(--text-primary-dark-bg);
-  margin-bottom: 1.4rem;
+.chapter-letter-body p,
+.chapter-paragraph-text,
+.respect-content p,
+.words-letter-card p,
+.chapter-body p {
+  font-family: "Lora", Georgia, serif !important;
+  font-size: 17px !important;
+  line-height: 1.75 !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.01em !important;
+  color: #F5E8E2 !important;
+  margin-bottom: 22px !important;
 }
 
-.chapter-handwritten-note {
-  font-family: var(--font-script);
-  font-size: 1.85rem;
-  color: var(--accent-soft);
-  text-align: center;
-  margin-top: 2rem;
-  line-height: 1.3;
+.chapter-letter-body p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.chapter-handwritten-note,
+.chapter-emotional-quote {
+  font-family: "Lora", Georgia, serif !important;
+  font-size: 19px !important;
+  font-style: italic !important;
+  line-height: 1.7 !important;
+  color: #ffccd8 !important;
+  background: rgba(233, 101, 130, 0.07) !important;
+  border-left: 3px solid rgba(233, 101, 130, 0.55) !important;
+  border-radius: 0 12px 12px 0 !important;
+  padding: 16px 22px !important;
+  margin-top: 24px !important;
+  margin-bottom: 8px !important;
+  text-align: left !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
 }
 
 .letter-quote-decor {
@@ -1661,10 +1684,11 @@ button[key="btn_start_journey"]:hover,
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   padding: 1.2rem 1.6rem;
   margin: 1.8rem 0;
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-style: italic;
-  color: var(--text-primary-dark-bg);
+  font-family: "Lora", Georgia, serif !important;
+  font-size: 18px !important;
+  font-style: italic !important;
+  line-height: 1.7 !important;
+  color: #F5E8E2 !important;
 }
 
 /* ==========================================================================
@@ -3316,12 +3340,23 @@ div[data-testid="stColumn"] div.stButton > button:hover {
   }
 
   .chapter-letter-card {
-    padding: 1.6rem 1.2rem !important;
+    padding: 1.6rem 1.25rem !important;
   }
 
-  .chapter-letter-body {
-    font-size: 1.05rem !important;
-    line-height: 1.8 !important;
+  .chapter-letter-body p,
+  .chapter-paragraph-text,
+  p {
+    font-size: 16px !important;
+    line-height: 1.75 !important;
+    margin-bottom: 20px !important;
+  }
+
+  .chapter-handwritten-note,
+  .chapter-emotional-quote {
+    font-size: 17px !important;
+    line-height: 1.65 !important;
+    padding: 14px 18px !important;
+    margin-top: 20px !important;
   }
 
   .ref-quote-bar {

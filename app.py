@@ -1605,12 +1605,13 @@ def render_welcome():
         
         <div class="chapter-letter-card floating-element">
             <div class="chapter-letter-body">
-                <p>Kuch log sirf zindagi ka hissa nahi bante… wo aadat ban jaate hain.<br>Unki baatein, unki hansi, unka hona — sab kuch itna apna lagne lagta hai ke faasla aane ke baad bhi dil unhein chhor nahi pata.</p>
-                <p>Shayad waqt ke saath sab kuch badal jaye, lekin kuch yaadein aisi hoti hain jo dil khud sambhal kar rakhta hai. Unhein na waqt mita pata hai, na faaslay kam kar pate hain.</p>
-                <p>Is safar mein jo kuch bhi hai, wo bas un jazbaat ka ek chhota sa hissa hai jo shayad alfaaz mein poore kabhi aa hi nahi sakte.</p>
+                <p>Kabhi kabhi kisi insan ka humari zindagi mein aana itna aam sa lagta hai…<br>lekin aahista aahista wahi insan humari roz ki soch, muskurahat aur yaadon ka hissa ban jata hai.</p>
+                <p>Pata hi nahi chalta ke kab uski ek choti si baat bhi dil ko sukoon dene lagti hai, aur kab uski khamoshi bhi mehsoos hone lagti hai.</p>
+                <p>Shayad hum har baat keh nahi pate, har ehsaas samjha nahi pate…<br>lekin iska matlab ye nahi hota ke wo ehsaas kam thay.<br>Kuch jazbaat bas dil ke andar reh jaate hain, bina kisi shor ke.</p>
+                <p>Aur shayad isi liye ye safar bana hai…<br>taake jo baatein kabhi alfaaz tak nahi aa sakin, wo kam az kam yaadon mein apni jagah bana saken.</p>
             </div>
             <div class="chapter-handwritten-note">
-                “Bas itna hai ke tumhari kami shayad waqt ke saath aadat ban jaye…<br>lekin tumhari jagah kabhi koi nahi le sakega.”
+                “Agar kabhi meri baaton ki kami mehsoos ho…<br>to bas itna samajh lena ke kuch log door ja kar bhi dil se kabhi door nahi hote.”
             </div>
         </div>
     </div>
@@ -1965,7 +1966,7 @@ def render_goodbye():
     reset_scroll_to_top()
     c = content.GOODBYE_SECTION
     
-    paragraphs_html = "".join([f'<p class="chapter-paragraph-text" style="color: #e0d0d8; line-height: 1.7; font-size: 1rem; margin-bottom: 16px;">{p}</p>' for p in c["paragraphs"]])
+    paragraphs_html = "".join([f'<p class="chapter-paragraph-text">{p}</p>' for p in c["paragraphs"]])
     
     ui(f"""
     <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_goodbye" id="sec_wrapper_goodbye">
