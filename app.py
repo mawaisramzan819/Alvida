@@ -1415,28 +1415,35 @@ def render_dua():
 # CHAPTER 7 — FINAL NOTE (Goodbye)
 # -----------------------------------------------------------------------------
 def render_goodbye():
-    """Render Chapter 7: Final Note with interactive reveal and smooth 3D slide-down."""
+    """Render Chapter 7: Final Note with interactive reveal and spotlight floating card."""
     reset_scroll_to_top()
     c = content.GOODBYE_SECTION
+    
+    paragraphs_html = "".join([f'<p class="chapter-paragraph-text" style="color: #e0d0d8; line-height: 1.7; font-size: 1rem; margin-bottom: 16px;">{p}</p>' for p in c["paragraphs"]])
+    
     ui(f"""
     <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_goodbye" id="sec_wrapper_goodbye">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
-        <div class="chapter-letter-card finale-letter-card floating-element">
-    """)
-    for p in c["paragraphs"]:
-        ui(f'<p class="chapter-paragraph-text">{p}</p>')
-
-    ui(f"""
-            <div class="finale-quote-highlight">
-                {c["highlighted_line"]}
-            </div>
-            
-            <div class="finale-special-monolith">
-                <span class="finale-lantern-icon">🏮</span>
-                <div class="finale-special-text">{c["final_visual_text"]}</div>
+        <div class="final-note-section-wrapper">
+            <!-- 1. Background Content (Gets blurred on focus) -->
+            <div class="final-note-bg-content">
+                <div class="chapter-letter-card finale-letter-card">
+                    {paragraphs_html}
+                    
+                    <div class="finale-quote-highlight" style="color: #e2a8b8; font-style: italic; font-size: 0.95rem; margin-bottom: 8px;">
+                        {c["highlighted_line"]}
+                    </div>
+                    
+                    <div class="finale-special-monolith">
+                        <span class="finale-lantern-icon">🏮</span>
+                        <div class="finale-special-text" style="color: #ffffff; font-weight: 600; font-size: 1rem;">
+                            {c["final_visual_text"]}
+                        </div>
+                    </div>
+                </div>
             </div>
     """)
 
@@ -1448,10 +1455,11 @@ def render_goodbye():
                 st.rerun()
     else:
         ui(f"""
-            <div class="finale-revealed-box">
-                <div class="revealed-sub-badge">From Awais to Almas</div>
-                <div class="revealed-prayer-text">{c["absolute_last_line"]}</div>
-                <div class="revealed-amen-flower">🌸 🤍 🤲</div>
+            <!-- 2. Focused Floating Letter Card -->
+            <div class="final-letter-card finale-revealed-box">
+                <div class="final-letter-header revealed-sub-badge">From Awais to Almas</div>
+                <div class="final-letter-body revealed-prayer-text">{c["absolute_last_line"]}</div>
+                <div class="final-letter-emojis revealed-amen-flower">🌸 🤍 🤲</div>
             </div>
         """)
 

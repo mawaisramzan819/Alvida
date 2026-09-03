@@ -2337,38 +2337,105 @@ div[data-testid="stColumn"] div.stButton > button:hover {
   margin: 1.5rem 0;
 }
 
+/* ========================================================
+   FINAL NOTE FOCUSED SPOTLIGHT & FLOATING SYSTEM
+   ======================================================== */
+
+/* Parent section wrapper for backdrop context */
+.final-note-section-wrapper {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+
+/* Background text elements that dim/blur when card is focused */
+.final-note-bg-content {
+  width: 100% !important;
+  transition: filter 0.5s cubic-bezier(0.16, 1, 0.3, 1), 
+              opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: filter, opacity;
+}
+
+/* When the card is hovered or focused, blur out background text */
+.final-note-section-wrapper:has(.final-letter-card:hover) .final-note-bg-content,
+.final-note-section-wrapper:has(.finale-revealed-box:hover) .final-note-bg-content {
+  filter: blur(6px) brightness(0.7) !important;
+  opacity: 0.45 !important;
+}
+
+/* --- Floating Animation Keyframe --- */
+@keyframes finalLetterFloat {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(-2px);
+  }
+}
+
+/* The Focused Message Card Container */
+.final-letter-card,
 .finale-revealed-box {
-  background: rgba(23, 22, 42, 0.95);
-  border: 1px solid var(--accent-primary);
-  border-radius: var(--radius-lg);
-  padding: 2.2rem;
-  text-align: center;
-  margin-top: 2rem;
-  box-shadow: 0 0 30px rgba(233, 101, 130, 0.25);
-  animation: fadeIn var(--duration-slow) var(--ease-standard);
+  position: relative !important;
+  z-index: 10 !important;
+  width: 100% !important;
+  max-width: 820px !important;
+  margin-top: 28px !important;
+  background: rgba(26, 18, 27, 0.88) !important;
+  border: 1px solid rgba(235, 140, 170, 0.25) !important;
+  border-radius: 20px !important;
+  padding: 28px 32px !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 25px rgba(235, 140, 170, 0.12) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  text-align: center !important;
+  
+  /* Floating animation */
+  animation: finalLetterFloat 4.0s ease-in-out infinite alternate !important;
+  will-change: transform, box-shadow, border-color !important;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), 
+              box-shadow 0.4s ease, 
+              border-color 0.4s ease !important;
 }
 
+/* Hover state: floating remains active while elevating and glowing */
+.final-letter-card:hover,
+.finale-revealed-box:hover {
+  border-color: rgba(235, 140, 170, 0.6) !important;
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.7), 0 0 35px rgba(235, 140, 170, 0.3) !important;
+  transform: translateY(-10px) scale(1.015) !important;
+}
+
+/* Card typography styling */
+.final-letter-header,
 .revealed-sub-badge {
-  font-family: var(--font-body);
-  font-size: var(--fs-caption);
-  color: var(--accent-primary);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: 600;
-  margin-bottom: 0.8rem;
+  color: #ffcad7 !important;
+  font-family: var(--font-body) !important;
+  font-size: 1.05rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 8px !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
 }
 
+.final-letter-body,
 .revealed-prayer-text {
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  line-height: 1.7;
-  color: var(--text-primary-dark-bg);
-  max-width: 640px;
-  margin: 0 auto 1rem auto;
+  color: #ffffff !important;
+  font-family: var(--font-display) !important;
+  font-size: 1.25rem !important;
+  line-height: 1.65 !important;
+  font-weight: 500 !important;
+  margin-bottom: 12px !important;
 }
 
+.final-letter-emojis,
 .revealed-amen-flower {
-  font-size: 1.4rem;
+  font-size: 1.35rem !important;
 }
 
 /* ==========================================================================
