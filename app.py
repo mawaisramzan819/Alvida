@@ -1724,7 +1724,7 @@ def render_home_overview():
 # CHAPTER 1 — WELCOME
 # -----------------------------------------------------------------------------
 def render_welcome():
-    """Render Chapter 1: Welcome letter with smooth 3D slide-down."""
+    """Render Chapter 1: Welcome letter with elevated keepsake layout."""
     reset_scroll_to_top()
     c = content.WELCOME_SECTION
     ui(f"""
@@ -1734,14 +1734,36 @@ def render_welcome():
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
         <div class="chapter-letter-card floating-element">
+            <!-- Decorative Corner Botanical Flourishes -->
+            <div class="card-corner-flourish corner-tl">🌸</div>
+            <div class="card-corner-flourish corner-tr">🌿</div>
+            <div class="card-corner-flourish corner-bl">🌿</div>
+            <div class="card-corner-flourish corner-br">🌸</div>
+
+            <!-- Card Top Motif -->
+            <div class="story-card-top-motif">
+                <div class="story-motif-line"></div>
+                <span class="story-motif-heart">♡</span>
+                <div class="story-motif-line"></div>
+            </div>
+
             <div class="chapter-letter-body">
                 <p>Kabhi kabhi kisi insan ka humari zindagi mein aana itna aam sa lagta hai…<br>lekin aahista aahista wahi insan humari roz ki soch, muskurahat aur yaadon ka hissa ban jata hai.</p>
                 <p>Pata hi nahi chalta ke kab uski ek choti si baat bhi dil ko sukoon dene lagti hai, aur kab uski khamoshi bhi mehsoos hone lagti hai.</p>
                 <p>Shayad hum har baat keh nahi pate, har ehsaas samjha nahi pate…<br>lekin iska matlab ye nahi hota ke wo ehsaas kam thay.<br>Kuch jazbaat bas dil ke andar reh jaate hain, bina kisi shor ke.</p>
                 <p>Aur shayad isi liye ye safar bana hai…<br>taake jo baatein kabhi alfaaz tak nahi aa sakin, wo kam az kam yaadon mein apni jagah bana saken.</p>
             </div>
-            <div class="chapter-handwritten-note">
-                “Agar kabhi meri baaton ki kami mehsoos ho…<br>to bas itna samajh lena ke kuch log door ja kar bhi dil se kabhi door nahi hote.”
+            
+            <!-- Spotlight Nested Callout Box -->
+            <div class="story-climax-quote-box">
+                <span class="quote-center-heart">✦ &nbsp; ♡ &nbsp; ✦</span>
+                <div class="story-quote-bracket-wrap">
+                    <span class="story-quote-large-mark open-mark">“</span>
+                    <p class="story-climax-quote-text">
+                        Agar kabhi meri baaton ki kami mehsoos ho…<br>to bas itna samajh lena ke kuch log door ja kar bhi dil se kabhi door nahi hote.
+                    </p>
+                    <span class="story-quote-large-mark close-mark">”</span>
+                </div>
             </div>
         </div>
     </div>
@@ -1954,24 +1976,46 @@ def render_memories():
 # CHAPTER 3 — WORDS FROM MY HEART
 # -----------------------------------------------------------------------------
 def render_words():
-    """Render Chapter 3: Words From My Heart intimate letter with smooth 3D slide-down."""
+    """Render Chapter 3: Words From My Heart intimate letter with elevated keepsake layout."""
     reset_scroll_to_top()
     c = content.WORDS_SECTION
+    
+    paragraphs_html = "".join([f'<p class="chapter-paragraph-text">{p}</p>' for p in c["paragraphs"]])
+    
     ui(f"""
     <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_words" id="sec_wrapper_words">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
-        <div class="chapter-letter-card floating-element">
-            <div class="letter-quote-decor">❝</div>
-    """)
-    for p in c["paragraphs"]:
-        ui(f'<p class="chapter-paragraph-text">{p}</p>')
+        <div class="chapter-letter-card words-letter-card floating-element">
+            <!-- Decorative Corner Botanical Flourishes -->
+            <div class="card-corner-flourish corner-tl">🌸</div>
+            <div class="card-corner-flourish corner-tr">🌿</div>
+            <div class="card-corner-flourish corner-bl">🌿</div>
+            <div class="card-corner-flourish corner-br">🌸</div>
 
-    ui(f"""
-            <div class="chapter-highlight-quote-box floating-element">
-                {c["closing_thought"]}
+            <!-- Card Top Motif -->
+            <div class="story-card-top-motif">
+                <div class="story-motif-line"></div>
+                <span class="story-motif-heart">♡</span>
+                <div class="story-motif-line"></div>
+            </div>
+
+            <div class="chapter-letter-body">
+                {paragraphs_html}
+            </div>
+            
+            <!-- Spotlight Nested Callout Box -->
+            <div class="story-climax-quote-box">
+                <span class="quote-center-heart">✦ &nbsp; ♡ &nbsp; ✦</span>
+                <div class="story-quote-bracket-wrap">
+                    <span class="story-quote-large-mark open-mark">“</span>
+                    <p class="story-climax-quote-text">
+                        {c["closing_thought"]}
+                    </p>
+                    <span class="story-quote-large-mark close-mark">”</span>
+                </div>
             </div>
         </div>
     </div>
@@ -2151,23 +2195,33 @@ def render_intentions():
 # CHAPTER 6 — DUA
 # -----------------------------------------------------------------------------
 def render_dua():
-    """Render Chapter 6: Prayer & Duas with smooth 3D slide-down."""
+    """Render Chapter 6: Prayer & Duas with elevated keepsake layout."""
     reset_scroll_to_top()
     c = content.DUA_SECTION
+    
+    paragraphs_html = "".join([f'<p class="dua-paragraph-text">{p}</p>' for p in c["paragraphs"]])
+    
     ui(f"""
     <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_dua" id="sec_wrapper_dua">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
-        <div class="dua-prayer-card floating-element">
-            <div class="dua-card-hands-icon">🤲 🤍</div>
-    """)
-    for p in c["paragraphs"]:
-        ui(f'<p class="dua-paragraph-text">{p}</p>')
+        <div class="chapter-letter-card dua-prayer-card floating-element">
+            <!-- Decorative Corner Botanical Flourishes -->
+            <div class="card-corner-flourish corner-tl">🌸</div>
+            <div class="card-corner-flourish corner-tr">🌿</div>
+            <div class="card-corner-flourish corner-bl">🌿</div>
+            <div class="card-corner-flourish corner-br">🌸</div>
 
-    ui(f"""
-            <div class="dua-ayah-highlight-box floating-element">
+            <div class="dua-card-hands-icon">🤲 🤍</div>
+            
+            <div class="chapter-letter-body">
+                {paragraphs_html}
+            </div>
+            
+            <!-- Spotlight Nested Callout Box for Dua Ayah -->
+            <div class="story-climax-quote-box dua-ayah-highlight-box">
                 <div class="dua-ayah-arabic">{c["closing_ayah"]}</div>
                 <div class="dua-ayah-translation">“ {c["closing_meaning"]} ”</div>
             </div>
@@ -2194,16 +2248,31 @@ def render_goodbye():
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
         <div class="final-note-section-wrapper">
-            <!-- 1. Background Content (Gets blurred on focus) -->
             <div class="final-note-bg-content">
-                <div class="chapter-letter-card finale-letter-card">
-                    {paragraphs_html}
+                <div class="chapter-letter-card finale-letter-card floating-element">
+                    <!-- Decorative Corner Botanical Flourishes -->
+                    <div class="card-corner-flourish corner-tl">🌸</div>
+                    <div class="card-corner-flourish corner-tr">🌿</div>
+                    <div class="card-corner-flourish corner-bl">🌿</div>
+                    <div class="card-corner-flourish corner-br">🌸</div>
                     
-                    <div class="finale-quote-highlight" style="color: #e2a8b8; font-style: italic; font-size: 0.95rem; margin-bottom: 8px;">
-                        {c["highlighted_line"]}
+                    <div class="chapter-letter-body">
+                        {paragraphs_html}
                     </div>
                     
-                    <div class="finale-special-monolith">
+                    <!-- Spotlight Nested Callout Box -->
+                    <div class="story-climax-quote-box">
+                        <span class="quote-center-heart">✦ &nbsp; ♡ &nbsp; ✦</span>
+                        <div class="story-quote-bracket-wrap">
+                            <span class="story-quote-large-mark open-mark">“</span>
+                            <p class="story-climax-quote-text">
+                                {c["highlighted_line"]}
+                            </p>
+                            <span class="story-quote-large-mark close-mark">”</span>
+                        </div>
+                    </div>
+                    
+                    <div class="finale-special-monolith" style="margin-top: 24px;">
                         <span class="finale-lantern-icon">🏮</span>
                         <div class="finale-special-text" style="color: #ffffff; font-weight: 600; font-size: 1rem;">
                             {c["final_visual_text"]}

@@ -1413,7 +1413,6 @@ button[key="btn_start_journey"]:hover,
 .view-exit {
   opacity: 1;
   transform: scale(1) translateY(0);
-  filter: blur(0px);
   animation: viewExitSoft var(--dur-page-exit) var(--ease-subtle-in-out) forwards;
   pointer-events: none;
 }
@@ -1422,7 +1421,6 @@ button[key="btn_start_journey"]:hover,
   to {
     opacity: 0;
     transform: scale(0.98) translateY(12px);
-    filter: blur(6px);
   }
 }
 
@@ -1436,23 +1434,17 @@ button[key="btn_start_journey"]:hover,
   perspective: 1200px;
   transform-origin: top center;
   animation: viewEnterCinematic var(--dur-page-enter) var(--ease-emotional-out) forwards;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
 }
 
 @keyframes viewEnterCinematic {
   0% {
     opacity: 0;
-    transform: translateY(-45px) rotateX(6deg) scale(0.97);
-    filter: blur(12px);
-  }
-  35% {
-    opacity: 0.75;
-    filter: blur(4px);
+    transform: translateY(-28px) scale(0.985);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) rotateX(0deg) scale(1);
-    filter: blur(0px);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -1554,17 +1546,11 @@ button[key="btn_start_journey"]:hover,
 @keyframes primaryCardEnter {
   0% {
     opacity: 0;
-    transform: scale(0.92) translateY(16px);
-    filter: blur(8px);
-  }
-  40% {
-    opacity: 0.7;
-    filter: blur(2px);
+    transform: scale(0.95) translateY(14px);
   }
   100% {
     opacity: 1;
     transform: scale(1) translateY(0);
-    filter: blur(0px);
   }
 }
 
@@ -1612,60 +1598,92 @@ button[key="btn_start_journey"]:hover,
   margin-bottom: 1.8rem;
 }
 
+/* ==========================================================================
+   UNIFIED ULTRA-LUXURY KEEPSAKE CARD ARCHITECTURE (ALL CHAPTER TEXT CARDS)
+   ========================================================================== */
 .chapter-letter-card,
 .respect-content-card,
 .dua-prayer-card,
 .finale-letter-card,
 .memory-opened-card,
+.words-letter-card,
+.editorial-story-card,
 .finale-revealed-box {
-  position: relative;
-  background: var(--surface-dark);
-  border: 1px solid var(--border-dark);
-  border-radius: var(--radius-xl);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03), 0 8px 30px rgba(0, 0, 0, 0.25);
-  padding: 2.4rem 2.8rem;
-  margin-bottom: 2rem;
-  max-width: 680px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  animation: gentleFloat 5.6s ease-in-out infinite alternate;
-  will-change: transform, box-shadow;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  position: relative !important;
+  background: radial-gradient(circle at 50% -10%, rgba(48, 26, 48, 0.96) 0%, rgba(20, 14, 25, 0.98) 100%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.45) !important;
+  border-radius: 28px !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 28px 70px rgba(0, 0, 0, 0.75), 0 0 45px rgba(233, 101, 130, 0.22) !important;
+  padding: 44px 40px 38px 40px !important;
+  margin: 1.5rem auto 2.2rem auto !important;
+  max-width: 720px !important;
+  overflow: hidden !important;
+  animation: gentleFloat 6s ease-in-out infinite alternate !important;
+  will-change: transform, box-shadow !important;
+}
+
+/* Global Crisp Text Rendering & Anti-Aliasing (Zero Blur) */
+*, *::before, *::after,
+p, span, h1, h2, h3, h4, h5, h6, div, blockquote,
+.chapter-paragraph-text,
+.story-paragraph-text,
+.dua-paragraph-text,
+.respect-plate-summary,
+.chapter-letter-body p,
+.chapter-handwritten-note,
+.chapter-highlight-quote-box,
+.story-climax-quote-text,
+.finale-special-text {
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  text-rendering: optimizeLegibility !important;
 }
 
 .chapter-letter-body p,
 .chapter-paragraph-text,
 .respect-content p,
 .words-letter-card p,
-.chapter-body p {
-  font-family: "Lora", Georgia, serif !important;
-  font-size: 17px !important;
-  line-height: 1.75 !important;
+.chapter-body p,
+.dua-paragraph-text,
+.story-paragraph-text {
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 17.5px !important;
+  line-height: 1.9 !important;
   font-weight: 400 !important;
-  letter-spacing: 0.01em !important;
-  color: #F5E8E2 !important;
+  letter-spacing: 0.012em !important;
+  color: #FFF6F2 !important;
   margin-bottom: 22px !important;
+  text-align: left !important;
+  text-shadow: none !important;
 }
 
-.chapter-letter-body p:last-child {
+.chapter-letter-body p:last-child,
+.story-paragraph-text:last-of-type {
   margin-bottom: 0 !important;
 }
 
+/* Standardized Spotlight Nested Quote Callout Box */
 .chapter-handwritten-note,
-.chapter-emotional-quote {
-  font-family: "Lora", Georgia, serif !important;
-  font-size: 19px !important;
-  font-style: italic !important;
-  line-height: 1.7 !important;
-  color: #ffccd8 !important;
-  background: rgba(233, 101, 130, 0.07) !important;
-  border-left: 3px solid rgba(233, 101, 130, 0.55) !important;
-  border-radius: 0 12px 12px 0 !important;
-  padding: 16px 22px !important;
-  margin-top: 24px !important;
+.chapter-emotional-quote,
+.chapter-highlight-quote-box,
+.story-climax-quote-box,
+.dua-ayah-highlight-box {
+  position: relative !important;
+  background: radial-gradient(circle at 50% 50%, rgba(233, 101, 130, 0.12) 0%, rgba(36, 20, 38, 0.65) 100%) !important;
+  border: 1.5px solid rgba(244, 143, 177, 0.45) !important;
+  border-radius: 20px !important;
+  padding: 24px 30px !important;
+  margin-top: 30px !important;
   margin-bottom: 8px !important;
-  text-align: left !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 25px rgba(233, 101, 130, 0.18), inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+  text-align: center !important;
+  font-family: 'Lora', Georgia, serif !important;
+  font-size: 18.5px !important;
+  font-style: italic !important;
+  font-weight: 500 !important;
+  line-height: 1.75 !important;
+  color: #ffccd8 !important;
+  text-shadow: 0 0 14px rgba(244, 143, 177, 0.35) !important;
 }
 
 .letter-quote-decor {
@@ -1883,24 +1901,18 @@ button[key="btn_start_journey"]:hover,
 .memories-page-enter,
 .feature-section-enter {
   animation: floatPageIn 1050ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   transform-origin: center top;
 }
 
 @keyframes floatPageIn {
   0% {
     opacity: 0;
-    transform: translateY(30px) scale(0.975);
-    filter: blur(8px);
-  }
-  45% {
-    opacity: 0.8;
-    filter: blur(2.5px);
+    transform: translateY(24px) scale(0.985);
   }
   100% {
     opacity: 1;
     transform: translateY(0px) scale(1);
-    filter: blur(0px);
   }
 }
 
@@ -1908,17 +1920,11 @@ button[key="btn_start_journey"]:hover,
 @keyframes memoriesEnter {
   0% {
     opacity: 0;
-    transform: translateY(30px) scale(0.975);
-    filter: blur(8px);
-  }
-  45% {
-    opacity: 0.8;
-    filter: blur(2.5px);
+    transform: translateY(24px) scale(0.985);
   }
   100% {
     opacity: 1;
     transform: translateY(0px) scale(1);
-    filter: blur(0px);
   }
 }
 
@@ -2451,7 +2457,7 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
 .primary-card-entrance,
 .memory-content-fade {
   animation: memorySlideUpFadeIn 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-  will-change: transform, opacity, filter;
+  will-change: transform, opacity;
   width: 100%;
 }
 
@@ -2459,16 +2465,10 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
   0% {
     opacity: 0;
     transform: translateY(16px) scale(0.985);
-    filter: blur(8px);
-  }
-  50% {
-    opacity: 0.85;
-    filter: blur(2px);
   }
   100% {
     opacity: 1;
     transform: translateY(0px) scale(1);
-    filter: blur(0px);
   }
 }
 
@@ -2476,16 +2476,10 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
   0% {
     opacity: 0;
     transform: translateY(16px) scale(0.985);
-    filter: blur(8px);
-  }
-  50% {
-    opacity: 0.85;
-    filter: blur(2px);
   }
   100% {
     opacity: 1;
     transform: translateY(0px) scale(1);
-    filter: blur(0px);
   }
 }
 
@@ -2495,13 +2489,11 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
 @keyframes keepsakeEntrance {
   0% {
     opacity: 0;
-    transform: translateY(22px) scale(0.985);
-    filter: blur(10px);
+    transform: translateY(18px) scale(0.985);
   }
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0px);
   }
 }
 
@@ -4207,23 +4199,17 @@ div.stButton:has(button[key^="mem_btn_"]) > button:hover {
 .landing-unified-stage,
 .landing-mount-enter {
   animation: landingStageEnter 1.0s cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
-  will-change: opacity, transform, filter !important;
+  will-change: opacity, transform !important;
 }
 
 @keyframes landingStageEnter {
   0% {
     opacity: 0;
     transform: translateY(20px) scale(0.985);
-    filter: blur(10px);
-  }
-  35% {
-    opacity: 0.8;
-    filter: blur(3px);
   }
   100% {
     opacity: 1;
     transform: translateY(0px) scale(1);
-    filter: blur(0px);
   }
 }
 
