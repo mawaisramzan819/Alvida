@@ -452,6 +452,25 @@ def render_sidebar_and_navigation_bridge(active_view: str = "landing", active_se
                 return;
             }}
 
+            const backIntro = target.closest('#btnBackIntro, .bottom-back-btn, [data-action="landing"], .sidebar-brand-wrapper');
+            if (backIntro) {{
+                e.preventDefault();
+                e.stopPropagation();
+                window.parent.__farewellGoToLanding();
+                return;
+            }}
+
+            const card = target.closest('.ref-card, .journey-card, [data-chapter]');
+            if (card) {{
+                const chap = card.getAttribute('data-chapter');
+                if (chap) {{
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.parent.__farewellNav(chap);
+                    return;
+                }}
+            }}
+
             const stopStart = target.closest('#musicBtnStopStart');
             const playPause = target.closest('#musicBtnPlayPause, .tc-music-playpause, .music-ctrl-playpause-glow');
             const prevBtn = target.closest('#musicBtnPrev, .tc-music-btn:first-child, .music-btn-prev');
@@ -702,14 +721,11 @@ def render_section(section_id: str):
 
 
 # -----------------------------------------------------------------------------
-# 9. Sidebar Component (Brand Header + Full Music Player + Journey Progress)
+# 9. Sidebar Component (Minimal Branded Header)
 # -----------------------------------------------------------------------------
 def render_sidebar():
-    """Render cinematic left sidebar containing Brand, Music Player, and Progress Tracker."""
+    """Render minimal cinematic left sidebar containing Brand Header."""
     with st.sidebar:
-        # =====================================================================
-        # 1. TOP BRAND / TITLE AREA (A Farewell / That Stays / in the Heart)
-        # =====================================================================
         ui("""
         <div class="sidebar-brand-wrapper" onclick="window.parent.__farewellGoToLanding && window.parent.__farewellGoToLanding()" style="cursor: pointer;" title="Return to Intro Screen">
             <div class="sidebar-brand-heart-glow">
@@ -720,77 +736,6 @@ def render_sidebar():
             <div class="sidebar-brand-title">A Farewell</div>
             <div class="sidebar-brand-sub">That Stays</div>
             <div class="sidebar-brand-sub-bottom">in the Heart</div>
-        </div>
-        """)
-
-        # =====================================================================
-        # 2. LOWER: MUSIC PLAYER CARD (Integrated & Fully Interactive)
-        # =====================================================================
-        ui(f"""
-        <div class="sidebar-music-card" id="sidebarMusicCard">
-            <div class="music-card-header">
-                <div>
-                    <div class="music-card-title">{config.AUDIO_CONFIG["song_title"]}</div>
-                    <div class="music-card-artist">{config.AUDIO_CONFIG["song_artist"]}</div>
-                </div>
-                <div class="music-card-icon">🎵</div>
-            </div>
-            <div class="music-progress-wrap">
-                <span class="music-time-lbl music-time-current" id="musicTimeCurrent">01:45</span>
-                <div class="music-progress-track" id="musicProgressTrack" title="Click to seek track">
-                    <div class="music-progress-fill" id="musicProgressFill"></div>
-                    <span class="music-progress-dot" id="musicProgressDot"></span>
-                </div>
-                <span class="music-time-lbl music-time-total" id="musicTimeTotal">04:58</span>
-            </div>
-            <div class="music-controls-row">
-                <span class="music-ctrl-icon music-btn-prev" id="musicBtnPrev" onclick="window.parent.__farewellRewind && window.parent.__farewellRewind()" title="Previous / Rewind 10s">⏮</span>
-                <button class="music-ctrl-playpause-glow" id="musicBtnPlayPause" onclick="window.parent.__farewellToggleAudio && window.parent.__farewellToggleAudio()" title="Click to Start or Stop Music">❚❚</button>
-                <span class="music-ctrl-icon music-btn-next" id="musicBtnNext" onclick="window.parent.__farewellForward && window.parent.__farewellForward()" title="Next / Forward 10s">⏭</span>
-                <span class="music-ctrl-heart" id="musicBtnHeart" title="Favorite">♡</span>
-            </div>
-            <!-- Prominent Stop / Start Music Button -->
-            <div class="music-stop-start-row">
-                <button class="music-stop-start-pill" id="musicBtnStopStart" onclick="window.parent.__farewellToggleAudio && window.parent.__farewellToggleAudio()" title="Click to Stop or Start Music">
-                    <span id="musicBtnStopStartIcon">⏸</span> &nbsp;<span id="musicBtnStopStartText">Stop Music</span>
-                </button>
-            </div>
-        </div>
-        """)
-
-        # =====================================================================
-        # 3. BOTTOM: JOURNEY PROGRESS CARD (Calculated from Real Chapter Position)
-        # =====================================================================
-        app_view = st.session_state.get("app_view", "landing")
-        active_id = st.session_state.get("selected_section", "home")
-        chapter_order = ["home", "welcome", "memories", "words", "respect", "intentions", "dua", "goodbye"]
-        active_idx = chapter_order.index(active_id) if active_id in chapter_order else 0
-
-        milestones = [12, 25, 38, 50, 63, 75, 88, 100]
-        pos_pct = milestones[active_idx]
-
-        visited_set = st.session_state.get("visited_chapters", set())
-        visited_ratio = len(visited_set.intersection(set(chapter_order))) / len(chapter_order)
-        visited_pct = int(visited_ratio * 100)
-
-        progress_pct = max(pos_pct, visited_pct) if app_view == "section" else max(15, visited_pct)
-
-        ui(f"""
-        <div class="sidebar-progress-card">
-            <div class="progress-card-title-row">
-                <span class="progress-title-left">✦ Hamara Safar</span>
-            </div>
-            <div class="progress-sub-row">
-                <span class="progress-sub-left">Khoobsurat yaadein mehfooz</span>
-                <span class="progress-pct-bold">{progress_pct}%</span>
-            </div>
-            <div class="progress-card-track">
-                <div class="progress-card-fill" style="width: {progress_pct}%;"></div>
-            </div>
-            <div class="progress-footer-row">
-                <span class="progress-caption">Har lamha khaas hai.</span>
-                <span class="progress-heart-icon">♡</span>
-            </div>
         </div>
         """)
 
@@ -1052,7 +997,7 @@ def render_journey_menu():
     ui(f"""
         <div class="ref-cards-grid">
             <!-- Card 1: Story Overview -->
-            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('home')">
+            <div class="ref-card ref-card-light" data-chapter="home" onclick="window.parent.__farewellNav('home')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Overview">
                 </div>
@@ -1060,13 +1005,13 @@ def render_journey_menu():
                     <h3 class="ref-card-title">Story Overview</h3>
                     <p class="ref-card-desc">Hamari kahani ke woh lamhe jo hamesha dil mein rahein ge.</p>
                     <div class="ref-card-btn-row">
-                        <span class="ref-card-open-btn">Open →</span>
+                        <span class="ref-card-open-btn" data-chapter="home">Open →</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 2: Welcome -->
-            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('welcome')">
+            <div class="ref-card ref-card-light" data-chapter="welcome" onclick="window.parent.__farewellNav('welcome')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_welcome}" class="ref-card-thumb" alt="Welcome">
                 </div>
@@ -1074,13 +1019,13 @@ def render_journey_menu():
                     <h3 class="ref-card-title">Welcome</h3>
                     <p class="ref-card-desc">Jaane se pehle, ek baar ye khat zaroor parh lena.</p>
                     <div class="ref-card-btn-row">
-                        <span class="ref-card-open-btn">Open →</span>
+                        <span class="ref-card-open-btn" data-chapter="welcome">Open →</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 3: Memories -->
-            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('memories')">
+            <div class="ref-card ref-card-light" data-chapter="memories" onclick="window.parent.__farewellNav('memories')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_memories}" class="ref-card-thumb" alt="Memories">
                 </div>
@@ -1088,13 +1033,13 @@ def render_journey_menu():
                     <h3 class="ref-card-title">Memories</h3>
                     <p class="ref-card-desc">Woh khoobsurat lamhe jo waqt ke saath kabhi dhundhle nahi honge.</p>
                     <div class="ref-card-btn-row">
-                        <span class="ref-card-open-btn">Open →</span>
+                        <span class="ref-card-open-btn" data-chapter="memories">Open →</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 4: Words From My Heart -->
-            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('words')">
+            <div class="ref-card ref-card-light" data-chapter="words" onclick="window.parent.__farewellNav('words')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_words}" class="ref-card-thumb" alt="Words From My Heart">
                 </div>
@@ -1102,13 +1047,13 @@ def render_journey_menu():
                     <h3 class="ref-card-title">Words From My Heart</h3>
                     <p class="ref-card-desc">Woh sachchi baatein jo main ap k saamne keh na saka.</p>
                     <div class="ref-card-btn-row">
-                        <span class="ref-card-open-btn">Open →</span>
+                        <span class="ref-card-open-btn" data-chapter="words">Open →</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 5: Why I Respect You -->
-            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('respect')">
+            <div class="ref-card ref-card-light" data-chapter="respect" onclick="window.parent.__farewellNav('respect')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_respect}" class="ref-card-thumb" alt="Why I Respect You">
                 </div>
@@ -1116,13 +1061,13 @@ def render_journey_menu():
                     <h3 class="ref-card-title">Why I Respect You</h3>
                     <p class="ref-card-desc">Woh khoobian jin ki wajah se ap ki izzat hamesha dil mein rahe gi.</p>
                     <div class="ref-card-btn-row">
-                        <span class="ref-card-open-btn">Open →</span>
+                        <span class="ref-card-open-btn" data-chapter="respect">Open →</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 6: Intentions -->
-            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('intentions')">
+            <div class="ref-card ref-card-light" data-chapter="intentions" onclick="window.parent.__farewellNav('intentions')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_intentions}" class="ref-card-thumb" alt="Intentions">
                 </div>
@@ -1130,13 +1075,13 @@ def render_journey_menu():
                     <h3 class="ref-card-title">Intentions</h3>
                     <p class="ref-card-desc">Meri sachchi duaein aur iradey jo sirf ap ki khushi ke liye hain.</p>
                     <div class="ref-card-btn-row">
-                        <span class="ref-card-open-btn">Open →</span>
+                        <span class="ref-card-open-btn" data-chapter="intentions">Open →</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 7: Dua -->
-            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('dua')">
+            <div class="ref-card ref-card-light" data-chapter="dua" onclick="window.parent.__farewellNav('dua')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_dua}" class="ref-card-thumb" alt="Dua">
                 </div>
@@ -1144,13 +1089,13 @@ def render_journey_menu():
                     <h3 class="ref-card-title">Dua</h3>
                     <p class="ref-card-desc">Tumhari khushi, sukoon aur kamyabi ke liye dil se dua.</p>
                     <div class="ref-card-btn-row">
-                        <span class="ref-card-open-btn">Open →</span>
+                        <span class="ref-card-open-btn" data-chapter="dua">Open →</span>
                     </div>
                 </div>
             </div>
 
             <!-- Card 8: Final Note -->
-            <div class="ref-card ref-card-light" onclick="window.parent.__farewellNav('goodbye')">
+            <div class="ref-card ref-card-light" data-chapter="goodbye" onclick="window.parent.__farewellNav('goodbye')">
                 <div class="ref-card-thumb-wrap">
                     <img src="data:image/png;base64,{t_goodbye}" class="ref-card-thumb" alt="Final Note">
                 </div>
@@ -1158,7 +1103,7 @@ def render_journey_menu():
                     <h3 class="ref-card-title">Final Note</h3>
                     <p class="ref-card-desc">Ek aakhri baat... mohabbat, izzat aur duaon ke saath.</p>
                     <div class="ref-card-btn-row">
-                        <span class="ref-card-open-btn">Open →</span>
+                        <span class="ref-card-open-btn" data-chapter="goodbye">Open →</span>
                     </div>
                 </div>
             </div>
@@ -1166,7 +1111,7 @@ def render_journey_menu():
 
         <!-- Return to Intro Button -->
         <div style="text-align: center; margin: 1.5rem 0 2.5rem 0;">
-            <button class="bottom-back-btn" onclick="window.parent.__farewellGoToLanding && window.parent.__farewellGoToLanding()">
+            <button class="bottom-back-btn" id="btnBackIntro" data-action="landing" onclick="window.parent.__farewellGoToLanding && window.parent.__farewellGoToLanding()">
                 ↺ Back to Intro Screen
             </button>
         </div>
