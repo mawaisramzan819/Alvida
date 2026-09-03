@@ -1138,12 +1138,12 @@ def render_home_overview():
     reset_scroll_to_top()
     c = content.HOME_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_home" id="sec_wrapper_home">
         <div class="chapter-eyebrow-badge">✦ HAMARI KAHANI KA SAFAR</div>
         <h2 class="chapter-main-title">A Farewell That Stays in the Heart</h2>
         <p class="chapter-subtitle-italic">Kuch alvida asal mein khatam nahi hotay — wo bas khoobsurat yaadon ki shuruat ban jatay hain.</p>
         
-        <div class="chapter-letter-card">
+        <div class="chapter-letter-card floating-element">
             <div class="chapter-letter-body">
                 <p>Kuch log zindagi mein aate hain aur dil par aise naqsh chor jaate hain jo waqt ke saath kabhi nahi mit'te.</p>
                 <p>Ye jagah un sabhi khoobsurat yaadon, sachchi seekhon aur be-shart duaon ke liye banayi gayi hai jinhein faaslay kabhi khatam nahi kar sakte.</p>
@@ -1166,12 +1166,12 @@ def render_welcome():
     reset_scroll_to_top()
     c = content.WELCOME_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_welcome" id="sec_wrapper_welcome">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
-        <div class="chapter-letter-card">
+        <div class="chapter-letter-card floating-element">
     """)
     for p in c["paragraphs"]:
         ui(f'<p class="chapter-paragraph-text">{p}</p>')
@@ -1192,7 +1192,7 @@ def render_memories():
     reset_scroll_to_top()
     c = content.MEMORIES_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter memories-page-enter">
+    <div class="v2-chapter-container feature-section-enter memories-page-enter section-floating-enter" key="sec_wrapper_memories" id="sec_wrapper_memories">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1207,7 +1207,7 @@ def render_memories():
             mem = c["cards"][i]
             with cols1[i]:
                 ui(f"""
-                <div class="memory-polaroid-card memory-card-floating memory-float-{i+1}" style="border-top: 3px solid {mem['accent_color']};">
+                <div class="memory-polaroid-card memory-card-floating floating-element memory-float-{i+1}" style="border-top: 3px solid {mem['accent_color']};">
                     <div class="memory-polaroid-icon">{mem['icon']}</div>
                     <h4 class="memory-polaroid-title">{mem['category']}</h4>
                 </div>
@@ -1224,7 +1224,7 @@ def render_memories():
             col_idx = i - 4
             with cols2[col_idx]:
                 ui(f"""
-                <div class="memory-polaroid-card memory-card-floating memory-float-{i+1}" style="border-top: 3px solid {mem['accent_color']};">
+                <div class="memory-polaroid-card memory-card-floating floating-element memory-float-{i+1}" style="border-top: 3px solid {mem['accent_color']};">
                     <div class="memory-polaroid-icon">{mem['icon']}</div>
                     <h4 class="memory-polaroid-title">{mem['category']}</h4>
                 </div>
@@ -1281,19 +1281,19 @@ def render_words():
     reset_scroll_to_top()
     c = content.WORDS_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_words" id="sec_wrapper_words">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
-        <div class="chapter-letter-card">
+        <div class="chapter-letter-card floating-element">
             <div class="letter-quote-decor">❝</div>
     """)
     for p in c["paragraphs"]:
         ui(f'<p class="chapter-paragraph-text">{p}</p>')
 
     ui(f"""
-            <div class="chapter-highlight-quote-box">
+            <div class="chapter-highlight-quote-box floating-element">
                 {c["closing_thought"]}
             </div>
         </div>
@@ -1310,12 +1310,12 @@ def render_respect():
     reset_scroll_to_top()
     c = content.RESPECT_SECTION
     ui(f"""
-    <div class="v2-chapter-container respect-special-section feature-section-enter chapter-page-enter">
+    <div class="v2-chapter-container respect-special-section feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_respect" id="sec_wrapper_respect">
         <div class="chapter-eyebrow-badge respect-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title respect-gold-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic respect-gold-sub">{c['subtitle']}</p>
         
-        <div class="respect-content-card">
+        <div class="respect-content-card floating-element">
     """)
     for point in c["main_content"]:
         ui(f"""
@@ -1326,7 +1326,7 @@ def render_respect():
         """)
 
     ui(f"""
-            <div class="respect-golden-banner">
+            <div class="respect-golden-banner floating-element">
                 “ {c["golden_line"]} ”
             </div>
             
@@ -1347,7 +1347,7 @@ def render_intentions():
     reset_scroll_to_top()
     c = content.INTENTIONS_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_intentions" id="sec_wrapper_intentions">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
@@ -1360,7 +1360,7 @@ def render_intentions():
         col_idx = i % 2
         with cols[col_idx]:
             ui(f"""
-            <div class="intention-item-card">
+            <div class="intention-item-card floating-element">
                 <div class="intention-card-icon">💝</div>
                 <h4 class="intention-card-title">{intn['title']}</h4>
                 <p class="intention-card-body">{intn['content']}</p>
@@ -1369,7 +1369,7 @@ def render_intentions():
 
     ui(f"""
         </div>
-        <div class="intentions-family-card">
+        <div class="intentions-family-card floating-element">
             <span class="family-card-icon">🏡</span>
             <p class="chapter-paragraph-text" style="margin-bottom:0; font-style:italic;">
                 {c["family_note"]}
@@ -1388,19 +1388,19 @@ def render_dua():
     reset_scroll_to_top()
     c = content.DUA_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_dua" id="sec_wrapper_dua">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
-        <div class="dua-prayer-card">
+        <div class="dua-prayer-card floating-element">
             <div class="dua-card-hands-icon">🤲 🤍</div>
     """)
     for p in c["paragraphs"]:
         ui(f'<p class="dua-paragraph-text">{p}</p>')
 
     ui(f"""
-            <div class="dua-ayah-highlight-box">
+            <div class="dua-ayah-highlight-box floating-element">
                 <div class="dua-ayah-arabic">{c["closing_ayah"]}</div>
                 <div class="dua-ayah-translation">“ {c["closing_meaning"]} ”</div>
             </div>
@@ -1418,12 +1418,12 @@ def render_goodbye():
     reset_scroll_to_top()
     c = content.GOODBYE_SECTION
     ui(f"""
-    <div class="v2-chapter-container feature-section-enter chapter-page-enter">
+    <div class="v2-chapter-container feature-section-enter chapter-page-enter section-floating-enter" key="sec_wrapper_goodbye" id="sec_wrapper_goodbye">
         <div class="chapter-eyebrow-badge">{c['eyebrow']}</div>
         <h2 class="chapter-main-title">{c['title']}</h2>
         <p class="chapter-subtitle-italic">{c['subtitle']}</p>
         
-        <div class="chapter-letter-card finale-letter-card">
+        <div class="chapter-letter-card finale-letter-card floating-element">
     """)
     for p in c["paragraphs"]:
         ui(f'<p class="chapter-paragraph-text">{p}</p>')
