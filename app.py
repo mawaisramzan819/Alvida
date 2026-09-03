@@ -1236,10 +1236,10 @@ def render_memories():
     # Mode B: Opened Memory View
     else:
         mem = c["cards"][idx]
-        anim_key = f"mem_anim_{idx}"
+        anim_key = f"mem_active_{idx}"
         ui(f"""
-        <div class="primary-card-entrance">
-            <div class="memory-opened-card memory-content-fade" id="{anim_key}" key="{anim_key}" style="border-left: 4px solid {mem['accent_color']};">
+        <div class="memory-detail-wrapper" id="wrap_{anim_key}" key="wrap_{anim_key}">
+            <div class="memory-opened-card active-memory-card memory-content-fade floating-element" id="{anim_key}" key="{anim_key}" style="border-left: 4px solid {mem['accent_color']};">
                 <div class="memory-opened-header">
                     <span class="memory-opened-icon">{mem['icon']}</span>
                     <div>

@@ -1997,10 +1997,53 @@ div[data-testid="stColumn"] div.stButton > button:hover {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--text-primary-dark-bg);
-  margin: 0;
+/* ========================================================
+   MEMORY SWITCH CROSSFADE & SLIDE ANIMATION
+   ======================================================== */
+
+.memory-detail-wrapper,
+.primary-card-entrance,
+.memory-content-fade {
+  animation: memorySwitchEnter 700ms cubic-bezier(0.16, 1, 0.3, 1) forwards !important;
+  will-change: transform, opacity, filter;
 }
 
-.memory-opened-card {
+@keyframes memorySwitchEnter {
+  0% {
+    opacity: 0;
+    transform: translateX(18px) scale(0.985);
+    filter: blur(6px);
+  }
+  40% {
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes memoryContentSwap {
+  0% {
+    opacity: 0;
+    transform: translateX(18px) scale(0.985);
+    filter: blur(6px);
+  }
+  40% {
+    opacity: 0.8;
+    filter: blur(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px) scale(1);
+    filter: blur(0px);
+  }
+}
+
+.memory-opened-card,
+.active-memory-card {
   background: var(--surface-dark);
   border: 1px solid var(--border-dark);
   border-radius: var(--radius-xl);
